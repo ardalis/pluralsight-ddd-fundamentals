@@ -1,0 +1,79 @@
+﻿@page "/"
+
+<Toast />
+
+<h1>Appointments</h1>
+<div class="appointment-inline @((IsClientSelected? "" : "appointment-error"))">
+    <label class="width100">
+        Client:<br />
+        <TelerikComboBox Filterable="true"
+                         ClearButton="false"
+                         @bind-Value=@ClientId
+                         Data="@Clients"
+                         ValueField="@nameof(ClientDto.ClientId)"
+                         TextField="@nameof(ClientDto.FullName)">
+        </TelerikComboBox>
+    </label>
+</div>
+<div class="appointment-inline @((IsPatientSelected? "" : "appointment-error"))">
+    <label class="width100">
+        Patient:<br />
+        <TelerikComboBox Filterable="true"
+                         ClearButton="false"
+                         Value="@PatientId"
+                         ValueChanged="@( (int v) => PatientChanged(v) )"
+                         Data="@ClientPatients"
+                         ValueField="@nameof(PatientDto.PatientId)"
+                         TextField="@nameof(PatientDto.Name)">
+            <ItemTemplate>
+                <div class="appointment-holder">
+                    <span>@((context as PatientDto).Name)</span>
+                    <div style="text-align: right;">
+                        <img class="appointment-image" src="@((context as PatientDto).ImageData)" />
+                    </div>
+                </div>
+            </ItemTemplate>
+        </TelerikComboBox>
+    </label>
+</div>
+
+@if (IsLoaded)
+{
+    <Scheduler Height="750" Rooms="@Rooms" AppointmentTypes="@AppointmentTypes" StartDate="@StartDate" StartTime="@DayStart" EndTime="@DayEnd" Groups="Groups" OnEditCallback="@((e) => OpenEdit(e))">
+        <Resource Name="AppointmentTypes" TextField="Name" ValueField="AppointmentTypeId" Field="AppointmentTypeId" Title="Appointment Type" Data="@AppointmentTypes" />
+        <Resource Name="Rooms" TextField="Name" ValueField="RoomId" Field="RoomId" Title="Room" Data="@Rooms" />
+    </Scheduler>
+}
+
+<!--<TelerikScheduler Data="@Appointments" @bind-Date="@StartDate" Height="600px" @bind-View="@CurrView"
+                  OnEdit="@EditHandler" OnDelete="@DeleteAppointmentAsync"
+                  AllowCreate="true" AllowDelete="true" AllowUpdate="true"
+                  IdField="@(nameof(AppointmentDto.AppointmentId))"
+                  StartField="@(nameof(AppointmentDto.Start))"
+                  EndField="@(nameof(AppointmentDto.End))"
+                  TitleField="@(nameof(AppointmentDto.Title))"
+                  DescriptionField="@(nameof(AppointmentDto.Description))"
+                  IsAllDayField="@(nameof(AppointmentDto.IsAllDay))">
+
+
+    <SchedulerResources>
+        <SchedulerResource TextField="Name" ValueField="AppointmentTypeId" Field="AppointmentTypeId" Title="Appointment Type" Data="@AppointmentTypes" />
+    </SchedulerResources>
+    <SchedulerViews>
+        <SchedulerDayView StartTime="@DayStart" EndTime="@DayEnd" WorkDayStart="@WorkDayStart" WorkDayEnd="@WorkDayEnd" />
+        <SchedulerWeekView StartTime="@DayStart" EndTime="@DayEnd" WorkDayStart="@WorkDayStart" WorkDayEnd="@WorkDayEnd" />
+        <SchedulerMultiDayView StartTime="@DayStart" EndTime="@DayEnd" WorkDayStart="@WorkDayStart" WorkDayEnd="@WorkDayEnd" NumberOfDays="10" />
+        <SchedulerMonthView></SchedulerMonthView>
+    </SchedulerViews>
+</TelerikScheduler>-->
+
+<TelerikWindow Modal="true" Size="WindowSize.Medium" Visible="@CustomEditFormShown">
+    <WindowTitle>Appointment Data</WindowTitle>
+    <WindowActions>
+        <WindowAction Name="Close" OnClick="@CancelEditing" />
+    </WindowActions>
+    <WindowContent>
+        @* This component is in the Pages folder *@
+        <AppointmentEditor Patient="Patient" ScheduleId="ScheduleId" RoomId="RoomId" Appointment="@CurrentAppointment" OnAppointmentChanged="@RefreshDataAsync" />
+    </WindowContent>
+</TelerikWindow>

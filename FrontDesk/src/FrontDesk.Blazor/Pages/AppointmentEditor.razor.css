@@ -1,0 +1,12 @@
+﻿.appointment-editor-msg {
+    color: rgba(243,23,0,0.5);
+}
+
+.appointment-editor-image {
+    max-width: 300px;
+    max-height: 300px;
+}
+
+.appointment-editor-confirm-button {
+    cursor: default !important;
+}

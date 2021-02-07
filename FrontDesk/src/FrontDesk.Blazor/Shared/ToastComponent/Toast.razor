@@ -1,0 +1,6 @@
+﻿<div class="alert @AlertType alert-dismissible fade @(ToastService.IsShow ? "show" : null)" role="alert">
+    @ToastService.Message
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close" @onclick="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
