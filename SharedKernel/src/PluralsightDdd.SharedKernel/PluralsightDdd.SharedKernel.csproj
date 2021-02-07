@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <PackageId>PluralsightDdd.SharedKernel</PackageId>
+    <Title>PluralsightDdd.SharedKernel</Title>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Authors>Steve Smith (@ardalis)</Authors>
+    <Company>Ardalis.com</Company>
+    <PackageProjectUrl>https://github.com/ardalis/pluralsight-ddd-fundamentals</PackageProjectUrl>
+    <Description>An SharedKernal packaged used as a sample in a DDD Pluralsight course.</Description>
+    <Summary>Includes common abstractions and base types.</Summary>
+    <RepositoryUrl>https://github.com/ardalis/pluralsight-ddd-fundamentals</RepositoryUrl>
+    <PackageTags>aspnet asp.net aspnetcore asp.net core ddd dddesign value object entity aggregate domain event</PackageTags>
+    <PackageReleaseNotes>Initial version.</PackageReleaseNotes>
+    <Version>1.0.0</Version>
+    <AssemblyName>PluralsightDdd.SharedKernel</AssemblyName>
+    <PackageIconUrl>https://user-images.githubusercontent.com/782127/33497760-facf6550-d69c-11e7-94e4-b3856da259a9.png</PackageIconUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+    <LangVersion>8.0</LangVersion>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.Specification" Version="4.2.0" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+</Project>
