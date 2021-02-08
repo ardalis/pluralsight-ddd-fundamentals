@@ -33,10 +33,10 @@ namespace FrontDesk.Api
     public void ConfigureDevelopmentServices(IServiceCollection services)
     {
       // use in-memory database
-      ConfigureInMemoryDatabases(services);
+      //ConfigureInMemoryDatabases(services);
 
       // use real database
-      //ConfigureProductionServices(services);
+      ConfigureProductionServices(services);
     }
 
     public void ConfigureDockerServices(IServiceCollection services)
@@ -50,15 +50,6 @@ namespace FrontDesk.Api
           c.UseInMemoryDatabase("AppDb"));
 
       ConfigureServices(services);
-
-      var sp = services.BuildServiceProvider();
-      using (var scope = sp.CreateScope())
-      {
-        var scopedServices = scope.ServiceProvider;
-        var db = scopedServices.GetRequiredService<AppDbContext>();
-        var loggerFactory = scopedServices.GetRequiredService<ILoggerFactory>();
-        AppDbContextSeed.SeedAsync(db, loggerFactory, new OfficeSettings().TestDate).Wait();
-      }
     }
 
     public void ConfigureProductionServices(IServiceCollection services)
@@ -70,15 +61,6 @@ namespace FrontDesk.Api
           c.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
       ConfigureServices(services);
-
-      var sp = services.BuildServiceProvider();
-      using (var scope = sp.CreateScope())
-      {
-        var scopedServices = scope.ServiceProvider;
-        var db = scopedServices.GetRequiredService<AppDbContext>();
-        var loggerFactory = scopedServices.GetRequiredService<ILoggerFactory>();
-        AppDbContextSeed.SeedAsync(db, loggerFactory, new OfficeSettings().TestDate).Wait();
-      }
     }
 
     public void ConfigureTestingServices(IServiceCollection services)

@@ -16,6 +16,7 @@
     <PackageReference Include="Ardalis.Result" Version="3.1.0" />
     <PackageReference Include="Ardalis.Specification" Version="4.2.0" />
     <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="PluralsightDdd.SharedKernel" Version="1.0.0" />
   </ItemGroup>
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using FrontDesk.Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +17,10 @@ namespace FrontDesk.Api
       using (var scope = host.Services.CreateScope())
       {
         var services = scope.ServiceProvider;
+        var hostEnvironment = services.GetService<IWebHostEnvironment>();
         var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+        var logger = loggerFactory.CreateLogger<Program>();
+        logger.LogInformation($"Starting in environment {hostEnvironment.EnvironmentName}");
         try
         {
           var catalogContext = services.GetRequiredService<AppDbContext>();
@@ -25,7 +28,6 @@ namespace FrontDesk.Api
         }
         catch (Exception ex)
         {
-          var logger = loggerFactory.CreateLogger<Program>();
           logger.LogError(ex, "An error occurred seeding the DB.");
         }
       }

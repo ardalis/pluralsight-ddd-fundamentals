@@ -1,5 +1,4 @@
-﻿
-using PluralsightDdd.SharedKernel;
+﻿using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 
 namespace FrontDesk.Core.Aggregates
@@ -22,13 +21,14 @@ namespace FrontDesk.Core.Aggregates
       Id = id;
     }
 
-    public override string ToString()
-    {
-      return Name.ToString();
-    }
-
     private AppointmentType() // required for EF
     {
     }
+
+    public override string ToString()
+    {
+      return Name;
+    }
+
   }
 }

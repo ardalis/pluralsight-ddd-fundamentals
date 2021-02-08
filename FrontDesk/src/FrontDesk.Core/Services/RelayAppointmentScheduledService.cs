@@ -13,13 +13,13 @@ namespace FrontDesk.Core.Services
   /// </summary>
   public class RelayAppointmentScheduledService : INotificationHandler<AppointmentScheduledEvent>
   {
-    private readonly IRepository _apptRepository;
+    private readonly IRepository _repository;
     private readonly IMessagePublisher _messagePublisher;
 
-    public RelayAppointmentScheduledService(IRepository apptRepository,
+    public RelayAppointmentScheduledService(IRepository repository,
         IMessagePublisher messagePublisher)
     {
-      this._apptRepository = apptRepository;
+      _repository = repository;
       _messagePublisher = messagePublisher;
     }
 
@@ -28,14 +28,20 @@ namespace FrontDesk.Core.Services
       // we are translating from a domain event to an application event here
       var newMessage = new CreateConfirmationEmailMessage();
 
-      var doctor = await _apptRepository.GetByIdAsync<Doctor, int>(appointmentScheduledEvent.AppointmentScheduled.DoctorId.Value);
+      var appt = appointmentScheduledEvent.AppointmentScheduled;
+
+      // if this is slow these can be parallelized or cached. MEASURE before optimizing.
+      var doctor = await _repository.GetByIdAsync<Doctor, int>(appt.DoctorId.Value);
+      var client = await _repository.GetByIdAsync<Client, int>(appt.ClientId);
+      var patient = await _repository.GetByIdAsync<Patient, int>(appt.PatientId);
+      var apptType = await _repository.GetByIdAsync<AppointmentType, int>(appt.AppointmentTypeId);
 
       newMessage.AppointmentDateTime = appointmentScheduledEvent.AppointmentScheduled.TimeRange.Start;
-      newMessage.ClientName = appointmentScheduledEvent.AppointmentScheduled.Client.FullName;
-      newMessage.ClientEmailAddress = appointmentScheduledEvent.AppointmentScheduled.Client.EmailAddress;
+      newMessage.ClientName = client.FullName;
+      newMessage.ClientEmailAddress = client.EmailAddress;
       newMessage.DoctorName = doctor.Name;
-      newMessage.PatientName = appointmentScheduledEvent.AppointmentScheduled.Patient.Name;
-      newMessage.ProcedureName = appointmentScheduledEvent.AppointmentScheduled.AppointmentType.Name;
+      newMessage.PatientName = patient.Name;
+      newMessage.ProcedureName = apptType.Name;
 
       _messagePublisher.Publish(newMessage);
     }

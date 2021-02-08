@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
+using BlazorShared.Models.Room;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -18,16 +22,25 @@ namespace FrontDesk.Infrastructure.Data
     private static DateTime TestDate;
     public const string MALE_SEX = "Male";
     public const string FEMALE_SEX = "Female";
+    public static ILogger Logger;
 
-    public static async Task SeedAsync(AppDbContext context, ILoggerFactory loggerFactory, DateTime TestDate, int? retry = 0)
+    public static async Task SeedAsync(AppDbContext context,
+      ILoggerFactory loggerFactory,
+      DateTime TestDate, int? retry = 0)
     {
+      Logger = loggerFactory.CreateLogger<AppDbContextSeed>();
+      Logger.LogInformation($"Seeding data.");
+      Logger.LogInformation($"DbContext Type: {context.Database.ProviderName}");
+
       AppDbContextSeed.TestDate = TestDate;
       int retryForAvailability = retry.Value;
       try
       {
-        // TODO: Only run this if using a real database
-        // context.Database.Migrate();
-
+        if (!context.Database.ProviderName.Contains("InMemory"))
+        {
+          // apply migrations if connecting to a SQL database
+          context.Database.Migrate();
+        }
         if (!await context.Schedules.AnyAsync())
         {
           await context.Schedules.AddAsync(
@@ -62,10 +75,9 @@ namespace FrontDesk.Infrastructure.Data
 
         if (!await context.Rooms.AnyAsync())
         {
-          await context.Rooms.AddRangeAsync(
-              CreateRooms());
-
-          await context.SaveChangesAsync();
+          var rooms = await CreateRooms();
+          await context.Rooms.AddRangeAsync(rooms);
+          await context.SaveChangesWithIdentityInsert<Room>();
         }
 
         if (!await context.Appointments.AnyAsync())
@@ -78,7 +90,7 @@ namespace FrontDesk.Infrastructure.Data
       }
       catch (Exception ex)
       {
-        if (retryForAvailability < 10)
+        if (retryForAvailability < 1)
         {
           retryForAvailability++;
           var log = loggerFactory.CreateLogger<AppDbContextSeed>();
@@ -91,18 +103,31 @@ namespace FrontDesk.Infrastructure.Data
       context.SaveChanges();
     }
 
-    private static List<Room> CreateRooms()
+    private static async Task<List<Room>> CreateRooms()
     {
-      var result = new List<Room>();
+      string fileName = "rooms.json";
+      if (!File.Exists(fileName))
+      {
+        Logger.LogInformation($"Creating {fileName}");
+        using Stream writer = new FileStream(fileName, FileMode.OpenOrCreate);
+        await JsonSerializer.SerializeAsync(writer, GetDefaultRooms());
+      }
 
-      result.Add(new Room(string.Format("Exam Room {0}", 1)));
-      result.Add(new Room(string.Format("Exam Room {0}", 2)));
-      result.Add(new Room(string.Format("Exam Room {0}", 3)));
-      result.Add(new Room(string.Format("Exam Room {0}", 4)));
-      result.Add(new Room(string.Format("Exam Room {0}", 5)));
+      Logger.LogInformation($"Reading rooms from file {fileName}");
+      using Stream reader = new FileStream(fileName, FileMode.Open);
+      var rooms = await JsonSerializer.DeserializeAsync<List<RoomDto>>(reader);
 
+      return rooms.Select(dto => new Room(dto.RoomId, dto.Name)).ToList();
+    }
 
-      return result;
+    private static List<RoomDto> GetDefaultRooms()
+    {
+      List<RoomDto> rooms = new List<RoomDto>();
+      for (int i = 1; i < 6; i++)
+      {
+        rooms.Add(new RoomDto { RoomId = i, Name = $"Exam Room {i}" });
+      }
+      return rooms;
     }
 
     private static Schedule CreateSchedule()
@@ -138,6 +163,7 @@ namespace FrontDesk.Infrastructure.Data
     private static IEnumerable<Client> CreateListOfClientsWithPatients(Doctor drSmith, Doctor drWho, Doctor drMcDreamy)
     {
       var clientGraphs = new List<Client>();
+
       var clientSmith = (CreateClientWithPatient("Steve Smith", "Steve", "Mr.", drSmith.Id, MALE_SEX, "Darwin", "Dog",
         "Poodle"));
       clientSmith.Patients.Add(new Patient(1, "Rumor", FEMALE_SEX, new AnimalType("Cat", "Alley"), drWho.Id));
@@ -145,8 +171,8 @@ namespace FrontDesk.Infrastructure.Data
       clientGraphs.Add(clientSmith);
 
       clientGraphs.Add(CreateClientWithPatient("Julia Lerman", "Julie", "Mrs.", drMcDreamy.Id, MALE_SEX, "Sampson", "Dog", "Newfoundland"));
-      clientGraphs.Add(CreateClientWithPatient("Wes McClure", "Wes", "Mr", drMcDreamy.Id, FEMALE_SEX, "Pax", "Dog",
-        "Jack Russell"));
+
+      clientGraphs.Add(CreateClientWithPatient("Wes McClure", "Wes", "Mr", drMcDreamy.Id, FEMALE_SEX, "Pax", "Dog", "Jack Russell"));
       clientGraphs.Add(CreateClientWithPatient("Andrew Mallett", "Andrew", "Mr.", drSmith.Id, MALE_SEX, "Barney",
         "Dog", "Corgi"));
       clientGraphs.Add(CreateClientWithPatient("Brian Lagunas", "Brian", "Mr.", drWho.Id, MALE_SEX, "Rocky", "Dog",
@@ -208,8 +234,8 @@ namespace FrontDesk.Infrastructure.Data
         string salutation,
         int doctorId,
         string patient1Sex,
-        string patient1Name, string
-        animalType,
+        string patient1Name,
+        string animalType,
         string breed)
     {
       var client = new Client(fullName, preferredName, salutation, doctorId, "client@example.com");
