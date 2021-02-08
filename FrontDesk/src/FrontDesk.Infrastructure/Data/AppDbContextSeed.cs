@@ -22,70 +22,75 @@ namespace FrontDesk.Infrastructure.Data
     private static DateTime TestDate;
     public const string MALE_SEX = "Male";
     public const string FEMALE_SEX = "Female";
-    public static ILogger Logger;
+    private readonly AppDbContext _context;
+    public readonly ILogger<AppDbContextSeed> _logger;
 
-    public static async Task SeedAsync(AppDbContext context,
-      ILoggerFactory loggerFactory,
-      DateTime TestDate, int? retry = 0)
+    public AppDbContextSeed(AppDbContext context,
+      ILogger<AppDbContextSeed> logger)
     {
-      Logger = loggerFactory.CreateLogger<AppDbContextSeed>();
-      Logger.LogInformation($"Seeding data.");
-      Logger.LogInformation($"DbContext Type: {context.Database.ProviderName}");
+      _context = context;
+      _logger = logger;
+    }
+
+    public async Task SeedAsync(DateTime TestDate, int? retry = 0)
+    {
+      _logger.LogInformation($"Seeding data.");
+      _logger.LogInformation($"DbContext Type: {_context.Database.ProviderName}");
 
       AppDbContextSeed.TestDate = TestDate;
       int retryForAvailability = retry.Value;
       try
       {
-        if (!context.Database.ProviderName.Contains("InMemory"))
+        if (!_context.Database.ProviderName.Contains("InMemory"))
         {
           // apply migrations if connecting to a SQL database
-          context.Database.Migrate();
+          _context.Database.Migrate();
         }
-        if (!await context.Schedules.AnyAsync())
+        if (!await _context.Schedules.AnyAsync())
         {
-          await context.Schedules.AddAsync(
+          await _context.Schedules.AddAsync(
               CreateSchedule());
 
-          await context.SaveChangesAsync();
+          await _context.SaveChangesAsync();
         }
 
-        if (!await context.AppointmentTypes.AnyAsync())
+        if (!await _context.AppointmentTypes.AnyAsync())
         {
-          await context.AppointmentTypes.AddRangeAsync(
+          await _context.AppointmentTypes.AddRangeAsync(
               CreateAppointmentTypes());
 
-          await context.SaveChangesAsync();
+          await _context.SaveChangesAsync();
         }
 
-        if (!await context.Doctors.AnyAsync())
+        if (!await _context.Doctors.AnyAsync())
         {
-          await context.Doctors.AddRangeAsync(
+          await _context.Doctors.AddRangeAsync(
               CreateDoctors());
 
-          await context.SaveChangesAsync();
+          await _context.SaveChangesAsync();
         }
 
-        if (!await context.Clients.AnyAsync())
+        if (!await _context.Clients.AnyAsync())
         {
-          await context.Clients.AddRangeAsync(
+          await _context.Clients.AddRangeAsync(
               CreateListOfClientsWithPatients(DrSmith, DrWho, DrMcDreamy));
 
-          await context.SaveChangesAsync();
+          await _context.SaveChangesAsync();
         }
 
-        if (!await context.Rooms.AnyAsync())
+        if (!await _context.Rooms.AnyAsync())
         {
           var rooms = await CreateRooms();
-          await context.Rooms.AddRangeAsync(rooms);
-          await context.SaveChangesWithIdentityInsert<Room>();
+          await _context.Rooms.AddRangeAsync(rooms);
+          await _context.SaveChangesWithIdentityInsert<Room>();
         }
 
-        if (!await context.Appointments.AnyAsync())
+        if (!await _context.Appointments.AnyAsync())
         {
-          await context.Appointments.AddRangeAsync(
+          await _context.Appointments.AddRangeAsync(
               CreateAppointments(ScheduleId));
 
-          await context.SaveChangesAsync();
+          await _context.SaveChangesAsync();
         }
       }
       catch (Exception ex)
@@ -93,34 +98,33 @@ namespace FrontDesk.Infrastructure.Data
         if (retryForAvailability < 1)
         {
           retryForAvailability++;
-          var log = loggerFactory.CreateLogger<AppDbContextSeed>();
-          log.LogError(ex.Message);
-          await SeedAsync(context, loggerFactory, TestDate, retryForAvailability);
+          _logger.LogError(ex.Message);
+          await SeedAsync(TestDate, retryForAvailability);
         }
         throw;
       }
 
-      context.SaveChanges();
+      _context.SaveChanges();
     }
 
-    private static async Task<List<Room>> CreateRooms()
+    private async Task<List<Room>> CreateRooms()
     {
       string fileName = "rooms.json";
       if (!File.Exists(fileName))
       {
-        Logger.LogInformation($"Creating {fileName}");
+        _logger.LogInformation($"Creating {fileName}");
         using Stream writer = new FileStream(fileName, FileMode.OpenOrCreate);
         await JsonSerializer.SerializeAsync(writer, GetDefaultRooms());
       }
 
-      Logger.LogInformation($"Reading rooms from file {fileName}");
+      _logger.LogInformation($"Reading rooms from file {fileName}");
       using Stream reader = new FileStream(fileName, FileMode.Open);
       var rooms = await JsonSerializer.DeserializeAsync<List<RoomDto>>(reader);
 
       return rooms.Select(dto => new Room(dto.RoomId, dto.Name)).ToList();
     }
 
-    private static List<RoomDto> GetDefaultRooms()
+    private List<RoomDto> GetDefaultRooms()
     {
       List<RoomDto> rooms = new List<RoomDto>();
       for (int i = 1; i < 6; i++)

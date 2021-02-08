@@ -23,8 +23,9 @@ namespace FrontDesk.Api
         logger.LogInformation($"Starting in environment {hostEnvironment.EnvironmentName}");
         try
         {
-          var catalogContext = services.GetRequiredService<AppDbContext>();
-          await AppDbContextSeed.SeedAsync(catalogContext, loggerFactory, new OfficeSettings().TestDate);
+          var seedService = services.GetRequiredService<AppDbContextSeed>();
+          //var catalogContext = services.GetRequiredService<AppDbContext>();
+          await seedService.SeedAsync(new OfficeSettings().TestDate);
         }
         catch (Exception ex)
         {
