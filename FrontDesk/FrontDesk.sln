@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTests", "tests\I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontDesk.Blazor", "src\FrontDesk.Blazor\FrontDesk.Blazor.csproj", "{6493BCA7-4491-481D-90B8-17065E17DC91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontDesk.Blazor.Host", "src\FrontDesk.Blazor.Host\FrontDesk.Blazor.Host.csproj", "{9D86FC4C-7E49-48F4-A17C-CB60FE393901}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{6493BCA7-4491-481D-90B8-17065E17DC91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6493BCA7-4491-481D-90B8-17065E17DC91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6493BCA7-4491-481D-90B8-17065E17DC91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D86FC4C-7E49-48F4-A17C-CB60FE393901}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D86FC4C-7E49-48F4-A17C-CB60FE393901}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D86FC4C-7E49-48F4-A17C-CB60FE393901}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D86FC4C-7E49-48F4-A17C-CB60FE393901}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,6 +73,7 @@ Global
 		{6D9693AC-90A7-48C4-B45F-953877EAD4BD} = {C799AB27-573B-4100-97A0-BB5D40FA29B5}
 		{F1D5CB5A-22F9-44FB-9966-77DB8840930A} = {C799AB27-573B-4100-97A0-BB5D40FA29B5}
 		{6493BCA7-4491-481D-90B8-17065E17DC91} = {214E4075-BCE7-453B-8AFA-AA5BCAFD2E82}
+		{9D86FC4C-7E49-48F4-A17C-CB60FE393901} = {214E4075-BCE7-453B-8AFA-AA5BCAFD2E82}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0C7E985-7329-48F5-BB22-EE0AC55B0F35}
