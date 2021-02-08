@@ -19,12 +19,15 @@
   </ItemGroup>  
 	
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.2" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="5.0.0" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
 	<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
-	<PackageReference Include="Telerik.UI.for.Blazor.Trial" Version="2.17.0" />
+    <PackageReference Include="Telerik.DataSource" Version="2.0.8" />
+    <PackageReference Include="Telerik.Recurrence" Version="0.1.0" />
+    <PackageReference Include="Telerik.Documents.SpreadsheetStreaming" Version="2021.1.118" />
+    <PackageReference Include="Telerik.UI.for.Blazor.Trial" Version="2.21.0" />
   </ItemGroup>
 
   <ItemGroup>
