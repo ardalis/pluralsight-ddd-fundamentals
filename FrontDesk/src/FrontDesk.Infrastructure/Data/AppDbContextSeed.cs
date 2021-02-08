@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using BlazorShared.Models.AppointmentType;
 using BlazorShared.Models.Room;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.ValueObjects;
@@ -56,10 +57,9 @@ namespace FrontDesk.Infrastructure.Data
 
         if (!await _context.AppointmentTypes.AnyAsync())
         {
-          await _context.AppointmentTypes.AddRangeAsync(
-              CreateAppointmentTypes());
-
-          await _context.SaveChangesAsync();
+          var apptTypes = await CreateAppointmentTypes();
+          await _context.AppointmentTypes.AddRangeAsync(apptTypes);
+          await _context.SaveChangesWithIdentityInsert<AppointmentType>();
         }
 
         if (!await _context.Doctors.AnyAsync())
@@ -140,13 +140,45 @@ namespace FrontDesk.Infrastructure.Data
       return new Schedule(ScheduleId, new DateTimeRange(DateTime.Now, DateTime.Now), 1, null);
     }
 
-    private static List<AppointmentType> CreateAppointmentTypes()
+    private async Task<List<AppointmentType>> CreateAppointmentTypes()
     {
-      var result = new List<AppointmentType>
+      string fileName = "appointmentTypes.json";
+      if (!File.Exists(fileName))
+      {
+        _logger.LogInformation($"Creating {fileName}");
+        using Stream writer = new FileStream(fileName, FileMode.OpenOrCreate);
+        await JsonSerializer.SerializeAsync(writer, GetDefaultAppointmentTypes());
+      }
+
+      _logger.LogInformation($"Reading appointment types from file {fileName}");
+      using Stream reader = new FileStream(fileName, FileMode.Open);
+      var apptTypes = await JsonSerializer.DeserializeAsync<List<AppointmentTypeDto>>(reader);
+
+      return apptTypes.Select(dto => new AppointmentType(dto.AppointmentTypeId, dto.Name, dto.Code, dto.Duration)).ToList();
+    }
+
+    private List<AppointmentTypeDto> GetDefaultAppointmentTypes()
+    {
+      var result = new List<AppointmentTypeDto>
             {
-                new AppointmentType("Wellness Exam", "WE", 30),
-                new AppointmentType("Diagnostic Exam", "DE", 60),
-                new AppointmentType("Nail Trim", "NT", 30)
+                new AppointmentTypeDto {
+                  AppointmentTypeId=1,
+                  Name="Wellness Exam",
+                  Code="WE",
+                  Duration=30
+                },
+                new AppointmentTypeDto {
+                  AppointmentTypeId=2,
+                  Name="Diagnostic Exam",
+                  Code="DE",
+                  Duration=60
+                },
+                new AppointmentTypeDto{
+                  AppointmentTypeId=3,
+                  Name="Nail Trim",
+                  Code="NT",
+                  Duration=30
+                }
             };
 
       return result;

@@ -9,16 +9,12 @@ namespace FrontDesk.Core.Aggregates
     public string Code { get; private set; }
     public int Duration { get; private set; }
 
-    public AppointmentType(string name, string code, int duration)
+    public AppointmentType(int id, string name, string code, int duration)
     {
+      Id = id;
       Name = name;
       Code = code;
       Duration = duration;
-    }
-
-    public AppointmentType(int id)
-    {
-      Id = id;
     }
 
     private AppointmentType() // required for EF
