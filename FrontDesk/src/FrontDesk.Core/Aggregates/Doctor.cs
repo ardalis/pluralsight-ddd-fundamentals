@@ -7,14 +7,14 @@ namespace FrontDesk.Core.Aggregates
   {
     public virtual string Name { get; private set; }
 
-    public Doctor(string name)
+    public Doctor(int id, string name)
     {
+      Id = id;
       Name = name;
     }
 
-    public Doctor(int id)
+    private Doctor() // required for EF
     {
-      Id = id;
     }
 
     public void UpdateName(string name)
@@ -25,11 +25,6 @@ namespace FrontDesk.Core.Aggregates
     public override string ToString()
     {
       return Name.ToString();
-    }
-
-    private Doctor() // required for EF
-    {
-
     }
   }
 }
