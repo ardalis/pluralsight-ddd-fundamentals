@@ -23,7 +23,7 @@ namespace FrontDesk.Infrastructure.Data
     public const string MALE_SEX = "Male";
     public const string FEMALE_SEX = "Female";
     private readonly AppDbContext _context;
-    public readonly ILogger<AppDbContextSeed> _logger;
+    private readonly ILogger<AppDbContextSeed> _logger;
 
     public AppDbContextSeed(AppDbContext context,
       ILogger<AppDbContextSeed> logger)

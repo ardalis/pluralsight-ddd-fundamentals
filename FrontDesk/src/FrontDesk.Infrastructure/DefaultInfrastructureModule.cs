@@ -76,6 +76,8 @@ namespace FrontDesk.Infrastructure
 
       builder.RegisterType<EmailSender>().As<IEmailSender>()
           .InstancePerLifetimeScope();
+
+      builder.RegisterType<AppDbContextSeed>().InstancePerLifetimeScope();
     }
 
     private void RegisterDevelopmentOnlyDependencies(ContainerBuilder builder)

@@ -1,4 +1,5 @@
 ﻿using System;
+using Autofac.Extensions.DependencyInjection;
 using FrontDesk.Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,9 +39,10 @@ namespace FrontDesk.Api
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-              webBuilder.UseStartup<Startup>();
-            });
+          .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+          .ConfigureWebHostDefaults(webBuilder =>
+          {
+            webBuilder.UseStartup<Startup>();
+          });
   }
 }

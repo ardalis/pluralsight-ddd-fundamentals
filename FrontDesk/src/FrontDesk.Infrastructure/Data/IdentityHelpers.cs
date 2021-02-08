@@ -18,6 +18,12 @@ namespace FrontDesk.Infrastructure.Data
 
     public static async Task SaveChangesWithIdentityInsert<T>(this DbContext context)
     {
+      if (context.Database.ProviderName.Contains("InMemory"))
+      {
+        await context.SaveChangesAsync();
+        return;
+      }
+
       using var transaction = context.Database.BeginTransaction();
       await context.EnableIdentityInsert<T>();
       await context.SaveChangesAsync();
