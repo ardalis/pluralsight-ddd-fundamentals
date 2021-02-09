@@ -77,6 +77,7 @@ namespace FrontDesk.Core.Aggregates
 
     public void UpdateEndTime(AppointmentType appointmentType)
     {
+      Guard.Against.Null(TimeRange?.Start, nameof(TimeRange));
       TimeRange = TimeRange.NewEnd(TimeRange.Start.AddMinutes(appointmentType.Duration));
 
       var appointmentUpdatedEvent = new AppointmentUpdatedEvent(this);
