@@ -16,11 +16,11 @@ namespace FrontDesk.Infrastructure.Data
 {
   public class AppDbContextSeed
   {
-    private static Doctor DrSmith => new Doctor("Dr. Smith");
-    private static Doctor DrWho => new Doctor("Dr. Who");
-    private static Doctor DrMcDreamy => new Doctor("Dr. McDreamy");
+    private Doctor DrSmith => new Doctor(1, "Dr. Smith");
+    private Doctor DrWho => new Doctor(2, "Dr. Who");
+    private Doctor DrMcDreamy => new Doctor(3, "Dr. McDreamy");
     private static Guid ScheduleId;
-    private static DateTime TestDate;
+    private DateTime _testDate = DateTime.Now;
     public const string MALE_SEX = "Male";
     public const string FEMALE_SEX = "Female";
     private readonly AppDbContext _context;
@@ -33,12 +33,12 @@ namespace FrontDesk.Infrastructure.Data
       _logger = logger;
     }
 
-    public async Task SeedAsync(DateTime TestDate, int? retry = 0)
+    public async Task SeedAsync(DateTime testDate, int? retry = 0)
     {
       _logger.LogInformation($"Seeding data.");
       _logger.LogInformation($"DbContext Type: {_context.Database.ProviderName}");
 
-      AppDbContextSeed.TestDate = TestDate;
+      _testDate = testDate;
       int retryForAvailability = retry.Value;
       try
       {
@@ -64,10 +64,9 @@ namespace FrontDesk.Infrastructure.Data
 
         if (!await _context.Doctors.AnyAsync())
         {
-          await _context.Doctors.AddRangeAsync(
-              CreateDoctors());
-
-          await _context.SaveChangesAsync();
+          var doctors = CreateDoctors();
+          await _context.Doctors.AddRangeAsync(doctors);
+          await _context.SaveChangesWithIdentityInsert<Doctor>();
         }
 
         if (!await _context.Clients.AnyAsync())
@@ -99,7 +98,7 @@ namespace FrontDesk.Infrastructure.Data
         {
           retryForAvailability++;
           _logger.LogError(ex.Message);
-          await SeedAsync(TestDate, retryForAvailability);
+          await SeedAsync(_testDate, retryForAvailability);
         }
         throw;
       }
@@ -134,10 +133,10 @@ namespace FrontDesk.Infrastructure.Data
       return rooms;
     }
 
-    private static Schedule CreateSchedule()
+    private Schedule CreateSchedule()
     {
       ScheduleId = Guid.NewGuid();
-      return new Schedule(ScheduleId, new DateTimeRange(DateTime.Now, DateTime.Now), 1, null);
+      return new Schedule(ScheduleId, new DateTimeRange(_testDate, _testDate), 1, null);
     }
 
     private async Task<List<AppointmentType>> CreateAppointmentTypes()
@@ -184,7 +183,7 @@ namespace FrontDesk.Infrastructure.Data
       return result;
     }
 
-    private static List<Doctor> CreateDoctors()
+    private List<Doctor> CreateDoctors()
     {
       var result = new List<Doctor>
             {
@@ -280,7 +279,7 @@ namespace FrontDesk.Infrastructure.Data
       return client;
     }
 
-    private static IEnumerable<Appointment> CreateAppointments(Guid scheduleId)
+    private IEnumerable<Appointment> CreateAppointments(Guid scheduleId)
     {
       var appointmentList = new List<Appointment>
               {
@@ -291,9 +290,7 @@ namespace FrontDesk.Infrastructure.Data
                     1,
                     1,
                     1,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 10, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 11, 0, 0)),
+                    new DateTimeRange(_testDate.AddHours(10), TimeSpan.FromHours(1)),
                     "(WE) Darwin - Steve Smith"),
                 new Appointment(
                     1,
@@ -302,9 +299,7 @@ namespace FrontDesk.Infrastructure.Data
                     2,
                     3,
                     2,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 11, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 11, 30, 0)),
+                    new DateTimeRange(_testDate.AddHours(11), TimeSpan.FromMinutes(30)),
                     "(DE) Sampson - Julie Lerman"),
                 new Appointment(
                     1,
@@ -313,9 +308,7 @@ namespace FrontDesk.Infrastructure.Data
                     2,
                     4,
                     2,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 12, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 12, 30, 0)),
+                    new DateTimeRange(_testDate.AddHours(12), TimeSpan.FromMinutes(30)),
                     "(DE) Pax - Wes McClure"),
                 new Appointment(
                     1,
@@ -324,9 +317,7 @@ namespace FrontDesk.Infrastructure.Data
                     2,
                     23,
                     3,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 30, 0)),
+                    new DateTimeRange(_testDate.AddHours(9), TimeSpan.FromMinutes(30)),
                     "(DE) Charlie - Jesse Liberty"),
                 new Appointment(
                     2,
@@ -336,197 +327,9 @@ namespace FrontDesk.Infrastructure.Data
                     24,
                     3,
                     new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 30, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 10, 30, 0)),
-                    "(DE) Allegra - Jesse Liberty"),
-                new Appointment(
-                    1,
-                    scheduleId,
-                    19,
-                    2,
-                    25,
-                    3,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 10, 30, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 11, 00, 0)),
-                    "(DE) Misty - Jesse Liberty"),
-                new Appointment(
-                    3,
-                    scheduleId,
-                    4,
-                    2,
-                    5,
-                    4,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 8, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 8, 30, 0)),
-                    "(DE) Barney - Andrew Mallett"),
-                new Appointment(
-                    2,
-                    scheduleId,
-                    5,
-                    2,
-                    6,
-                    3,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 8, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 0, 0)),
-                    "(DE) Rocky - Brian Lagunas",
-                    new DateTime(2014,6,8,8,0,0)),
-                new Appointment(
-                    3,
-                    scheduleId,
-                    20,
-                    2,
-                    26,
-                    2,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 30, 0)),
-                    "(DE) Willie - Tyler Young"),
-                new Appointment(
-                    3,
-                    scheduleId,
-                    20,
-                    2,
-                    27,
-                    2,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 30, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 10, 00, 0)),
-                    "(DE) JoeFish - Tyler Young"),
-                new Appointment(
-                    1,
-                    scheduleId,
-                    20,
-                    2,
-                    27,
-                    2,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 30, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 10, 00, 0)),
-                    "(DE) JoeFish - Tyler Young"),
-                new Appointment(
-                    1,
-                    scheduleId,
-                    20,
-                    2,
-                    28,
-                    2,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 10, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 10, 30, 0)),
-                    "(DE) Fabian - Tyler Young"),
-                new Appointment(
-                    1,
-                    scheduleId,
-                    6,
-                    2,
-                    7,
-                    4,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 11, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 11, 30, 0)),
-                    "(DE) Zak - Corey Haines"),
-                new Appointment(
-                    3,
-                    scheduleId,
-                    7,
-                    2,
-                    8,
-                    4,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 30, 0)),
-                    "(DE) Tinkelbel - Reindert Ekkert"),
-                new Appointment(
-                    1,
-                    scheduleId,
-                    18,
-                    2,
-                    20,
-                    4,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 30, 0)),
-                    "(DE) Ruske - Julie Yack"),
-                new Appointment(
-                    3,
-                    scheduleId,
-                    18,
-                    2,
-                    22,
-                    4,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 30, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 10, 00, 0)),
-                    "(DE) Lizzie - Julie Yack"),
-                new Appointment(
-                    3,
-                    scheduleId,
-                    18,
-                    2,
-                    21,
-                    4,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 10, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 10, 30, 0)),
-                    "(DE) Ginger - Julie Yack"),
-                new Appointment(
-                    2,
-                    scheduleId,
-                    8,
-                    2,
-                    9,
-                    5,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 8, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 00, 0)),
-                    "(DE) Anubis - Patrick Hynds"),
-                new Appointment(
-                    1,
-                    scheduleId,
-                    21,
-                    2,
-                    30,
-                    1,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 30, 0)),
-                    "(DE) Radar - Michael Perry"),
-                new Appointment(
-                    1,
-                    scheduleId,
-                    21,
-                    2,
-                    31,
-                    1,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 30, 0)),
-                    "(DE) Tinkerbell - Michael Perry"),
-                new Appointment(
-                    2,
-                    scheduleId,
-                    10,
-                    2,
-                    11,
-                    1,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 8, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 00, 0)),
-                    "(DE) Corde - Joe Eames"),
-                new Appointment(
-                    3,
-                    scheduleId,
-                    21,
-                    2,
-                    29,
-                    5,
-                    new DateTimeRange(
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 0, 0),
-                        new DateTime(TestDate.Year, TestDate.Month, TestDate.Day, 9, 30, 0)),
-                    "(DE) Callie - Michael Perry"),
+                        new DateTime(_testDate.Year, _testDate.Month, _testDate.Day, 9, 30, 0),
+                        new DateTime(_testDate.Year, _testDate.Month, _testDate.Day, 10, 30, 0)),
+                    "(DE) Allegra - Jesse Liberty")
               };
 
       return appointmentList;

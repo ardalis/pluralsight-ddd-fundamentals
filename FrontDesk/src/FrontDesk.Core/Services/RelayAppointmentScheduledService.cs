@@ -1,8 +1,10 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Events;
 using FrontDesk.Core.Interfaces;
+using FrontDesk.Core.Specifications;
 using MediatR;
 using PluralsightDdd.SharedKernel.Interfaces;
 
@@ -32,8 +34,11 @@ namespace FrontDesk.Core.Services
 
       // if this is slow these can be parallelized or cached. MEASURE before optimizing.
       var doctor = await _repository.GetByIdAsync<Doctor, int>(appt.DoctorId.Value);
-      var client = await _repository.GetByIdAsync<Client, int>(appt.ClientId);
-      var patient = await _repository.GetByIdAsync<Patient, int>(appt.PatientId);
+
+      var clientWithPatientsSpec = new ClientByIdIncludePatientsSpecification(appt.ClientId);
+      var client = (await _repository.ListAsync<Client, int>(clientWithPatientsSpec))
+        .FirstOrDefault();
+      var patient = client.Patients.First(p => p.Id == appt.PatientId);
       var apptType = await _repository.GetByIdAsync<AppointmentType, int>(appt.AppointmentTypeId);
 
       newMessage.AppointmentDateTime = appointmentScheduledEvent.AppointmentScheduled.TimeRange.Start;

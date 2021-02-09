@@ -32,10 +32,15 @@ namespace FrontDesk.Api.PatientEndpoints
     {
       var response = new CreatePatientResponse(request.CorrelationId());
 
-      var toAdd = _mapper.Map<Patient>(request);
-      toAdd = await _repository.AddAsync<Patient, int>(toAdd);
+      var client = await _repository.GetByIdAsync<Client, int>(request.ClientId);
+      if (client == null) return NotFound();
 
-      var dto = _mapper.Map<PatientDto>(toAdd);
+      var newPatient = new Patient(client.Id, request.PatientName, "", new Core.ValueObjects.AnimalType("Dog", "Husky"));
+      client.Patients.Add(newPatient);
+
+      await _repository.UpdateAsync<Client, int>(client);
+
+      var dto = _mapper.Map<PatientDto>(newPatient);
       response.Patient = dto;
 
       return Ok(response);

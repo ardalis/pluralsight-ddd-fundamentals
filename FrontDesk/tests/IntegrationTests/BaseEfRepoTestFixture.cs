@@ -3,14 +3,16 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Xunit;
 
 namespace IntegrationTests
 {
+  [Collection("Sequential")]
   public abstract class BaseEfRepoTestFixture
   {
     protected AppDbContext _dbContext;
 
-    protected static DbContextOptions<AppDbContext> CreateNewContextOptions()
+    protected static DbContextOptions<AppDbContext> CreateInMemoryContextOptions()
     {
       // Create a fresh service provider, and therefore a fresh
       // InMemory database instance.
@@ -27,9 +29,19 @@ namespace IntegrationTests
       return builder.Options;
     }
 
+    protected DbContextOptions<AppDbContext> CreateSqlLiteOptions()
+    {
+      var builder = new DbContextOptionsBuilder<AppDbContext>();
+      builder.UseSqlite("Data Source=test.db");
+
+      return builder.Options;
+    }
+
+
     protected EfRepository GetRepository()
     {
-      var options = CreateNewContextOptions();
+      //var options = CreateInMemoryContextOptions();
+      var options = CreateSqlLiteOptions();
       var mockMediator = new Mock<IMediator>();
 
       _dbContext = new AppDbContext(options, mockMediator.Object);
