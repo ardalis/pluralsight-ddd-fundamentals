@@ -23,7 +23,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     {
       var scheduleId = Guid.NewGuid();
       var testClientId = 1;
-      var testPatientId = 1;
+      var testPatientId = 2;
       var testRoomId = 3;
       var testAppointmentTypeId = 4;
       var testDoctorId = 5;
