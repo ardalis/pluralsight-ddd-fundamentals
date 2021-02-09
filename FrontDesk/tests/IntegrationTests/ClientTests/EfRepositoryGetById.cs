@@ -3,31 +3,27 @@ using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
 
-namespace IntegrationTests.Client
+namespace IntegrationTests.ClientTests
 {
-  public class EfRepositoryUpdate : BaseEfRepoTestFixture
+  public class EfRepositoryGetById : BaseEfRepoTestFixture
   {
     private readonly EfRepository _repository;
 
-    public EfRepositoryUpdate()
+    public EfRepositoryGetById()
     {
       _repository = GetRepository();
     }
 
     [Fact]
-    public async Task UpdatesClientAfterAddingIt()
+    public async Task GetsByIdClientAfterAddingIt()
     {
-      var id = 2;
-      var fullName = "changed";
-
+      var id = 9;
       var client = await AddClient(id);
 
-      client.UpdateFullName(fullName);
-      await _repository.UpdateAsync<FrontDesk.Core.Aggregates.Client, int>(client);
+      var newClient = await _repository.GetByIdAsync<FrontDesk.Core.Aggregates.Client, int>(id);
 
-      var updatedClient = await _repository.GetByIdAsync<FrontDesk.Core.Aggregates.Client, int>(id);
-
-      Assert.Equal(fullName, updatedClient.FullName);
+      Assert.Equal(client, newClient);
+      Assert.True(newClient?.Id == id);
     }
 
     private async Task<FrontDesk.Core.Aggregates.Client> AddClient(int id)

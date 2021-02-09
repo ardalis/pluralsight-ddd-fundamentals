@@ -4,31 +4,30 @@ using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
 
-namespace IntegrationTests.Client
+namespace IntegrationTests.ClientTests
 {
-  public class EfRepositoryAdd : BaseEfRepoTestFixture
+  public class EfRepositoryList : BaseEfRepoTestFixture
   {
     private readonly EfRepository _repository;
 
-    public EfRepositoryAdd()
+    public EfRepositoryList()
     {
       _repository = GetRepository();
     }
 
     [Fact]
-    public async Task AddsClientAndSetsId()
+    public async Task ListsClientAfterAddingIt()
     {
-      var client = await AddClient();
+      await AddClient();
 
-      var newClient = (await _repository.ListAsync<FrontDesk.Core.Aggregates.Client, int>()).FirstOrDefault();
+      var clients = (await _repository.ListAsync<FrontDesk.Core.Aggregates.Client, int>()).ToList();
 
-      Assert.Equal(client, newClient);
-      Assert.True(newClient?.Id > 0);
+      Assert.True(clients?.Count > 0);
     }
 
     private async Task<FrontDesk.Core.Aggregates.Client> AddClient()
     {
-      var client = new ClientBuilder().Id(2).Build();
+      var client = new ClientBuilder().Id(7).Build();
 
       await _repository.AddAsync<FrontDesk.Core.Aggregates.Client, int>(client);
 

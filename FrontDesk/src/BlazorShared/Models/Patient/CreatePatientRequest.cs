@@ -2,6 +2,7 @@
 {
   public class CreatePatientRequest : BaseRequest
   {
-    public string Name { get; set; }
+    public int ClientId { get; set; }
+    public string PatientName { get; set; }
   }
 }
