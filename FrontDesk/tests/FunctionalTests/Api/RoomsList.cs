@@ -9,12 +9,12 @@ using Xunit.Abstractions;
 
 namespace FunctionalTests.Api
 {
-  public class List : IClassFixture<CustomWebApplicationFactory<Startup>>
+  public class RoomsList : IClassFixture<CustomWebApplicationFactory<Startup>>
   {
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _outputHelper;
 
-    public List(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
+    public RoomsList(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
     {
       _client = factory.CreateClient();
       _outputHelper = outputHelper;
