@@ -20,44 +20,6 @@ namespace FrontDesk.Core.Aggregates
 
     public string Title { get; private set; }
 
-    //private Patient _patient;
-    //public Patient Patient
-    //{
-    //  get
-    //  {
-    //    return _patient;
-    //  }
-    //  private set
-    //  {
-    //    _patient = value;
-    //  }
-    //}
-
-    //private AppointmentType _appointmentType;
-    //public AppointmentType AppointmentType
-    //{
-    //  get
-    //  {
-    //    return _appointmentType;
-    //  }
-    //  private set
-    //  {
-    //    _appointmentType = value;
-    //  }
-    //}
-
-    //private Client _client;
-    //public Client Client
-    //{
-    //  get
-    //  {
-    //    return _client;
-    //  }
-    //  private set
-    //  {
-    //    _client = value;
-    //  }
-    //}
 
     #region More Properties
     public DateTime? DateTimeConfirmed { get; set; }
@@ -68,6 +30,16 @@ namespace FrontDesk.Core.Aggregates
     [NotMapped]
     public bool IsPotentiallyConflicting { get; set; }
     #endregion
+
+    public Appointment(Guid id)
+    {
+      Id = id;
+    }
+
+    private Appointment() // required for EF
+    {
+      Id = Guid.NewGuid();
+    }
 
     public Appointment(int appointmentTypeId, Guid scheduleId, int clientId, int doctorId, int patientId, int roomId, DateTimeRange timeRange, string title, DateTime? dateTimeConfirmed = null)
     {
@@ -81,16 +53,6 @@ namespace FrontDesk.Core.Aggregates
       TimeRange = timeRange;
       Title = title;
       DateTimeConfirmed = dateTimeConfirmed;
-    }
-
-    public Appointment(Guid id)
-    {
-      Id = id;
-    }
-
-    private Appointment() // required for EF
-    {
-      Id = Guid.NewGuid();
     }
 
     public void UpdateRoom(int newRoomId)

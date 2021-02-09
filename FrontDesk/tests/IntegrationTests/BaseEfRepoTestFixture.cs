@@ -43,16 +43,13 @@ namespace IntegrationTests
       return builder.Options;
     }
 
-
     protected EfRepository GetRepository()
     {
       //var options = CreateInMemoryContextOptions();
       var options = CreateSqlLiteOptions();
       var mockMediator = new Mock<IMediator>();
 
-      _dbContext = new AppDbContext(options, mockMediator.Object);
-      _dbContext.Database.OpenConnection();
-      _dbContext.Database.EnsureCreated();
+      _dbContext = new TestContext(options, mockMediator.Object);
       return new EfRepository(_dbContext);
     }
   }
