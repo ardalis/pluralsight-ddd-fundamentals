@@ -21,7 +21,7 @@ namespace FunctionalTests.Api
     }
 
     [Fact]
-    public async Task ReturnsTwoItems()
+    public async Task Returns5Rooms()
     {
       var response = await _client.GetAsync("/api/rooms");
       response.EnsureSuccessStatusCode();

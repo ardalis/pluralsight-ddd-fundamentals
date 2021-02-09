@@ -1,5 +1,6 @@
 ﻿using FrontDesk.Infrastructure.Data;
 using MediatR;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -11,7 +12,12 @@ namespace IntegrationTests
   public abstract class BaseEfRepoTestFixture
   {
     protected AppDbContext _dbContext;
+    protected readonly SqliteConnection _connection;
 
+    public BaseEfRepoTestFixture()
+    {
+
+    }
     protected static DbContextOptions<AppDbContext> CreateInMemoryContextOptions()
     {
       // Create a fresh service provider, and therefore a fresh
@@ -32,7 +38,7 @@ namespace IntegrationTests
     protected DbContextOptions<AppDbContext> CreateSqlLiteOptions()
     {
       var builder = new DbContextOptionsBuilder<AppDbContext>();
-      builder.UseSqlite("Data Source=integrationtests.db");
+      builder.UseSqlite("DataSource=file:memdb1?mode=memory");
 
       return builder.Options;
     }
@@ -45,7 +51,8 @@ namespace IntegrationTests
       var mockMediator = new Mock<IMediator>();
 
       _dbContext = new AppDbContext(options, mockMediator.Object);
-
+      _dbContext.Database.OpenConnection();
+      _dbContext.Database.EnsureCreated();
       return new EfRepository(_dbContext);
     }
   }
