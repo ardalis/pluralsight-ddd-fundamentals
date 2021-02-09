@@ -1,5 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FrontDesk.Infrastructure.Data
 {
@@ -18,7 +20,7 @@ namespace FrontDesk.Infrastructure.Data
 
     public static async Task SaveChangesWithIdentityInsert<T>(this DbContext context)
     {
-      if (context.Database.ProviderName.Contains("InMemory"))
+      if (!context.IsRealDatabase())
       {
         await context.SaveChangesAsync();
         return;
@@ -29,6 +31,11 @@ namespace FrontDesk.Infrastructure.Data
       await context.SaveChangesAsync();
       await context.DisableIdentityInsert<T>();
       transaction.Commit();
+    }
+
+    public static bool IsRealDatabase(this DbContext context)
+    {
+      return context.Database.ProviderName.Contains("SqlServer");
     }
 
   }

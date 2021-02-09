@@ -32,7 +32,7 @@ namespace IntegrationTests
     protected DbContextOptions<AppDbContext> CreateSqlLiteOptions()
     {
       var builder = new DbContextOptionsBuilder<AppDbContext>();
-      builder.UseSqlite("Data Source=test.db");
+      builder.UseSqlite("Data Source=integrationtests.db");
 
       return builder.Options;
     }

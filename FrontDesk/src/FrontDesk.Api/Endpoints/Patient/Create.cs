@@ -4,6 +4,7 @@ using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Patient;
 using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
@@ -32,7 +33,8 @@ namespace FrontDesk.Api.PatientEndpoints
     {
       var response = new CreatePatientResponse(request.CorrelationId());
 
-      var client = await _repository.GetByIdAsync<Client, int>(request.ClientId);
+      var spec = new ClientByIdIncludePatientsSpecification(request.ClientId);
+      var client = await _repository.GetAsync<Client, int>(spec);
       if (client == null) return NotFound();
 
       var newPatient = new Patient(client.Id, request.PatientName, "", new Core.ValueObjects.AnimalType("Dog", "Husky"));

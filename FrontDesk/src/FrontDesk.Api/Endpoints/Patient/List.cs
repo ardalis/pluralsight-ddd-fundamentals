@@ -34,7 +34,8 @@ namespace FrontDesk.Api.PatientEndpoints
     {
       var response = new ListPatientResponse(request.CorrelationId());
 
-      var client = await _repository.GetByIdAsync<Client, int>(request.ClientId);
+      var spec = new ClientByIdIncludePatientsSpecification(request.ClientId);
+      var client = await _repository.GetAsync<Client, int>(spec);
       if (client == null) return NotFound();
 
       response.Patients = _mapper.Map<List<PatientDto>>(client.Patients);

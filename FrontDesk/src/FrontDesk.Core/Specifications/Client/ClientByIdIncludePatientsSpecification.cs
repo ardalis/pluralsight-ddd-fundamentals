@@ -9,8 +9,7 @@ namespace FrontDesk.Core.Specifications
     {
       Query
         .Include(client => client.Patients)
-        .Where(client => client.Id == clientId)
-        .OrderBy(client => client.FullName);
+        .Where(client => client.Id == clientId);
     }
   }
 }

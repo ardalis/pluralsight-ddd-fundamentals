@@ -8,7 +8,6 @@ namespace FrontDesk.Core.Specifications
     public PatientByClientIdSpecification(int clientId)
     {
       Query
-          .Include(nameof(Patient.Client))
           .Where(patient => patient.ClientId == clientId);
 
       Query.OrderBy(patient => patient.Name);
