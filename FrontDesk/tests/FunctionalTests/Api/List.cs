@@ -23,15 +23,12 @@ namespace FunctionalTests.Api
     [Fact]
     public async Task ReturnsTwoItems()
     {
-      var options = new JsonSerializerOptions
-      {
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
       var response = await _client.GetAsync("/api/rooms");
       response.EnsureSuccessStatusCode();
       var stringResponse = await response.Content.ReadAsStringAsync();
       _outputHelper.WriteLine(stringResponse);
-      var result = JsonSerializer.Deserialize<ListRoomResponse>(stringResponse, options);
+      var result = JsonSerializer.Deserialize<ListRoomResponse>(stringResponse,
+        Constants.DefaultJsonOptions);
 
       Assert.Equal(5, result.Rooms.Count());
       Assert.Contains(result.Rooms, room => room.Name == "Exam Room 1");
