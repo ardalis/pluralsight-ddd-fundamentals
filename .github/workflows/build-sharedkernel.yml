@@ -3,12 +3,13 @@ name: .NET Core Build and Test
 on:
   workflow_dispatch:
     branches: [ main ]
+    paths: [ 'SharedKernel/src/**' ]
   push:
     branches: [ main ]
+    paths: [ 'SharedKernel/src/**' ]
   pull_request:
     branches: [ main, dev ]
-  paths:
-    - 'SharedKernel/src/**'
+    paths: [ 'SharedKernel/src/**' ]
 
 jobs:
   build:
