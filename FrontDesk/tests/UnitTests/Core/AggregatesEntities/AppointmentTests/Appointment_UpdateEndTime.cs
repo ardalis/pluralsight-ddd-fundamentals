@@ -8,7 +8,13 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
   public class Appointment_UpdateEndTime
   {
     private readonly DateTime _startTime = new DateTime(2021, 01, 01, 10, 00, 00);
+    private readonly DateTime _endTime;
     private readonly Fixture _fixture = new Fixture();
+
+    public Appointment_UpdateEndTime()
+    {
+      _endTime = _startTime.AddHours(3);
+    }
 
     [Fact]
     public void SuccessWhenUpdateEndTime()
@@ -16,7 +22,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
       var scheduleId = Guid.NewGuid();
 
       var appointment =
-        Appointment.Create(scheduleId, 1, 1, 1, _startTime, _startTime.AddHours(3), 1, 1, "Title Test");
+        Appointment.Create(scheduleId, 1, 1, 1, _startTime, _endTime, 1, 1, "Title Test");
       appointment.UpdateEndTime(new AppointmentType(1, "Test Type", "01", 30));
 
       Assert.Equal(30, appointment.TimeRange.DurationInMinutes());
