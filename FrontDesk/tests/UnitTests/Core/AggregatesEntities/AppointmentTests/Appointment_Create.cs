@@ -10,7 +10,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     private readonly DateTime _endTime;
     private readonly Guid _scheduleId = Guid.NewGuid();
     private readonly int _testClientId = 1;
-    private readonly int _testPatientId = 1;
+    private readonly int _testPatientId = 2;
     private readonly int _testRoomId = 3;
     private readonly int _testAppointmentTypeId = 4;
     private readonly int _testDoctorId = 5;
@@ -24,7 +24,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     [Fact]
     public void CreateSuccess()
     {
-      var appointment = Appointment.Create(_scheduleId, _testClientId, _testPatientId, _testRoomId, _startTime, _endTime, 4, _testDoctorId, _testTitle);
+      var appointment = Appointment.Create(_scheduleId, _testClientId, _testPatientId, _testRoomId, _startTime, _endTime, _testAppointmentTypeId, _testDoctorId, _testTitle);
       var threeHours = 3 * 60;
 
       Assert.Null(appointment.DateTimeConfirmed);
