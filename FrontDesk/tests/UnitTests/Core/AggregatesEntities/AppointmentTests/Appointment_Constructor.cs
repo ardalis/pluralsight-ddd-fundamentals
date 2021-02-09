@@ -12,17 +12,18 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     {
       var scheduleId = Guid.NewGuid();
       var range = new DateTimeRange(DateTime.Now, DateTime.Now.AddHours(3));
-      var appointment = new Appointment(1, scheduleId, 1, 1, 1, 1, range, "Title Test");
+      var appointment = new Appointment(1, scheduleId, 2, 3, 4, 5, range, "Title Test");
 
       Assert.Null(appointment.DateTimeConfirmed);
       Assert.Equal(1, appointment.AppointmentTypeId);
       Assert.Equal(scheduleId, appointment.ScheduleId);
-      Assert.Equal(1, appointment.ClientId);
-      Assert.Equal(1, appointment.DoctorId);
-      Assert.Equal(1, appointment.PatientId);
-      Assert.Equal(1, appointment.RoomId);
+      Assert.Equal(2, appointment.ClientId);
+      Assert.Equal(3, appointment.DoctorId);
+      Assert.Equal(4, appointment.PatientId);
+      Assert.Equal(5, appointment.RoomId);
       Assert.Equal(3*60, appointment.TimeRange.DurationInMinutes());
       Assert.Equal("Title Test", appointment.Title);
+      Assert.NotEqual(Guid.Empty, appointment.Id);
     }
 
     [Fact]

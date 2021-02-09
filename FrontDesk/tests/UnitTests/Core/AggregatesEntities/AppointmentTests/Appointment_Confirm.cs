@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using AutoFixture;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Events;
@@ -9,7 +8,8 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
 {
   public class Appointment_Confirm
   {
-    private Fixture _fixture = new Fixture();
+    private readonly Fixture _fixture = new Fixture();
+    private DateTime _confirmedDate = new DateTime(2021, 01, 01);
 
     [Fact]
     public void ReconfirmResultDateNotChanged()
@@ -18,11 +18,11 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
         .Without(z => z.Events)
         .Create();
 
-      var confirmedDate = DateTime.Now;
+      _confirmedDate = new DateTime(2021, 01, 01);
 
-      appointment.Confirm(confirmedDate);
+      appointment.Confirm(_confirmedDate);
 
-      Assert.NotEqual(confirmedDate, appointment.DateTimeConfirmed);
+      Assert.NotEqual(_confirmedDate, appointment.DateTimeConfirmed);
     }
 
     [Fact]
@@ -33,11 +33,11 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
         .Create();
       appointment.DateTimeConfirmed = null;
 
-      var confirmedDate = DateTime.Now;
+      _confirmedDate = new DateTime(2021, 01, 01);
 
-      appointment.Confirm(confirmedDate);
+      appointment.Confirm(_confirmedDate);
 
-      Assert.Equal(confirmedDate, appointment.DateTimeConfirmed);
+      Assert.Equal(_confirmedDate, appointment.DateTimeConfirmed);
     }
 
     [Fact]
@@ -48,11 +48,11 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
         .Create();
       appointment.DateTimeConfirmed = null;
 
-      var confirmedDate = DateTime.Now;
+      _confirmedDate = new DateTime(2021, 01, 01);
 
-      appointment.Confirm(confirmedDate);
+      appointment.Confirm(_confirmedDate);
 
-      Assert.NotNull(appointment.Events.FirstOrDefault(x => x.GetType() == typeof(AppointmentConfirmedEvent)));
+      Assert.Contains(appointment.Events, x => x.GetType() == typeof(AppointmentConfirmedEvent));
     }
   }
 }
