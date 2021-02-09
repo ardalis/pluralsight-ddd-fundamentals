@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
+using Ardalis.HttpClientTestExtensions;
 using BlazorShared.Models.AppointmentType;
 using FrontDesk.Api;
 using Xunit;
@@ -23,12 +23,7 @@ namespace FunctionalTests.Api
     [Fact]
     public async Task Returns3AppointmentTypes()
     {
-      var response = await _client.GetAsync("/api/appointment-types");
-      response.EnsureSuccessStatusCode();
-      var stringResponse = await response.Content.ReadAsStringAsync();
-      _outputHelper.WriteLine(stringResponse);
-      var result = JsonSerializer.Deserialize<ListAppointmentTypeResponse>(stringResponse,
-        Constants.DefaultJsonOptions);
+      var result = await _client.GetAndDeserialize<ListAppointmentTypeResponse>("/api/appointment-types", _outputHelper);
 
       Assert.Equal(3, result.AppointmentTypes.Count());
       Assert.Contains(result.AppointmentTypes, x => x.Name == "Wellness Exam");
