@@ -7,7 +7,7 @@ namespace PluralsightDdd.SharedKernel.Interfaces
   public interface IRepository
   {
     Task<T> GetByIdAsync<T, TId>(TId id) where T : BaseEntity<TId>, IAggregateRoot;
-    Task<T> Get<T, TId>(ISpecification<T> spec) where T : BaseEntity<TId>, IAggregateRoot;
+    Task<T> GetAsync<T, TId>(ISpecification<T> spec) where T : BaseEntity<TId>, IAggregateRoot;
 
     Task<List<T>> ListAsync<T, TId>() where T : BaseEntity<TId>, IAggregateRoot;
     Task<List<T>> ListAsync<T, TId>(ISpecification<T> spec) where T : BaseEntity<TId>, IAggregateRoot;
