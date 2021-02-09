@@ -9,7 +9,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
   public class Appointment_Confirm
   {
     private readonly Fixture _fixture = new Fixture();
-    private DateTime _confirmedDate = new DateTime(2021, 01, 01);
+    private readonly DateTime _confirmedDate = new DateTime(2021, 01, 01);
 
     [Fact]
     public void ReconfirmResultDateNotChanged()
@@ -17,8 +17,6 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
       var appointment = _fixture.Build<Appointment>()
         .Without(z => z.Events)
         .Create();
-
-      _confirmedDate = new DateTime(2021, 01, 01);
 
       appointment.Confirm(_confirmedDate);
 
@@ -33,8 +31,6 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
         .Create();
       appointment.DateTimeConfirmed = null;
 
-      _confirmedDate = new DateTime(2021, 01, 01);
-
       appointment.Confirm(_confirmedDate);
 
       Assert.Equal(_confirmedDate, appointment.DateTimeConfirmed);
@@ -47,8 +43,6 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
         .Without(z => z.Events)
         .Create();
       appointment.DateTimeConfirmed = null;
-
-      _confirmedDate = new DateTime(2021, 01, 01);
 
       appointment.Confirm(_confirmedDate);
 
