@@ -1,0 +1,30 @@
+name: .NET Core Build and Test
+
+on:
+  workflow_dispatch:
+    branches: [ main ]
+    paths: [ 'SharedKernel/src/**' ]
+  push:
+    branches: [ main ]
+    paths: [ 'SharedKernel/src/**' ]
+  pull_request:
+    branches: [ main, dev ]
+    paths: [ 'SharedKernel/src/**' ]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.102
+    - name: Install dependencies
+      run: dotnet restore SharedKernel/SharedKernel.sln
+    - name: Build
+      run: dotnet build --configuration Release --no-restore SharedKernel/SharedKernel.sln
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal SharedKernel/SharedKernel.sln

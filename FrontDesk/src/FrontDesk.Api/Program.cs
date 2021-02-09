@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using Autofac.Extensions.DependencyInjection;
 using FrontDesk.Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,15 +18,18 @@ namespace FrontDesk.Api
       using (var scope = host.Services.CreateScope())
       {
         var services = scope.ServiceProvider;
+        var hostEnvironment = services.GetService<IWebHostEnvironment>();
         var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+        var logger = loggerFactory.CreateLogger<Program>();
+        logger.LogInformation($"Starting in environment {hostEnvironment.EnvironmentName}");
         try
         {
-          var catalogContext = services.GetRequiredService<AppDbContext>();
-          await AppDbContextSeed.SeedAsync(catalogContext, loggerFactory, new OfficeSettings().TestDate);
+          var seedService = services.GetRequiredService<AppDbContextSeed>();
+          //var catalogContext = services.GetRequiredService<AppDbContext>();
+          await seedService.SeedAsync(new OfficeSettings().TestDate);
         }
         catch (Exception ex)
         {
-          var logger = loggerFactory.CreateLogger<Program>();
           logger.LogError(ex, "An error occurred seeding the DB.");
         }
       }
@@ -35,9 +39,10 @@ namespace FrontDesk.Api
 
     public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-              webBuilder.UseStartup<Startup>();
-            });
+          .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+          .ConfigureWebHostDefaults(webBuilder =>
+          {
+            webBuilder.UseStartup<Startup>();
+          });
   }
 }

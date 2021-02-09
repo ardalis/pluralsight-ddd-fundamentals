@@ -1,9 +1,11 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Patient;
 using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
@@ -32,10 +34,18 @@ namespace FrontDesk.Api.PatientEndpoints
     {
       var response = new UpdatePatientResponse(request.CorrelationId());
 
-      var toUpdate = _mapper.Map<Patient>(request);
-      await _repository.UpdateAsync<Patient, int>(toUpdate);
+      var spec = new ClientByIdIncludePatientsSpecification(request.ClientId);
+      var client = await _repository.GetAsync<Client, int>(spec);
+      if (client == null) return NotFound();
 
-      var dto = _mapper.Map<PatientDto>(toUpdate);
+      var patientToUpdate = client.Patients.FirstOrDefault(p => p.Id == request.PatientId);
+      if (patientToUpdate == null) return NotFound();
+
+      patientToUpdate.UpdateName(request.Name);
+
+      await _repository.UpdateAsync<Client, int>(client);
+
+      var dto = _mapper.Map<PatientDto>(patientToUpdate);
       response.Patient = dto;
 
       return Ok(response);

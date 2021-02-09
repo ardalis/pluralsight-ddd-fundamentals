@@ -10,7 +10,7 @@ namespace FrontDesk.Api.MappingProfiles
     {
       CreateMap<Patient, PatientDto>()
           .ForMember(dto => dto.PatientId, options => options.MapFrom(src => src.Id))
-          .ForMember(dto => dto.ClientName, options => options.MapFrom(src => src.Client == null ? string.Empty : src.Client.FullName));
+          .ForMember(dto => dto.ClientName, options => options.MapFrom(src => string.Empty));
       CreateMap<PatientDto, Patient>()
           .ForMember(dto => dto.Id, options => options.MapFrom(src => src.PatientId));
       CreateMap<CreatePatientRequest, Patient>();

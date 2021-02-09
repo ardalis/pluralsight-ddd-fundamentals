@@ -8,12 +8,12 @@
     <Authors>Steve Smith (@ardalis)</Authors>
     <Company>Ardalis.com</Company>
     <PackageProjectUrl>https://github.com/ardalis/pluralsight-ddd-fundamentals</PackageProjectUrl>
-    <Description>An SharedKernal packaged used as a sample in a DDD Pluralsight course.</Description>
+    <Description>An SharedKernal packaged used as a sample in the DDD Fundamentals Pluralsight course by Julie Lerman and Steve Smith.</Description>
     <Summary>Includes common abstractions and base types.</Summary>
     <RepositoryUrl>https://github.com/ardalis/pluralsight-ddd-fundamentals</RepositoryUrl>
-    <PackageTags>aspnet asp.net aspnetcore asp.net core ddd dddesign value object entity aggregate domain event</PackageTags>
-    <PackageReleaseNotes>Adding XML doc comments.</PackageReleaseNotes>
-    <Version>1.0.1</Version>
+    <PackageTags>aspnet asp.net aspnetcore asp.net core ddd dddesign value object entity aggregate domain event pluralsight</PackageTags>
+    <PackageReleaseNotes>Adding Get with Specification to Repository.</PackageReleaseNotes>
+    <Version>1.0.3</Version>
     <AssemblyName>PluralsightDdd.SharedKernel</AssemblyName>
     <PackageIconUrl>https://user-images.githubusercontent.com/782127/33497760-facf6550-d69c-11e7-94e4-b3856da259a9.png</PackageIconUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>

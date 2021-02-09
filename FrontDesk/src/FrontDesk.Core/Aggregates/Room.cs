@@ -7,14 +7,10 @@ namespace FrontDesk.Core.Aggregates
   {
     public virtual string Name { get; private set; }
 
-    public Room(string name)
-    {
-      Name = name;
-    }
-
-    public Room(int id)
+    public Room(int id, string name)
     {
       Id = id;
+      Name = name;
     }
 
     public override string ToString()

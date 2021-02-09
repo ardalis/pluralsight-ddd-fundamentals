@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Autofac;
 using BlazorShared;
 using FrontDesk.Api.Hubs;
 using FrontDesk.Core.Interfaces;
+using FrontDesk.Infrastructure;
 using FrontDesk.Infrastructure.Data;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -13,19 +15,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using PluralsightDdd.SharedKernel.Interfaces;
 
 namespace FrontDesk.Api
 {
   public class Startup
   {
     public const string CORS_POLICY = "CorsPolicy";
+    private readonly IWebHostEnvironment _env;
 
-    public Startup(IConfiguration configuration)
+    public Startup(IConfiguration configuration, IWebHostEnvironment env)
     {
       Configuration = configuration;
+      _env = env;
     }
 
     public IConfiguration Configuration { get; }
@@ -33,10 +34,10 @@ namespace FrontDesk.Api
     public void ConfigureDevelopmentServices(IServiceCollection services)
     {
       // use in-memory database
-      ConfigureInMemoryDatabases(services);
+      //ConfigureInMemoryDatabases(services);
 
       // use real database
-      //ConfigureProductionServices(services);
+      ConfigureProductionServices(services);
     }
 
     public void ConfigureDockerServices(IServiceCollection services)
@@ -50,15 +51,6 @@ namespace FrontDesk.Api
           c.UseInMemoryDatabase("AppDb"));
 
       ConfigureServices(services);
-
-      var sp = services.BuildServiceProvider();
-      using (var scope = sp.CreateScope())
-      {
-        var scopedServices = scope.ServiceProvider;
-        var db = scopedServices.GetRequiredService<AppDbContext>();
-        var loggerFactory = scopedServices.GetRequiredService<ILoggerFactory>();
-        AppDbContextSeed.SeedAsync(db, loggerFactory, new OfficeSettings().TestDate).Wait();
-      }
     }
 
     public void ConfigureProductionServices(IServiceCollection services)
@@ -70,15 +62,6 @@ namespace FrontDesk.Api
           c.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
       ConfigureServices(services);
-
-      var sp = services.BuildServiceProvider();
-      using (var scope = sp.CreateScope())
-      {
-        var scopedServices = scope.ServiceProvider;
-        var db = scopedServices.GetRequiredService<AppDbContext>();
-        var loggerFactory = scopedServices.GetRequiredService<ILoggerFactory>();
-        AppDbContextSeed.SeedAsync(db, loggerFactory, new OfficeSettings().TestDate).Wait();
-      }
     }
 
     public void ConfigureTestingServices(IServiceCollection services)
@@ -86,15 +69,12 @@ namespace FrontDesk.Api
       ConfigureInMemoryDatabases(services);
     }
 
-
-    // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddScoped(typeof(IRepository), typeof(EfRepository));
-
       services.AddSignalR();
-
       services.AddMemoryCache();
+
+      services.AddSingleton(typeof(IApplicationSettings), typeof(OfficeSettings));
 
       var baseUrlConfig = new BaseUrlConfiguration();
       Configuration.Bind(BaseUrlConfiguration.CONFIG_NAME, baseUrlConfig);
@@ -120,46 +100,16 @@ namespace FrontDesk.Api
                   new[] { "application/octet-stream" });
       });
 
-      // Wire up application settings
-      services.AddSingleton(typeof(IApplicationSettings), typeof(OfficeSettings));
-
       services.AddAutoMapper(typeof(Startup).Assembly);
-      services.AddSwaggerGen(c =>
-      {
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-        c.EnableAnnotations();
-        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-        {
-          Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
-                      Enter 'Bearer' [space] and then your token in the text input below.
-                      \r\n\r\nExample: 'Bearer 12345abcdef'",
-          Name = "Authorization",
-          In = ParameterLocation.Header,
-          Type = SecuritySchemeType.ApiKey,
-          Scheme = "Bearer"
-        });
-
-        c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-          {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
-                            Scheme = "oauth2",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header,
-
-                        },
-                        new List<string>()
-                    }
-          });
-      });
+      services.AddSwaggerGenCustom();
 
       //services.AddHostedService<RabbitMQService>();
+    }
+
+    public void ConfigureContainer(ContainerBuilder builder)
+    {
+      bool isDevelopment = (_env.EnvironmentName == "Development");
+      builder.RegisterModule(new DefaultInfrastructureModule(isDevelopment, Assembly.GetExecutingAssembly()));
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

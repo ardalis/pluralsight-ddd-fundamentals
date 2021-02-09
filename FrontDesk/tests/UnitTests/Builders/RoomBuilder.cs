@@ -25,7 +25,7 @@ namespace UnitTests.Builders
 
     public RoomBuilder WithDefaultValues()
     {
-      _room = new Room("Test Room");
+      _room = new Room(1, "Test Room");
 
       return this;
     }

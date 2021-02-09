@@ -1,7 +1,7 @@
 ﻿namespace PluralsightDdd.SharedKernel.Interfaces
 {
-    public interface IApplicationEvent
-    {
-        string EventType { get; }
-    }
+  public interface IApplicationEvent
+  {
+    string EventType { get; }
+  }
 }

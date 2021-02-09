@@ -25,7 +25,7 @@ namespace UnitTests.Builders
 
     public AppointmentTypeBuilder WithDefaultValues()
     {
-      _appointmentType = new AppointmentType("Test AppointmentType", "Test Code", 30);
+      _appointmentType = new AppointmentType(1, "Test AppointmentType", "Test Code", 30);
 
       return this;
     }

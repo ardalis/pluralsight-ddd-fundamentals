@@ -18,14 +18,15 @@ namespace FrontDesk.Infrastructure.Data
       _dbContext = dbContext;
     }
 
-    public T GetById<T, TId>(TId id) where T : BaseEntity<TId>, IAggregateRoot
-    {
-      return _dbContext.Set<T>().SingleOrDefault(e => e.Id.Equals(id));
-    }
-
     public Task<T> GetByIdAsync<T, TId>(TId id) where T : BaseEntity<TId>, IAggregateRoot
     {
       return _dbContext.Set<T>().SingleOrDefaultAsync(e => e.Id.Equals(id));
+    }
+
+    public Task<T> GetAsync<T, TId>(ISpecification<T> spec) where T : BaseEntity<TId>, IAggregateRoot
+    {
+      var specificationResult = ApplySpecification<T, TId>(spec);
+      return specificationResult.FirstOrDefaultAsync();
     }
 
     public Task<List<T>> ListAsync<T, TId>() where T : BaseEntity<TId>, IAggregateRoot

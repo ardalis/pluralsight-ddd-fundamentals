@@ -1,10 +1,10 @@
-﻿using MediatR;
-using System;
+﻿using System;
+using MediatR;
 
 namespace PluralsightDdd.SharedKernel
-{    
-    public abstract class BaseDomainEvent : INotification
-    {
-        public DateTime DateOccurred { get; protected set; } = DateTime.UtcNow;
-    }
+{
+  public abstract class BaseDomainEvent : INotification
+  {
+    public DateTime DateOccurred { get; protected set; } = DateTime.UtcNow;
+  }
 }

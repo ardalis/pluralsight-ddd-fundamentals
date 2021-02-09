@@ -3,7 +3,7 @@ using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
 
-namespace IntegrationTests.Client
+namespace IntegrationTests.ClientTests
 {
   public class EfRepositoryDelete : BaseEfRepoTestFixture
   {

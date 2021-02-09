@@ -25,7 +25,7 @@ namespace UnitTests.Builders
 
     public DoctorBuilder WithDefaultValues()
     {
-      _doctor = new Doctor("Test Doctor");
+      _doctor = new Doctor(1, "Test Doctor");
 
       return this;
     }

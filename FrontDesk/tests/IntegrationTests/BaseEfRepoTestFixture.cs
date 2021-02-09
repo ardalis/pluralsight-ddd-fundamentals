@@ -1,16 +1,24 @@
 ﻿using FrontDesk.Infrastructure.Data;
 using MediatR;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Xunit;
 
 namespace IntegrationTests
 {
+  [Collection("Sequential")]
   public abstract class BaseEfRepoTestFixture
   {
     protected AppDbContext _dbContext;
+    protected readonly SqliteConnection _connection;
 
-    protected static DbContextOptions<AppDbContext> CreateNewContextOptions()
+    public BaseEfRepoTestFixture()
+    {
+
+    }
+    protected static DbContextOptions<AppDbContext> CreateInMemoryContextOptions()
     {
       // Create a fresh service provider, and therefore a fresh
       // InMemory database instance.
@@ -27,13 +35,21 @@ namespace IntegrationTests
       return builder.Options;
     }
 
+    protected DbContextOptions<AppDbContext> CreateSqlLiteOptions()
+    {
+      var builder = new DbContextOptionsBuilder<AppDbContext>();
+      builder.UseSqlite("DataSource=file:memdb1?mode=memory");
+
+      return builder.Options;
+    }
+
     protected EfRepository GetRepository()
     {
-      var options = CreateNewContextOptions();
+      //var options = CreateInMemoryContextOptions();
+      var options = CreateSqlLiteOptions();
       var mockMediator = new Mock<IMediator>();
 
-      _dbContext = new AppDbContext(options, mockMediator.Object);
-
+      _dbContext = new TestContext(options, mockMediator.Object);
       return new EfRepository(_dbContext);
     }
   }

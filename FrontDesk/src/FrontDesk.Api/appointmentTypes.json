@@ -1,0 +1,1 @@
+[{"AppointmentTypeId":1,"Name":"Wellness Exam","Code":"WE","Duration":30},{"AppointmentTypeId":2,"Name":"Diagnostic Exam","Code":"DE","Duration":60},{"AppointmentTypeId":3,"Name":"Nail Trim","Code":"NT","Duration":30}]
