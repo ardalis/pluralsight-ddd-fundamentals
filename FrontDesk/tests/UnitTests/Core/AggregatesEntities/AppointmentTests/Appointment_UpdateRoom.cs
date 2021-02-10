@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using AutoFixture;
+﻿using AutoFixture;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Events;
 using Xunit;
@@ -12,35 +10,35 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     private Fixture _fixture = new Fixture();
 
     [Fact]
-    public async Task DoesNothingGivenSameRoomId()
+    public void DoesNothingGivenSameRoomId()
     {
-      var appt = _fixture.Build<Appointment>()
+      var appointment = _fixture.Build<Appointment>()
         .Without(a => a.Events)
         .Create();
-      var initialRoomId = appt.RoomId;
-      var initialEventCount = appt.Events.Count;
+      var initialRoomId = appointment.RoomId;
+      var initialEventCount = appointment.Events.Count;
 
-      appt.UpdateRoom(initialRoomId);
+      appointment.UpdateRoom(initialRoomId);
 
-      Assert.Equal(initialRoomId, appt.RoomId);
-      Assert.Equal(initialEventCount, appt.Events.Count);
+      Assert.Equal(initialRoomId, appointment.RoomId);
+      Assert.Equal(initialEventCount, appointment.Events.Count);
     }
 
     [Fact]
-    public async Task UpdatesRoomIdAndAddsEventGivenNewRoomId()
+    public void UpdatesRoomIdAndAddsEventGivenNewRoomId()
     {
-      var appt = _fixture.Build<Appointment>()
+      var appointment = _fixture.Build<Appointment>()
         .Without(a => a.Events)
         .Create();
-      var initialRoomId = appt.RoomId;
-      var initialEventCount = appt.Events.Count;
+      var initialRoomId = appointment.RoomId;
+      var initialEventCount = appointment.Events.Count;
 
       int newRoomId = initialRoomId + 1;
-      appt.UpdateRoom(newRoomId);
+      appointment.UpdateRoom(newRoomId);
 
-      Assert.Equal(newRoomId, appt.RoomId);
-      Assert.Single(appt.Events);
-      Assert.Contains(appt.Events, x => x.GetType() == typeof(AppointmentUpdatedEvent));
+      Assert.Equal(newRoomId, appointment.RoomId);
+      Assert.Single(appointment.Events);
+      Assert.Contains(appointment.Events, x => x.GetType() == typeof(AppointmentUpdatedEvent));
     }
   }
 }
