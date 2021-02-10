@@ -29,5 +29,13 @@ namespace FunctionalTests.Api
       Assert.Equal(2, result.Clients.Count());
       Assert.Contains(result.Clients, x => x.FullName == "Steve Smith");
     }
+
+    [Fact]
+    public async Task IncludesPatientIds()
+    {
+      var result = await _client.GetAndDeserialize<ListClientResponse>("/api/clients", _outputHelper);
+
+      Assert.NotEmpty(result.Clients.First().Patients);
+    }
   }
 }
