@@ -5,14 +5,21 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using BlazorShared.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
+using SixLabors.ImageSharp.Processing;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.FileEndpoints
 {
   public class Read : BaseAsyncEndpoint<string, FileItem>
   {
-    public Read()
+    private readonly ILogger<Read> _logger;
+
+    public Read(ILogger<Read> logger)
     {
+      _logger = logger;
     }
 
     [HttpGet("api/files/{fileName}")]
@@ -22,29 +29,41 @@ namespace FrontDesk.Api.FileEndpoints
         OperationId = "files.read",
         Tags = new[] { "FileEndpoints" })
     ]
-    public override async Task<ActionResult<FileItem>> HandleAsync([FromRoute] string fileName, CancellationToken cancellationToken)
+    public override async Task<ActionResult<FileItem>> HandleAsync([FromRoute] string fileName,
+      CancellationToken cancellationToken)
     {
       if (string.IsNullOrEmpty(fileName)) return BadRequest();
 
       var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "images", "patients", fileName.ToLower());
       if (!System.IO.File.Exists(fullPath))
       {
-        // TODO: Add logger
-        System.Console.WriteLine($"File not found: {fullPath}");
+        _logger.LogError($"File not found: {fullPath}");
         return NotFound();
       }
 
-      byte[] fileArray = System.IO.File.ReadAllBytes(fullPath);
-      if (fileArray.Length <= 0) return BadRequest();
+      int maxWidth = 200;
+      var outputStream = new MemoryStream();
+      using(var image = Image.Load(fullPath))
+      {
+        int newWidth = Math.Min(image.Width, maxWidth);
+        _logger.LogDebug($"Resizing to: {newWidth}");
 
-      string fileDataBase64 = Convert.ToBase64String(fileArray);
-      var respons = new FileItem()
+        if (newWidth != image.Width)
+        {
+          image.Mutate(x => x.Resize(newWidth, 0));
+          _logger.LogDebug($"Resized to {image.Width} x {image.Height}");
+        }
+        image.Save(outputStream, new JpegEncoder());
+      }
+
+      string fileDataBase64 = Convert.ToBase64String(outputStream.ToArray());
+      var response = new FileItem()
       {
         DataBase64 = fileDataBase64,
         FileName = fileName
       };
 
-      return Ok(respons);
+      return Ok(response);
     }
   }
 }

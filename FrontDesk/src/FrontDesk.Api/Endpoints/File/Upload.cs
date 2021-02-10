@@ -34,7 +34,7 @@ namespace FrontDesk.Api.FileEndpoints
       {
         System.IO.File.Delete(fullPath);
       }
-      System.IO.File.WriteAllBytes(fullPath, fileData);
+      await System.IO.File.WriteAllBytesAsync(fullPath, fileData);
 
       return Ok(true);
     }

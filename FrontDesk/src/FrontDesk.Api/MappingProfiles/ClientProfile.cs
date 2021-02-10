@@ -16,6 +16,7 @@ namespace FrontDesk.Api.MappingProfiles
       CreateMap<UpdateClientRequest, Client>()
           .ForMember(dto => dto.Id, options => options.MapFrom(src => src.ClientId));
       CreateMap<DeleteClientRequest, Client>();
+      CreateMap<Patient, int>().ConvertUsing(src => src.Id);
     }
   }
 }

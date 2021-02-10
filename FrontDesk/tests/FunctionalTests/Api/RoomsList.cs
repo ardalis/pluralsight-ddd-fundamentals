@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
+using Ardalis.HttpClientTestExtensions;
 using BlazorShared.Models.Room;
 using FrontDesk.Api;
 using Xunit;
@@ -9,12 +9,12 @@ using Xunit.Abstractions;
 
 namespace FunctionalTests.Api
 {
-  public class List : IClassFixture<CustomWebApplicationFactory<Startup>>
+  public class RoomsList : IClassFixture<CustomWebApplicationFactory<Startup>>
   {
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _outputHelper;
 
-    public List(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
+    public RoomsList(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
     {
       _client = factory.CreateClient();
       _outputHelper = outputHelper;
@@ -23,12 +23,7 @@ namespace FunctionalTests.Api
     [Fact]
     public async Task Returns5Rooms()
     {
-      var response = await _client.GetAsync("/api/rooms");
-      response.EnsureSuccessStatusCode();
-      var stringResponse = await response.Content.ReadAsStringAsync();
-      _outputHelper.WriteLine(stringResponse);
-      var result = JsonSerializer.Deserialize<ListRoomResponse>(stringResponse,
-        Constants.DefaultJsonOptions);
+      var result = await _client.GetAndDeserialize<ListRoomResponse>("/api/rooms", _outputHelper);
 
       Assert.Equal(5, result.Rooms.Count());
       Assert.Contains(result.Rooms, room => room.Name == "Exam Room 1");

@@ -37,5 +37,10 @@ namespace BlazorShared.Models.Appointment
     {
       return (AppointmentDto)this.MemberwiseClone();
     }
+
+    public override string ToString()
+    {
+      return $"Id: {AppointmentId} \nRoomId: {RoomId}\nDoctorId: {DoctorId}\nClient: {ClientId} {ClientName}\nPatient: {PatientId} {PatientName}\nStart: {Start}\nEnd:{End}";
+    }
   }
 }

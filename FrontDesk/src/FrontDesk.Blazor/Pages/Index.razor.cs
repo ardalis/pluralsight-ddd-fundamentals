@@ -106,7 +106,6 @@ namespace FrontDesk.Blazor.Pages
       _ = hubConnection.DisposeAsync();
     }
 
-
     protected override async Task OnInitializedAsync()
     {
       SchedulerService.Appointments = await AppointmentService.ListAsync();
@@ -114,7 +113,8 @@ namespace FrontDesk.Blazor.Pages
       Clients = await ClientService.ListAsync();
       Rooms = await RoomService.ListAsync();
 
-      Patients = await PatientService.ListAsync();
+      // Patients belong to Clients - This should be driven by the selected client
+      Patients = await PatientService.ListAsync(ClientId);
       Patient = Patients.FirstOrDefault(p => p.PatientId == PatientId);
 
       Today = await ConfigurationService.ReadAsync();

@@ -5,6 +5,7 @@ using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Client;
 using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
@@ -33,7 +34,8 @@ namespace FrontDesk.Api.ClientEndpoints
     {
       var response = new ListClientResponse(request.CorrelationId());
 
-      var clients = await _repository.ListAsync<Client, int>();
+      var spec = new ClientsIncludePatientsSpecification();
+      var clients = await _repository.ListAsync<Client, int>(spec);
       if (clients is null) return NotFound();
 
       response.Clients = _mapper.Map<List<ClientDto>>(clients);
