@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30516.212
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{855DD11F-7B21-4DDF-AE8F-FC5E3AE65E82}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3654CDF1-8973-4429-B9BC-DF48294ACBC4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetClinicPublic", "src\VetClinicPublic\VetClinicPublic.csproj", "{AAE803E2-C4B7-4A07-861C-21E81B772365}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AAE803E2-C4B7-4A07-861C-21E81B772365}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAE803E2-C4B7-4A07-861C-21E81B772365}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAE803E2-C4B7-4A07-861C-21E81B772365}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAE803E2-C4B7-4A07-861C-21E81B772365}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{AAE803E2-C4B7-4A07-861C-21E81B772365} = {855DD11F-7B21-4DDF-AE8F-FC5E3AE65E82}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1B162917-0757-44A7-9348-554082BB3DCE}
+	EndGlobalSection
+EndGlobal
