@@ -1,0 +1,71 @@
+﻿@page "/rooms"
+
+<h1>Rooms</h1>
+
+@if (Rooms == null)
+{
+    <Spinner></Spinner>
+}
+else
+{
+    <div class="main-action">
+        <button @onclick="@(() => CreateClick())" @onclick:stopPropagation="true" class="btn btn-primary">
+            <span class="oi oi-plus" aria-hidden="true"></span> Add
+        </button>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var room in Rooms)
+            {
+                <tr>
+                    <td>
+                        @room.RoomId
+                    </td>
+                    <td>
+                        @if (IsAddOrEdit(@room.RoomId))
+                        {
+                            <input @bind="ToSave.Name" />
+                        }
+                        else
+                        {
+                            @room.Name
+                        }
+                    </td>
+                    <td class="action-buttons">
+                        @if (IsAddOrEdit(@room.RoomId))
+                        {
+                            <button @onclick="@(() => SaveClick())" @onclick:stopPropagation="true" class="btn btn-primary margin-5">
+
+                                Save
+                            </button>
+                            <button @onclick="@(() => CancelClick())" @onclick:stopPropagation="true" class="btn btn-danger margin-5">
+
+                                Cancel
+                            </button>
+                        }
+                        else
+                        {
+                            <button @onclick="@(() => EditClick(room.RoomId))" @onclick:stopPropagation="true" class="btn btn-primary margin-5">
+                                <EditIcon></EditIcon>
+                                Edit
+                            </button>
+
+                            <button @onclick="@(() => DeleteClick(room.RoomId))" @onclick:stopPropagation="true" class="btn btn-danger margin-5">
+                                <DeleteIcon></DeleteIcon>
+                                Delete
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

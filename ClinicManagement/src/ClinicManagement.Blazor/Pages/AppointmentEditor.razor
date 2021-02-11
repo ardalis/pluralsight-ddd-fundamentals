@@ -1,0 +1,104 @@
+﻿
+
+<div id="appointmentEditor">
+    <EditForm Model="@Appointment" OnValidSubmit="@SaveAppointment">
+        <DataAnnotationsValidator />
+
+        <label class="width100">
+            Title:<br />
+            <TelerikTextBox Value="@Title" ValueExpression="@( () => Title )" Width="100%" Enabled="false"></TelerikTextBox>
+        </label>
+        <br />
+
+        <label class="width100">
+            Doctor:<br />
+            <TelerikComboBox Data="@Doctors" Placeholder="Doctor" ClearButton="false"
+                             TextField="@nameof(DoctorDto.Name)" ValueField="@nameof(DoctorDto.DoctorId)" Filterable="true"
+                             Id="@nameof(DoctorDto.DoctorId)"
+                             @bind-Value="@Appointment.DoctorId">
+            </TelerikComboBox>
+        </label>
+        <br />
+
+        <label class="width100">
+            Appointment Type:<br />
+            <TelerikComboBox Data="@AppointmentTypes" Placeholder="Appointment Type" ClearButton="false"
+                             TextField="@nameof(AppointmentTypeDto.Name)" ValueField="@nameof(AppointmentTypeDto.AppointmentTypeId)" Filterable="true"
+                             Id="@nameof(AppointmentTypeDto.AppointmentTypeId)"
+                             @bind-Value="@Appointment.AppointmentTypeId">
+            </TelerikComboBox>
+        </label>
+        <br />
+
+        <label class="width100">
+            Duration:<br />
+            @GetDuration
+        </label>
+        <br />
+
+        @if (Appointment.IsAllDay)
+        {
+            <label class="width100">
+                Start:<br />
+                <TelerikDatePicker Value="@Appointment.Start" ValueChanged="@( (DateTime d) => StartChanged(d) )"
+                                   ValueExpression="@( () => Appointment.Start )"
+                                   Max="@GetHigherDate()" Width="100%" />
+            </label>
+            <label class="width100">
+                End:<br />
+                <TelerikDatePicker Value="@Appointment.End" ValueChanged="@( (DateTime d) => EndChanged(d) )"
+                                   ValueExpression="@( () => Appointment.End)"
+                                   Min="@GetLowerDate()" Width="100%" />
+            </label>
+        }
+        else
+        {
+            <label class="width100">
+                Start:<br />
+                <TelerikDateTimePicker Value="@Appointment.Start" ValueChanged="@( (DateTime d) => StartChanged(d) )"
+                                       ValueExpression="@( () => Appointment.Start)"
+                                       Max="@GetHigherDate()" Width="100%" />
+            </label>
+            <label class="width100">
+                End:<br />
+                <TelerikDateTimePicker Value="@Appointment.End" ValueChanged="@( (DateTime d) => EndChanged(d) )"
+                                       ValueExpression="@( () => Appointment.End )"
+                                       Min="@GetLowerDate()" Width="100%" />
+            </label>
+        }
+        <br />
+
+        <label class="width100">
+            Patient: @Appointment.PatientName<br />
+            @if (!string.IsNullOrEmpty(Picture))
+            {
+                <img class="appointment-editor-image" src="@Picture" />
+            }
+        </label>
+        <br />
+
+        @if (@Appointment.IsConfirmed)
+        {
+            <button type="button" class="btn btn-success appointment-editor-confirm-button">Confirmed</button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-danger appointment-editor-confirm-button">Not Confirmed</button>
+        }
+        <br />
+        <br />
+
+        <ValidationSummary />
+        @if (ShowErrorMessage)
+        {
+            <span class="appointment-editor-msg">@WrongRangeMessage</span>
+        }
+
+        <TelerikButton Enabled="@IsValid()" Primary="true">
+            Save
+        </TelerikButton>
+        <TelerikButton OnClick="@CancelEditing" ButtonType="ButtonType.Button">Cancel</TelerikButton>
+        <TelerikButton OnClick="@DeleteAppointment" ButtonType="ButtonType.Button">Delete</TelerikButton>
+
+    </EditForm>
+</div>
