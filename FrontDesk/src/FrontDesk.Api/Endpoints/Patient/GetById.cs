@@ -25,12 +25,13 @@ namespace FrontDesk.Api.PatientEndpoints
 
     [HttpGet("api/patients/{PatientId}")]
     [SwaggerOperation(
-        Summary = "Get a Patient by Id",
+        Summary = "Get a Patient by Id with ClientId (via querystring)",
         Description = "Gets a Patient by Id",
         OperationId = "patients.GetById",
         Tags = new[] { "PatientEndpoints" })
     ]
-    public override async Task<ActionResult<GetByIdPatientResponse>> HandleAsync([FromRoute] GetByIdPatientRequest request, CancellationToken cancellationToken)
+    public override async Task<ActionResult<GetByIdPatientResponse>> HandleAsync([FromRoute] GetByIdPatientRequest request, 
+      CancellationToken cancellationToken)
     {
       var response = new GetByIdPatientResponse(request.CorrelationId());
 
