@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using BlazorShared;
 using ClinicManagement.Blazor.Services;
-using ClinicManagement.Blazor.Shared.SchedulerComponent;
 using ClinicManagement.Blazor.Shared.ToastComponent;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -31,12 +30,10 @@ namespace ClinicManagement.Blazor
       builder.Services.AddScoped<ClientService>();
       builder.Services.AddScoped<PatientService>();
       builder.Services.AddScoped<RoomService>();
-      builder.Services.AddScoped<AppointmentService>();
       builder.Services.AddScoped<AppointmentTypeService>();
       builder.Services.AddScoped<FileService>();
       builder.Services.AddScoped<ConfigurationService>();
       builder.Services.AddScoped<ToastService>();
-      builder.Services.AddScoped<SchedulerService>();
 
       // register the Telerik services
       builder.Services.AddTelerikBlazor();

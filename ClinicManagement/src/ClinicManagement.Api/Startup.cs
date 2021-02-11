@@ -141,7 +141,7 @@ namespace ClinicManagement.Api
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
-        //endpoints.MapHub<ScheduleHub>("/schedulehub");
+        endpoints.MapHub<ClinicManagementHub>($"/{SignalRConstants.HUB_NAME}");
       });
     }
   }
