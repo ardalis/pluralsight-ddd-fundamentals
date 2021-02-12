@@ -11,7 +11,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ClinicManagement.Api.AppointmentTypeEndpoints
 {
-  public class List : BaseAsyncEndpoint<ListAppointmentTypeRequest, ListAppointmentTypeResponse>
+  public class List : BaseAsyncEndpoint
+    .WithRequest<ListAppointmentTypeRequest>
+    .WithResponse<ListAppointmentTypeResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;

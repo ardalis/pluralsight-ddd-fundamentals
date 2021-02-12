@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using BlazorShared.Models;
+using BlazorShared.Models.Doctor;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
@@ -13,7 +14,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ClinicManagement.Api.FileEndpoints
 {
-  public class Read : BaseAsyncEndpoint<string, FileItem>
+  public class Read : BaseAsyncEndpoint
+    .WithRequest<string>
+    .WithResponse<FileItem>
   {
     private readonly ILogger<Read> _logger;
 

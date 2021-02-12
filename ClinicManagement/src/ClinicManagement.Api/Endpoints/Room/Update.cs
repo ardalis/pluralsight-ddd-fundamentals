@@ -10,7 +10,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ClinicManagement.Api.RoomEndpoints
 {
-  public class Update : BaseAsyncEndpoint<UpdateRoomRequest, UpdateRoomResponse>
+  public class Update : BaseAsyncEndpoint
+    .WithRequest<UpdateRoomRequest>
+    .WithResponse<UpdateRoomResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;

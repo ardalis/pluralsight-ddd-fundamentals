@@ -12,7 +12,9 @@ using System.Linq;
 
 namespace ClinicManagement.Api.PatientEndpoints
 {
-  public class Delete : BaseAsyncEndpoint<DeletePatientRequest, DeletePatientResponse>
+  public class Delete : BaseAsyncEndpoint
+    .WithRequest<DeletePatientRequest>
+    .WithResponse<DeletePatientResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;
