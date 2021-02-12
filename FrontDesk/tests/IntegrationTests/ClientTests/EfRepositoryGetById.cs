@@ -11,7 +11,7 @@ namespace IntegrationTests.ClientTests
 
     public EfRepositoryGetById()
     {
-      _repository = GetRepository();
+      _repository = GetRepositoryAsync().Result;
     }
 
     [Fact]

@@ -1,0 +1,351 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>FrontDesk.Blazor</title>
+    <base href="/blazor-frontdesk-demo/" />
+    <script src="_content/Telerik.UI.for.Blazor.Trial/js/telerik-blazor.js" defer></script>
+
+    <link href="css/kendo/kendo.common.min.css" rel="stylesheet" />
+    <link href="css/kendo/kendo.default.min.css" rel="stylesheet" />
+    <link href="css/kendo/all.css" rel="stylesheet" />
+    <script src="js/kendo/jquery-1.12.3.min.js"></script>
+    <script src="js/kendo/kendo.all.min.js"></script>
+    <script src="js/kendo/kendo.timezones.min.js"></script>
+
+    <link rel="stylesheet" href="_content/Telerik.UI.for.Blazor.Trial/css/kendo-theme-default/all.css" />
+    <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
+    <link href="_framework/scoped.styles.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app">Loading...</div>
+
+    <div id="blazor-error-ui">
+        An unhandled error has occurred.
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+    <script src="_framework/blazor.webassembly.js"></script>
+
+    <script>
+
+        $(function () {
+
+            $("#kendoVersion").text(kendo.version);
+
+        });
+
+    </script>
+
+    <script>
+        var currentAppointment = {};
+        var instanceKendoCall = {};
+        const colorFieldName = 'key';
+
+        function lowerCasefirst(string) {
+            if (!string || string.length <= 0) {
+                return '';
+            }
+            return string.charAt(0).toLowerCase() + string.slice(1);
+        }
+
+        function createDataSourceResource(name, data, valueField, textField) {
+            var result = {};
+
+            if (data[lowerCasefirst(valueField)]) {
+                result['value'] = data[lowerCasefirst(valueField)];
+            }
+
+            if (data[lowerCasefirst(textField)]) {
+                result['text'] = data[lowerCasefirst(textField)];
+            }
+
+            if (name.toLowerCase() == 'rooms') {
+                result[colorFieldName] = createColor(data, valueField);
+            }
+
+
+            return result;
+        }
+
+        function createColorForAppointment(data) {
+            if (data['roomId'] == 1) {
+                return "#97c741";
+            } else if (data['roomId'] == 2) {
+                return "#63aeb8";
+            } else if (data['roomId'] == 3) {
+                return "#c163a2";
+            } else if (data['roomId'] == 4) {
+                return "#ed652e";
+            } else if (data['roomId'] == 5) {
+                return "#6380ba";
+            }
+        }
+
+        function createColor(data, valueField) {
+
+            if (data[lowerCasefirst(valueField)] == 1) {
+                return "#97c741";
+            } else if (data[lowerCasefirst(valueField)] == 2) {
+                return "#63aeb8";
+            } else if (data[lowerCasefirst(valueField)] == 3) {
+                return "#c163a2";
+            } else if (data[lowerCasefirst(valueField)] == 4) {
+                return "#ed652e";
+            } else if (data[lowerCasefirst(valueField)] == 5) {
+                return "#6380ba";
+            }
+
+            return '';
+        }
+
+        function createResource(schedulerResource) {
+            var result = {};
+            var dataSource = [];
+
+            if (schedulerResource['name'].toLowerCase() == 'rooms') {
+                result['dataColorField'] = colorFieldName;
+            }
+
+            for (var i = 0; i < schedulerResource['data'].length; i++) {
+                dataSource.push(createDataSourceResource(schedulerResource['name'], schedulerResource['data'][i], schedulerResource['valueField'], schedulerResource['textField']));
+            }
+
+            result['dataSource'] = dataSource;
+            result['name'] = schedulerResource['name'].toLowerCase();
+            result['field'] = lowerCasefirst(schedulerResource['field']);
+            result['title'] = schedulerResource['title'];
+
+            return result;
+        }
+
+        function addListenerToFireEdit(instance) {
+            instanceKendoCall = instance;
+        }
+
+        function createGroups(schedulerGroups) {
+            var groups = [];
+
+            if (schedulerGroups) {
+                for (var i = 0; i < schedulerGroups.length; i++) {
+                    groups.push(schedulerGroups[i].toLowerCase());
+                }
+            }
+
+            return groups;
+        }
+
+        function createResources(schedulerResources) {
+            var resources = [];
+
+            if (schedulerResources) {
+                for (var i = 0; i < schedulerResources.length; i++) {
+                    resources.push(createResource(schedulerResources[i]));
+                }
+            }
+
+            return resources;
+        }
+
+        function scheduler(startDate, startTime, endDate, appointments, schedulerResources, schedulerGroups, height) {
+            var resources = createResources(schedulerResources)
+            var groups = createGroups(schedulerGroups);
+
+            console.log('resources', resources);
+
+            hardRefresh();
+
+            var viewModel = new kendo.observable({
+                schedulerData: new kendo.data.SchedulerDataSource({
+                    data: appointments,
+                    schema: {
+                        model: {
+                            id: "appointmentId",
+                            fields: {
+                                appointmentId: { from: "appointmentId", type: "string" },
+                                title: { from: "title", defaultValue: "No title", validation: { required: true } },
+                                start: { type: "date", from: "start" },
+                                end: { type: "date", from: "end" },
+                                description: { from: "description" },
+                                roomId: { from: "roomId", nullable: true, type: "number" },
+                                isAllDay: { type: "boolean", from: "isAllDay" },
+                                ScheduleId: { type: "string", from: "ScheduleId" },
+                                isConflict: { type: "boolean", from: "isPotentiallyConflicting" },
+                                isConfirmed: { from: "isConfirmed" }
+                            }
+                        }
+                    }
+                }),
+            });
+
+            var onDataBound = function (e) {
+                $("[data-is-conflicted=true]")
+                    .parent()
+                    .addClass("conflicted-event");
+                $("[data-is-confirmed=true]")
+                    .parent()
+                    .addClass("confirmed-event");
+            };
+
+            $("#scheduler").kendoScheduler({
+                date: startDate,
+                startTime: startTime,
+                endTime: endDate,
+                height: height,
+                resize: function (e) {
+                    e.preventDefault();
+                },
+                resizeEnd: function (e) {
+                    e.preventDefault();
+                },
+                moveEnd: function (e) {
+                    if (!checkAvailability(e.start, e.end, e.event, e.resources)) {
+                        e.preventDefault();
+                    } else {
+                        onMoveEnd(e);
+                    }
+                },
+                views: [
+                    { type: "day", selected: true, allDaySlot: false, minorTickCount: 4 },
+                    { type: "workWeek", allDaySlot: false, minorTickCount: 4 },
+                    "agenda"
+                ],
+                workWeekEnd: 6,
+                timezone: "America/Detroit",
+                dataSource: viewModel.schedulerData,
+                dataBound: onDataBound,
+                eventTemplate: kendo.template($("#event-template").html()),
+                footer: false,
+                group: {
+                    resources: groups
+                },
+                resources: resources,
+                edit: onEdit,
+                remove: onDelete,
+            });
+        }
+
+        function occurrencesInRangeByResource(start, end, resourceFieldName, event, resources) {
+            var scheduler = $("#scheduler").getKendoScheduler();
+
+            var occurrences = scheduler.occurrencesInRange(start, end);
+
+            var idx = occurrences.indexOf(event);
+            if (idx > -1) {
+                occurrences.splice(idx, 1);
+            }
+
+            event = $.extend({}, event, resources);
+
+            return filterByResource(occurrences, resourceFieldName, event[resourceFieldName]);
+        }
+
+        function filterByResource(occurrences, resourceFieldName, value) {
+            var result = [];
+            var occurrence;
+
+            for (var idx = 0, length = occurrences.length; idx < length; idx++) {
+                occurrence = occurrences[idx];
+                if (occurrence[resourceFieldName] === value) {
+                    result.push(occurrence);
+                }
+            }
+            return result;
+        }
+
+        function roomIsOccupied(start, end, event, resources) {
+            var occurrences = occurrencesInRangeByResource(start, end, "roomId", event, resources);
+            if (occurrences.length > 0) {
+                return true;
+            }
+            return false;
+        }
+
+        function checkAvailability(start, end, event, resources) {
+
+            if (roomIsOccupied(start, end, event, resources)) {
+                setTimeout(function () {
+                    alert("This room is not available in this time period.");
+                }, 0);
+
+                return false;
+            }
+
+            return true;
+        }
+
+        function onMoveEnd(e) {
+            createAppointment(e.event);
+            currentAppointment['roomId'] = e.resources['roomId'];
+            currentAppointment['start'] = e['start'];
+            currentAppointment['end'] = e['end'];
+            instanceKendoCall.invokeMethodAsync('KendoCall', 'move', JSON.stringify(currentAppointment));
+        }
+
+        function onEdit(e) {
+            e.preventDefault();
+
+            createAppointment(e.event);
+
+            instanceKendoCall.invokeMethodAsync('KendoCall', 'edit', JSON.stringify(currentAppointment));
+        }
+
+        function onDelete(e) {
+            e.preventDefault();
+
+            createAppointment(e.event);
+
+            instanceKendoCall.invokeMethodAsync('KendoCall', 'delete', JSON.stringify(currentAppointment));
+        }
+
+        function createAppointment(event) {
+            currentAppointment = {};
+            if (event['appointmentId']) {
+                currentAppointment['appointmentId'] = event['appointmentId'];
+            } else {
+                currentAppointment['appointmentId'] = '00000000-0000-0000-0000-000000000000';
+            }
+
+            if (event['isConfirmed']) {
+                currentAppointment['isConfirmed'] = true;
+            } else {
+                currentAppointment['isConfirmed'] = false;
+            }
+
+            currentAppointment['start'] = event['start'];
+            currentAppointment['end'] = event['end'];
+            currentAppointment['description'] = event['description'];
+            currentAppointment['isAllDay'] = event['isAllDay'];
+            currentAppointment['isConflict'] = event['isConflict'];
+            currentAppointment['scheduleId'] = event['scheduleId'];
+            currentAppointment['roomId'] = event['roomId'];
+            currentAppointment['doctorId'] = event['doctorId'];
+            currentAppointment['clientId'] = event['clientId'];
+            currentAppointment['clientName'] = event['clientName'];
+            currentAppointment['patientId'] = event['patientId'];
+            currentAppointment['patientName'] = event['patientName'];
+            currentAppointment['title'] = event['title'];
+            currentAppointment['appointmentTypeId'] = event['appointmentTypeId'];
+            currentAppointment['appointmentType'] = event['appointmentType'];
+        }
+
+        function hardRefresh() {
+            var scheduler = $("#scheduler").data("kendoScheduler");
+            if (scheduler) {
+                scheduler.destroy();
+                $("#scheduler").empty();
+            }
+        }
+    </script>
+
+    <script id="event-template" type="text/x-kendo-template">
+        <div data-is-conflicted="#: isConflict #" data-is-confirmed="#: isConfirmed #" class="appointment-template" style="height: 100%; width: 110%; background-color: #:createColorForAppointment(data)#">#: title #</div>
+    </script>
+
+</body>
+
+</html>

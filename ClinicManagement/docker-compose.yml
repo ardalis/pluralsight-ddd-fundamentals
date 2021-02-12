@@ -1,0 +1,13 @@
+version: '3.4'
+
+services:
+  clinicmanagementblazor:
+    image: ${DOCKER_REGISTRY-}clinicmanagementblazor
+    build:
+      context: .
+      dockerfile: src/ClinicManagement.Blazor.Host/Dockerfile
+  clinicmanagementapi:
+    image: ${DOCKER_REGISTRY-}clinicmanagementapi
+    build:
+      context: .
+      dockerfile: src/ClinicManagement.Api/Dockerfile

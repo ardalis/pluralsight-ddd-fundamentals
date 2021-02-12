@@ -1,0 +1,71 @@
+﻿@page "/doctors"
+
+<h1>Doctors</h1>
+
+@if (Doctors == null)
+{
+    <Spinner></Spinner>
+}
+else
+{
+    <div class="main-action">
+        <button @onclick="@(() => CreateClick())" @onclick:stopPropagation="true" class="btn btn-primary">
+            <span class="oi oi-plus" aria-hidden="true"></span> Add
+        </button>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var doctor in Doctors)
+            {
+                <tr>
+                    <td>
+                        @doctor.DoctorId
+                    </td>
+                    <td>
+                        @if (IsAddOrEdit(@doctor.DoctorId))
+                        {
+                            <input @bind="ToSave.Name" />
+                        }
+                        else
+                        {
+                            @doctor.Name
+                        }
+                    </td>
+                    <td class="action-buttons">
+                        @if (IsAddOrEdit(@doctor.DoctorId))
+                        {
+                            <button @onclick="@(() => SaveClick())" @onclick:stopPropagation="true" class="btn btn-primary margin-5">
+
+                                Save
+                            </button>
+                            <button @onclick="@(() => CancelClick())" @onclick:stopPropagation="true" class="btn btn-danger margin-5">
+
+                                Cancel
+                            </button>
+                        }
+                        else
+                        {
+                            <button @onclick="@(() => EditClick(doctor.DoctorId))" @onclick:stopPropagation="true" class="btn btn-primary margin-5">
+                                <EditIcon></EditIcon>
+                                Edit
+                            </button>
+
+                            <button @onclick="@(() => DeleteClick(doctor.DoctorId))" @onclick:stopPropagation="true" class="btn btn-danger margin-5">
+                                <DeleteIcon></DeleteIcon>
+                                Delete
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

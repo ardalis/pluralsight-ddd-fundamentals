@@ -1,0 +1,18 @@
+﻿.appointment-holder {
+    margin: 0 auto;
+    display: inline-block;
+    width: 100%;
+}
+
+.appointment-image {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+.appointment-error {
+    border: 2px solid red;
+}
+
+.appointment-inline {
+    display: inline-block;
+}

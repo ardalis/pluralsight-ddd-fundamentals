@@ -1,0 +1,2 @@
+﻿-- RUN THIS FROM ClinicManagement.Api project folder
+dotnet ef migrations add MIGRATIONNAME -c appdbcontext -p ../ClinicManagement.Infrastructure/ClinicManagement.Infrastructure.csproj -s ClinicManagement.Api.csproj -o Data/Migrations

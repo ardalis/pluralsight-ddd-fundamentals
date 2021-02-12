@@ -1,0 +1,104 @@
+﻿@page "/clients"
+
+<h1>Clients</h1>
+
+@if (Clients == null)
+{
+    <Spinner></Spinner>
+}
+else
+{
+    <div class="main-action">
+        <button @onclick="@(() => CreateClick())" @onclick:stopPropagation="true" class="btn btn-primary">
+            <span class="oi oi-plus" aria-hidden="true"></span> Add
+        </button>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Full Name</th>
+                <th>Email</th>
+                <th>Salutation</th>
+                <th>Preferred Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var client in Clients)
+            {
+                <tr>
+                    <td>
+                        @client.ClientId
+                    </td>
+                    <td>
+                        @if (IsAddOrEdit(@client.ClientId))
+                        {
+                            <input @bind="ToSave.FullName" />
+                        }
+                        else
+                        {
+                            @client.FullName
+                        }
+                    </td>
+                    <td>
+                        @if (IsAddOrEdit(@client.ClientId))
+                        {
+                            <input @bind="ToSave.EmailAddress" />
+                        }
+                        else
+                        {
+                            @client.EmailAddress
+                        }
+                    </td>
+                    <td>
+                        @if (IsAddOrEdit(@client.ClientId))
+                        {
+                            <input @bind="ToSave.Salutation" />
+                        }
+                        else
+                        {
+                            @client.Salutation
+                        }
+                    </td>
+                    <td>
+                        @if (IsAddOrEdit(@client.ClientId))
+                        {
+                            <input @bind="ToSave.PreferredName" />
+                        }
+                        else
+                        {
+                            @client.PreferredName
+                        }
+                    </td>
+                    <td class="action-buttons">
+                        @if (IsAddOrEdit(@client.ClientId))
+                        {
+                            <button @onclick="@(() => SaveClick())" @onclick:stopPropagation="true" class="btn btn-primary margin-5">
+
+                                Save
+                            </button>
+                            <button @onclick="@(() => CancelClick())" @onclick:stopPropagation="true" class="btn btn-danger margin-5">
+
+                                Cancel
+                            </button>
+                        }
+                        else
+                        {
+                            <button @onclick="@(() => EditClick(client.ClientId))" @onclick:stopPropagation="true" class="btn btn-primary margin-5">
+                                <EditIcon></EditIcon>
+                                Edit
+                            </button>
+
+                            <button @onclick="@(() => DeleteClick(client.ClientId))" @onclick:stopPropagation="true" class="btn btn-danger margin-5">
+                                <DeleteIcon></DeleteIcon>
+                                Delete
+                            </button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -14,10 +14,10 @@ namespace FrontDesk.Api.ConfigurationEndpoints
 
     [HttpGet("api/configurations")]
     [SwaggerOperation(
-        Summary = "Read configurations",
-        Description = "Read configurations",
-        OperationId = "configurations.read",
-        Tags = new[] { "configurationEndpoints" })
+        Summary = "Read configuration settings",
+        Description = "Read configuration settingss",
+        OperationId = "Configurations.Read",
+        Tags = new[] { "ConfigurationEndpoints" })
     ]
     public override async Task<ActionResult<string>> HandleAsync(CancellationToken cancellationToken)
     {

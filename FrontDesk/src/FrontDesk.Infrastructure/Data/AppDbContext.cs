@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using FrontDesk.Core.Aggregates;
@@ -72,6 +73,8 @@ namespace FrontDesk.Infrastructure.Data
       });
 
       base.OnModelCreating(modelBuilder);
+      modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

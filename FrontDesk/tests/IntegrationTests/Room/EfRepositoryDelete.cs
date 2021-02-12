@@ -11,7 +11,7 @@ namespace IntegrationTests.Room
 
     public EfRepositoryDelete()
     {
-      _repository = GetRepository();
+      _repository = GetRepositoryAsync().Result;
     }
 
     [Fact]

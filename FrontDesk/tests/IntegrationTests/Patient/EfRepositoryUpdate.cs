@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using FrontDesk.Infrastructure.Data;
-using UnitTests.Builders;
-using Xunit;
+﻿using FrontDesk.Infrastructure.Data;
 
 namespace IntegrationTests.Client
 {
@@ -11,7 +8,7 @@ namespace IntegrationTests.Client
 
     public EfRepositoryUpdate()
     {
-      _repository = GetRepository();
+      _repository = GetRepositoryAsync().Result;
     }
 
     //[Fact]
