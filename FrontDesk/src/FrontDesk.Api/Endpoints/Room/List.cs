@@ -12,7 +12,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.RoomEndpoints
 {
-  public class List : BaseAsyncEndpoint<ListRoomRequest, ListRoomResponse>
+  public class List : BaseAsyncEndpoint
+    .WithRequest<ListRoomRequest>
+    .WithResponse<ListRoomResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;

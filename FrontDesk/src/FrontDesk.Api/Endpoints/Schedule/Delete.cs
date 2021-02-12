@@ -11,7 +11,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.ScheduleEndpoints
 {
-  public class Delete : BaseAsyncEndpoint<DeleteScheduleRequest, DeleteScheduleResponse>
+  public class Delete : BaseAsyncEndpoint
+    .WithRequest<DeleteScheduleRequest>
+    .WithResponse<DeleteScheduleResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;

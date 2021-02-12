@@ -10,7 +10,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.DoctorEndpoints
 {
-  public class Update : BaseAsyncEndpoint<UpdateDoctorRequest, UpdateDoctorResponse>
+  public class Update : BaseAsyncEndpoint
+    .WithRequest<UpdateDoctorRequest>
+    .WithResponse<UpdateDoctorResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;

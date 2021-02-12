@@ -11,7 +11,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.ScheduleEndpoints
 {
-  public class Update : BaseAsyncEndpoint<UpdateScheduleRequest, UpdateScheduleResponse>
+  public class Update : BaseAsyncEndpoint
+    .WithRequest<UpdateScheduleRequest>
+    .WithResponse<UpdateScheduleResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;

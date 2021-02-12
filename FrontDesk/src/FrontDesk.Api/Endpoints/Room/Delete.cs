@@ -10,7 +10,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.RoomEndpoints
 {
-  public class Delete : BaseAsyncEndpoint<DeleteRoomRequest, DeleteRoomResponse>
+  public class Delete : BaseAsyncEndpoint
+    .WithRequest<DeleteRoomRequest>
+    .WithResponse<DeleteRoomResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;

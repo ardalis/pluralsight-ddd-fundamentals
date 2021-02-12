@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
+using BlazorShared.Models.Client;
 using BlazorShared.Models.Doctor;
 using FrontDesk.Core.Aggregates;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.DoctorEndpoints
 {
-  public class GetById : BaseAsyncEndpoint<GetByIdDoctorRequest, GetByIdDoctorResponse>
+  public class GetById : BaseAsyncEndpoint
+    .WithRequest<GetByIdDoctorRequest>
+    .WithResponse<GetByIdDoctorResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;

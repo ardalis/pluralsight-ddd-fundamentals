@@ -6,7 +6,10 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.ConfigurationEndpoints
 {
-  public class Read : BaseAsyncEndpoint<string>
+  public class Read : BaseAsyncEndpoint
+    .WithoutRequest
+    .WithResponse<string>
+
   {
     public Read()
     {

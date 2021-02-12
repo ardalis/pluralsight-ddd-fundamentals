@@ -11,7 +11,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
-  public class Delete : BaseAsyncEndpoint<DeleteAppointmentRequest, DeleteAppointmentResponse>
+  public class Delete : BaseAsyncEndpoint
+    .WithRequest<DeleteAppointmentRequest>
+    .WithResponse<DeleteAppointmentResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;

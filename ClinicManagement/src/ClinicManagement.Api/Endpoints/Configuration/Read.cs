@@ -6,7 +6,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ClinicManagement.Api.ConfigurationEndpoints
 {
-  public class Read : BaseAsyncEndpoint<string>
+  public class Read : BaseAsyncEndpoint
+    .WithoutRequest
+    .WithResponse<string>
   {
     public Read()
     {

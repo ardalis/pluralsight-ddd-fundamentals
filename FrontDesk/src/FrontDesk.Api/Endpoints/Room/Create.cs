@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
+using BlazorShared.Models.Patient;
 using BlazorShared.Models.Room;
 using FrontDesk.Core.Aggregates;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.RoomEndpoints
 {
-  public class Create : BaseAsyncEndpoint<CreateRoomRequest, CreateRoomResponse>
+  public class Create : BaseAsyncEndpoint
+    .WithRequest<CreateRoomRequest>
+    .WithResponse<CreateRoomResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;
