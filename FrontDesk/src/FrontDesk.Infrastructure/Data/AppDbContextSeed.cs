@@ -9,8 +9,6 @@ using BlazorShared.Models.Room;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.ValueObjects;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel;
 
@@ -21,7 +19,7 @@ namespace FrontDesk.Infrastructure.Data
     private Doctor DrSmith => new Doctor(1, "Dr. Smith");
     private Doctor DrWho => new Doctor(2, "Dr. Who");
     private Doctor DrMcDreamy => new Doctor(3, "Dr. McDreamy");
-    private Guid _scheduleId = Guid.NewGuid();
+    private readonly Guid _scheduleId = Guid.Parse("f9369039-9d11-4442-9738-ed65d8a8ad52");
     private DateTime _testDate = DateTime.Now;
     public const string MALE_SEX = "Male";
     public const string FEMALE_SEX = "Female";
@@ -53,6 +51,7 @@ namespace FrontDesk.Infrastructure.Data
           // apply migrations if connecting to a SQL database
           _context.Database.Migrate();
         }
+
         if (!await _context.Schedules.AnyAsync())
         {
           await _context.Schedules.AddAsync(

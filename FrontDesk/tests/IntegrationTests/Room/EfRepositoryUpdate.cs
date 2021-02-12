@@ -11,7 +11,7 @@ namespace IntegrationTests.Room
 
     public EfRepositoryUpdate()
     {
-      _repository = GetRepository();
+      _repository = GetRepositoryAsync().Result;
     }
 
     [Fact]

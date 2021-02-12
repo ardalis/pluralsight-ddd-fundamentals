@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
-using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Specifications;
 
 namespace IntegrationTests.ClientTests
@@ -14,7 +13,7 @@ namespace IntegrationTests.ClientTests
 
     public EfRepositoryAddWithPatient()
     {
-      _repository = GetRepository();
+      _repository = GetRepositoryAsync().Result;
     }
 
     [Fact]

@@ -12,7 +12,7 @@ namespace IntegrationTests.Doctor
 
     public EfRepositoryList()
     {
-      _repository = GetRepository();
+      _repository = GetRepositoryAsync().Result;
     }
 
     [Fact]
