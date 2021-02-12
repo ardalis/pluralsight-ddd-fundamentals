@@ -9,8 +9,6 @@ using BlazorShared.Models.Room;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.ValueObjects;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel;
 
@@ -21,7 +19,7 @@ namespace FrontDesk.Infrastructure.Data
     private Doctor DrSmith => new Doctor(1, "Dr. Smith");
     private Doctor DrWho => new Doctor(2, "Dr. Who");
     private Doctor DrMcDreamy => new Doctor(3, "Dr. McDreamy");
-    private Guid _scheduleId = Guid.NewGuid();
+    private readonly Guid _scheduleId = Guid.Parse("f9369039-9d11-4442-9738-ed65d8a8ad52");
     private DateTime _testDate = DateTime.Now;
     public const string MALE_SEX = "Male";
     public const string FEMALE_SEX = "Female";
@@ -39,6 +37,86 @@ namespace FrontDesk.Infrastructure.Data
       _logger = logger;
     }
 
+    public async Task SeedAsync(DateTime testDate, AppDbContext context, int? retry = 0)
+    {
+      _logger.LogInformation($"Seeding data.");
+      _logger.LogInformation($"DbContext Type: {context.Database.ProviderName}");
+
+      _testDate = testDate;
+      int retryForAvailability = retry.Value;
+      try
+      {
+        if (context.IsRealDatabase())
+        {
+          // apply migrations if connecting to a SQL database
+          context.Database.Migrate();
+        }
+
+        if (!await context.Schedules.AnyAsync())
+        {
+          await context.Schedules.AddAsync(
+              CreateSchedule());
+
+          await context.SaveChangesAsync();
+        }
+
+        if (!await context.AppointmentTypes.AnyAsync())
+        {
+          var apptTypes = await CreateAppointmentTypes();
+          await context.AppointmentTypes.AddRangeAsync(apptTypes);
+          await context.SaveChangesWithIdentityInsert<AppointmentType>();
+        }
+
+        if (!await context.Doctors.AnyAsync())
+        {
+          var doctors = CreateDoctors();
+          await context.Doctors.AddRangeAsync(doctors);
+          await context.SaveChangesWithIdentityInsert<Doctor>();
+        }
+
+        if (!await context.Clients.AnyAsync())
+        {
+          await context.Clients.AddRangeAsync(
+              CreateListOfClientsWithPatients(DrSmith, DrWho, DrMcDreamy));
+
+          await context.SaveChangesAsync();
+        }
+
+        if (!await context.Rooms.AnyAsync())
+        {
+          var rooms = await CreateRooms();
+          await context.Rooms.AddRangeAsync(rooms);
+          await context.SaveChangesWithIdentityInsert<Room>();
+        }
+
+        if (!await context.Appointments.AnyAsync())
+        {
+          _steve = context.Clients.FirstOrDefault(c => c.FullName == "Steve Smith");
+          _julie = context.Clients.FirstOrDefault(c => c.FullName == "Julia Lerman");
+          _darwin = context.Patients.FirstOrDefault(p => p.Name == "Darwin");
+          _sampson = context.Patients.FirstOrDefault(p => p.Name == "Sampson");
+          var rooms = context.Rooms.ToList();
+          var apptTypes = context.AppointmentTypes.ToList();
+          await context.Appointments.AddRangeAsync(
+              CreateAppointments(_scheduleId));
+
+          await context.SaveChangesAsync();
+        }
+      }
+      catch (Exception ex)
+      {
+        if (retryForAvailability < 1)
+        {
+          retryForAvailability++;
+          _logger.LogError(ex.Message);
+          await SeedAsync(_testDate, retryForAvailability);
+        }
+        throw;
+      }
+
+      await context.SaveChangesAsync();
+    }
+
     public async Task SeedAsync(DateTime testDate, int? retry = 0)
     {
       _logger.LogInformation($"Seeding data.");
@@ -53,6 +131,7 @@ namespace FrontDesk.Infrastructure.Data
           // apply migrations if connecting to a SQL database
           _context.Database.Migrate();
         }
+
         if (!await _context.Schedules.AnyAsync())
         {
           await _context.Schedules.AddAsync(

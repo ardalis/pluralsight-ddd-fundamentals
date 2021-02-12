@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using FrontDesk.Api;
 using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
@@ -12,9 +13,9 @@ namespace IntegrationTests.ClientTests
   {
     private readonly EfRepository _repository;
 
-    public EfRepositoryAddWithPatient()
+    public EfRepositoryAddWithPatient(CustomWebApplicationFactory<Startup> factory) : base(factory)
     {
-      _repository = GetRepository();
+      _repository = GetRepositoryAsync().Result;
     }
 
     [Fact]
