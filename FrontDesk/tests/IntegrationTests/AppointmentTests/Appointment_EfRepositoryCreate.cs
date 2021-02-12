@@ -1,18 +1,17 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FrontDesk.Api;
 using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
 
 namespace IntegrationTests.AppointmentTests
 {
-  public class Appointment_EfRepositoryCreate : BaseEfRepoTestFixture
+  public class Appointment_EfRepositoryCreate: BaseEfRepoTestFixture
   {
     private readonly EfRepository _repository;
 
-    public Appointment_EfRepositoryCreate(CustomWebApplicationFactory<Startup> factory) : base(factory)
+    public Appointment_EfRepositoryCreate()
     {
       _repository = GetRepositoryAsync().Result;
     }

@@ -11,14 +11,12 @@ using Xunit;
 namespace IntegrationTests
 {
   [Collection("Sequential")]
-  public abstract class BaseEfRepoTestFixture : IClassFixture<CustomWebApplicationFactory<Startup>>
+  public abstract class BaseEfRepoTestFixture
   {
-    private readonly CustomWebApplicationFactory<Startup> _factory;
     protected AppDbContext _dbContext;
 
-    protected BaseEfRepoTestFixture(CustomWebApplicationFactory<Startup> factory)
+    protected BaseEfRepoTestFixture()
     {
-      _factory = factory;
     }
 
     protected static DbContextOptions<AppDbContext> CreateInMemoryContextOptions()

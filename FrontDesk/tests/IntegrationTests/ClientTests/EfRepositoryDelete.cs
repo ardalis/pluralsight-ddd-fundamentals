@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using FrontDesk.Api;
 using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
@@ -10,7 +9,7 @@ namespace IntegrationTests.ClientTests
   {
     private readonly EfRepository _repository;
 
-    public EfRepositoryDelete(CustomWebApplicationFactory<Startup> factory) : base(factory)
+    public EfRepositoryDelete()
     {
       _repository = GetRepositoryAsync().Result;
     }

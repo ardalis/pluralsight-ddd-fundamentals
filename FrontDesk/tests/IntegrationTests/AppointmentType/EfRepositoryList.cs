@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using FrontDesk.Api;
 using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
@@ -11,7 +10,7 @@ namespace IntegrationTests.AppointmentType
   {
     private readonly EfRepository _repository;
 
-    public EfRepositoryList(CustomWebApplicationFactory<Startup> factory) : base(factory)
+    public EfRepositoryList()
     {
       _repository = GetRepositoryAsync().Result;
     }
