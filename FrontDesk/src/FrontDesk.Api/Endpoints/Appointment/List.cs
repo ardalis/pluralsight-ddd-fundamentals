@@ -15,7 +15,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
-  public class List : BaseAsyncEndpoint<ListAppointmentRequest, ListAppointmentResponse>
+  public class List : BaseAsyncEndpoint
+    .WithRequest<ListAppointmentRequest>
+    .WithResponse<ListAppointmentResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;

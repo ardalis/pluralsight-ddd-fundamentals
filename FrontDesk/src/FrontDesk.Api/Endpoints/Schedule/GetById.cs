@@ -11,7 +11,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.ScheduleEndpoints
 {
-  public class GetById : BaseAsyncEndpoint<GetByIdScheduleRequest, GetByIdScheduleResponse>
+  public class GetById : BaseAsyncEndpoint
+    .WithRequest<GetByIdScheduleRequest>
+    .WithResponse<GetByIdScheduleResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;

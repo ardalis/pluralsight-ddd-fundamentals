@@ -10,7 +10,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.DoctorEndpoints
 {
-  public class Delete : BaseAsyncEndpoint<DeleteDoctorRequest, DeleteDoctorResponse>
+  public class Delete : BaseAsyncEndpoint
+    .WithRequest<DeleteDoctorRequest>
+    .WithResponse<DeleteDoctorResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;

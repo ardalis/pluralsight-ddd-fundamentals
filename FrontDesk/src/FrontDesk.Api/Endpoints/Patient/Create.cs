@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
+using BlazorShared.Models;
 using BlazorShared.Models.Patient;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Specifications;
@@ -11,7 +12,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.PatientEndpoints
 {
-  public class Create : BaseAsyncEndpoint<CreatePatientRequest, CreatePatientResponse>
+  public class Create : BaseAsyncEndpoint
+    .WithRequest<CreatePatientRequest>
+    .WithResponse<CreatePatientResponse>
   {
     private readonly IRepository _repository;
     private readonly IMapper _mapper;
