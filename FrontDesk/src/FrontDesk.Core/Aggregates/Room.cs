@@ -5,13 +5,16 @@ namespace FrontDesk.Core.Aggregates
 {
   public class Room : BaseEntity<int>, IAggregateRoot
   {
-    public virtual string Name { get; private set; }
-
     public Room(int id, string name)
     {
       Id = id;
       Name = name;
     }
+
+    private Room() // required for EF
+    {
+    }
+    public string Name { get; private set; }
 
     public override string ToString()
     {
@@ -22,10 +25,6 @@ namespace FrontDesk.Core.Aggregates
     {
       Name = name;
       return this;
-    }
-
-    private Room() // required for EF
-    {
     }
   }
 }

@@ -10,13 +10,26 @@ namespace FrontDesk.Core.Aggregates
 {
   public class Schedule : BaseEntity<Guid>, IAggregateRoot
   {
+    public Schedule(Guid id, DateTimeRange dateRange, int clinicId, IEnumerable<Appointment> appointments)
+    {
+      Id = id;
+      DateRange = dateRange;
+      ClinicId = clinicId;
+      _appointments.AddRange(appointments);
+      MarkConflictingAppointments();
+    }
+
+    private Schedule() // required for EF
+    {
+    }
+
     public int ClinicId { get; private set; }
 
     // not persisted
     [NotMapped]
     public virtual DateTimeRange DateRange { get; private set; }
 
-    private List<Appointment> _appointments;
+    private List<Appointment> _appointments = new List<Appointment>();
     public IEnumerable<Appointment> Appointments
     {
       get
@@ -27,20 +40,6 @@ namespace FrontDesk.Core.Aggregates
       {
         _appointments = (List<Appointment>)value;
       }
-    }
-
-    public Schedule(Guid id, DateTimeRange dateRange, int clinicId, IEnumerable<Appointment> appointments)
-    {
-      Id = id;
-      DateRange = dateRange;
-      ClinicId = clinicId;
-      _appointments = appointments == null ? new List<Appointment>() : new List<Appointment>(appointments);
-      MarkConflictingAppointments();
-    }
-
-    private Schedule() // required for EF
-    {
-      _appointments = new List<Appointment>();
     }
 
     public Appointment AddNewAppointment(Appointment appointment)

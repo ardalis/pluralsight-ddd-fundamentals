@@ -5,8 +5,6 @@ namespace FrontDesk.Core.Aggregates
 {
   public class Doctor : BaseEntity<int>, IAggregateRoot
   {
-    public virtual string Name { get; private set; }
-
     public Doctor(int id, string name)
     {
       Id = id;
@@ -16,6 +14,8 @@ namespace FrontDesk.Core.Aggregates
     private Doctor() // required for EF
     {
     }
+
+    public string Name { get; private set; }
 
     public void UpdateName(string name)
     {

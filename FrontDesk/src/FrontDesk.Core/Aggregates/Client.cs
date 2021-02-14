@@ -6,13 +6,6 @@ namespace FrontDesk.Core.Aggregates
 {
   public class Client : BaseEntity<int>, IAggregateRoot
   {
-    public string FullName { get; private set; }
-    public string PreferredName { get; private set; }
-    public string Salutation { get; private set; }
-    public string EmailAddress { get; private set; }
-    public int PreferredDoctorId { get; private set; }
-    public IList<Patient> Patients { get; private set; }
-
     public Client(int id)
     {
       Id = id;
@@ -28,6 +21,16 @@ namespace FrontDesk.Core.Aggregates
       EmailAddress = emailAddress;
       Patients = new List<Patient>();
     }
+    private Client() //required for EF
+    {
+    }
+
+    public string FullName { get; private set; }
+    public string PreferredName { get; private set; }
+    public string Salutation { get; private set; }
+    public string EmailAddress { get; private set; }
+    public int PreferredDoctorId { get; private set; }
+    public IList<Patient> Patients { get; private set; }
 
     public void UpdateFullName(string fullName)
     {
@@ -37,10 +40,6 @@ namespace FrontDesk.Core.Aggregates
     public override string ToString()
     {
       return FullName.ToString();
-    }
-
-    private Client() //required for EF
-    {
     }
   }
 }
