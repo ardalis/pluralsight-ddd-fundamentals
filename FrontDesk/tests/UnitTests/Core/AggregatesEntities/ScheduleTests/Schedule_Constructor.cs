@@ -20,7 +20,7 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
     }
 
     [Fact]
-    public void SetsProperties()
+    public void CreateConstructor()
     {
       var appointments = new List<Appointment>();
 
@@ -31,27 +31,6 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
       Assert.Equal(_endTime, schedule.DateRange.End);
       Assert.Equal(_clinicId, schedule.ClinicId);
       Assert.Equal(appointments, schedule.Appointments);
-    }
-
-    [Fact]
-    public void MarksConflictingAppointments()
-    {
-      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId, null);
-      var appointmentType = 1;
-      var doctorId = 2;
-      var patientId = 3;
-      var roomId = 4;
-
-      var lisaTitle = "Lisa Appointment";
-      var lisaAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, lisaTitle);
-      schedule.AddNewAppointment(lisaAppointment);
-
-      var mimiTitle = "Mimi Appointment";
-      var mimiAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, mimiTitle);
-      schedule.AddNewAppointment(mimiAppointment);
-
-      Assert.True(lisaAppointment.IsPotentiallyConflicting);
-      Assert.True(mimiAppointment.IsPotentiallyConflicting);
     }
   }
 }
