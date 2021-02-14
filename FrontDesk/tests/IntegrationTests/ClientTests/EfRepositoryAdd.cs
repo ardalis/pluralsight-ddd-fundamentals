@@ -8,6 +8,7 @@ namespace IntegrationTests.ClientTests
 {
   public class EfRepositoryAdd : BaseEfRepoTestFixture
   {
+    private int _newClientId = 123;
     private readonly EfRepository _repository;
 
     public EfRepositoryAdd()
@@ -20,15 +21,15 @@ namespace IntegrationTests.ClientTests
     {
       var client = await AddClient();
 
-      var newClient = (await _repository.ListAsync<FrontDesk.Core.Aggregates.Client, int>()).FirstOrDefault();
+      var newClient = (await _repository.ListAsync<FrontDesk.Core.Aggregates.Client, int>()).FirstOrDefault(c => c.Id == _newClientId);
 
-      Assert.Equal(client, newClient);
+      Assert.Equal(client.Id, newClient.Id);
       Assert.True(newClient?.Id > 0);
     }
 
     private async Task<FrontDesk.Core.Aggregates.Client> AddClient()
     {
-      var client = new ClientBuilder().Id(2).Build();
+      var client = new ClientBuilder().Id(_newClientId).Build();
 
       await _repository.AddAsync<FrontDesk.Core.Aggregates.Client, int>(client);
 

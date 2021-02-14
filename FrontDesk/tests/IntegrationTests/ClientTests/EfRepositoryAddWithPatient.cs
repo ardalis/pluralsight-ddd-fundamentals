@@ -10,6 +10,8 @@ namespace IntegrationTests.ClientTests
   public class EfRepositoryAddWithPatient : BaseEfRepoTestFixture
   {
     private readonly EfRepository _repository;
+    private int _newClientId = 234;
+    private int _newPatientId = 345;
 
     public EfRepositoryAddWithPatient()
     {
@@ -32,8 +34,8 @@ namespace IntegrationTests.ClientTests
 
     private async Task<FrontDesk.Core.Aggregates.Client> AddClient()
     {
-      var client = new ClientBuilder().Id(2).Build();
-      var patient = new PatientBuilder().Id(3).Build();
+      var client = new ClientBuilder().Id(_newClientId).Build();
+      var patient = new PatientBuilder().Id(_newPatientId).Build();
       client.Patients.Add(patient);
 
       await _repository.AddAsync<FrontDesk.Core.Aggregates.Client, int>(client);

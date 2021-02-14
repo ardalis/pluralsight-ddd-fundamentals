@@ -8,6 +8,7 @@ namespace IntegrationTests.ClientTests
   public class EfRepositoryUpdate : BaseEfRepoTestFixture
   {
     private readonly EfRepository _repository;
+    private int _testClientId = 345;
 
     public EfRepositoryUpdate()
     {
@@ -17,15 +18,14 @@ namespace IntegrationTests.ClientTests
     [Fact]
     public async Task UpdatesClientAfterAddingIt()
     {
-      var id = 2;
       var fullName = "changed";
 
-      var client = await AddClient(id);
+      var client = await AddClient(_testClientId);
 
       client.UpdateFullName(fullName);
       await _repository.UpdateAsync<FrontDesk.Core.Aggregates.Client, int>(client);
 
-      var updatedClient = await _repository.GetByIdAsync<FrontDesk.Core.Aggregates.Client, int>(id);
+      var updatedClient = await _repository.GetByIdAsync<FrontDesk.Core.Aggregates.Client, int>(_testClientId);
 
       Assert.Equal(fullName, updatedClient.FullName);
     }

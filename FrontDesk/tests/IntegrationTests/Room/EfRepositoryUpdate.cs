@@ -8,6 +8,7 @@ namespace IntegrationTests.Room
   public class EfRepositoryUpdate : BaseEfRepoTestFixture
   {
     private readonly EfRepository _repository;
+    private int _testRoomId = 678;
 
     public EfRepositoryUpdate()
     {
@@ -17,15 +18,14 @@ namespace IntegrationTests.Room
     [Fact]
     public async Task UpdatesRoomAfterAddingIt()
     {
-      var id = 2;
       var name = "changed";
 
-      var room = await AddRoom(id);
+      var room = await AddRoom(_testRoomId);
 
       room.UpdateName(name);
       await _repository.UpdateAsync<FrontDesk.Core.Aggregates.Room, int>(room);
 
-      var updatedRoom = await _repository.GetByIdAsync<FrontDesk.Core.Aggregates.Room, int>(id);
+      var updatedRoom = await _repository.GetByIdAsync<FrontDesk.Core.Aggregates.Room, int>(_testRoomId);
 
       Assert.Equal(name, updatedRoom.Name);
     }

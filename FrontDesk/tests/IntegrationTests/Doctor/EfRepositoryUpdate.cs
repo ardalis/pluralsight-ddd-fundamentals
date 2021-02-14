@@ -8,6 +8,7 @@ namespace IntegrationTests.Doctor
   public class EfRepositoryUpdate : BaseEfRepoTestFixture
   {
     private readonly EfRepository _repository;
+    private int _testDoctorId = 567;
 
     public EfRepositoryUpdate()
     {
@@ -17,15 +18,14 @@ namespace IntegrationTests.Doctor
     [Fact]
     public async Task UpdatesDoctorAfterAddingIt()
     {
-      var id = 2;
       var name = "changed";
 
-      var doctor = await AddDoctor(id);
+      var doctor = await AddDoctor(_testDoctorId);
 
       doctor.UpdateName(name);
       await _repository.UpdateAsync<FrontDesk.Core.Aggregates.Doctor, int>(doctor);
 
-      var updatedDoctor = await _repository.GetByIdAsync<FrontDesk.Core.Aggregates.Doctor, int>(id);
+      var updatedDoctor = await _repository.GetByIdAsync<FrontDesk.Core.Aggregates.Doctor, int>(_testDoctorId);
 
       Assert.Equal(name, updatedDoctor.Name);
     }

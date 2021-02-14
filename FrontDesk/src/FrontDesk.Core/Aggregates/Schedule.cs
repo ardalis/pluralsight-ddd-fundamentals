@@ -10,12 +10,15 @@ namespace FrontDesk.Core.Aggregates
 {
   public class Schedule : BaseEntity<Guid>, IAggregateRoot
   {
-    public Schedule(Guid id, DateTimeRange dateRange, int clinicId, IEnumerable<Appointment> appointments)
+    public Schedule(Guid id,
+      DateTimeRange dateRange,
+      int clinicId,
+      IEnumerable<Appointment> appointments)
     {
       Id = id;
       DateRange = dateRange;
       ClinicId = clinicId;
-      _appointments.AddRange(appointments);
+      _appointments.AddRange(appointments ?? new List<Appointment>());
       MarkConflictingAppointments();
     }
 

@@ -9,6 +9,7 @@ namespace IntegrationTests.Doctor
   public class EfRepositoryAdd : BaseEfRepoTestFixture
   {
     private readonly EfRepository _repository;
+    private int _testDoctorId = 567;
 
     public EfRepositoryAdd()
     {
@@ -20,7 +21,7 @@ namespace IntegrationTests.Doctor
     {
       var doctor = await AddDoctor();
 
-      var newDoctor = (await _repository.ListAsync<FrontDesk.Core.Aggregates.Doctor, int>()).FirstOrDefault();
+      var newDoctor = (await _repository.ListAsync<FrontDesk.Core.Aggregates.Doctor, int>()).FirstOrDefault(d => d.Id == _testDoctorId);
 
       Assert.Equal(doctor, newDoctor);
       Assert.True(newDoctor?.Id > 0);
@@ -28,7 +29,7 @@ namespace IntegrationTests.Doctor
 
     private async Task<FrontDesk.Core.Aggregates.Doctor> AddDoctor()
     {
-      var doctor = new DoctorBuilder().Id(2).Build();
+      var doctor = new DoctorBuilder().Id(_testDoctorId).Build();
 
       await _repository.AddAsync<FrontDesk.Core.Aggregates.Doctor, int>(doctor);
 
