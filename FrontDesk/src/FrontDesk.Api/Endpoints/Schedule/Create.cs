@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
-using BlazorShared.Models.Room;
 using BlazorShared.Models.Schedule;
 using FrontDesk.Core.Aggregates;
 using Microsoft.AspNetCore.Mvc;

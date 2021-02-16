@@ -1,6 +1,5 @@
 ﻿using FrontDesk.Core.ValueObjects;
 using PluralsightDdd.SharedKernel;
-using PluralsightDdd.SharedKernel.Interfaces;
 
 namespace FrontDesk.Core.Aggregates
 {

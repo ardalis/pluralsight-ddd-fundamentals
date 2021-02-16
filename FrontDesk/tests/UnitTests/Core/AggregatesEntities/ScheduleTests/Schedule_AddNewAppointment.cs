@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoFixture;
 using FrontDesk.Core.Aggregates;
 using PluralsightDdd.SharedKernel;
 using Xunit;
