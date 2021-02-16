@@ -35,9 +35,6 @@ namespace ClinicManagement.Blazor
       builder.Services.AddScoped<ConfigurationService>();
       builder.Services.AddScoped<ToastService>();
 
-      // register the Telerik services
-      builder.Services.AddTelerikBlazor();
-
       await builder.Build().RunAsync();
     }
   }
