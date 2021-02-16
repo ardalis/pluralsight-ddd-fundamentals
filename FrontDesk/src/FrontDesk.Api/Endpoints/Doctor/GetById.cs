@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
-using BlazorShared.Models.Client;
 using BlazorShared.Models.Doctor;
 using FrontDesk.Core.Aggregates;
 using Microsoft.AspNetCore.Mvc;

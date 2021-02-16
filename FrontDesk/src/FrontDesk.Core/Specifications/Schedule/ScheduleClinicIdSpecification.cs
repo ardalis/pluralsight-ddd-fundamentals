@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Ardalis.Specification;
+﻿using Ardalis.Specification;
 using FrontDesk.Core.Aggregates;
 
 namespace FrontDesk.Core.Specifications
