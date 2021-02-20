@@ -12,6 +12,8 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     private readonly Fixture _fixture = new Fixture();
     private readonly string _testAppointmentTypeTitle = "Test Type";
     private readonly int _duration = 30;
+    private readonly int _appointmentTypeId = 1;
+    private readonly string _appointmentTypeCode = "01";
 
     public Appointment_UpdateEndTime()
     {
@@ -22,16 +24,16 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     public void SuccessWhenUpdateEndTime()
     {
       var scheduleId = Guid.NewGuid();
-      var testClientId = 1;
-      var testPatientId = 2;
-      var testRoomId = 3;
-      var testAppointmentTypeId = 4;
-      var testDoctorId = 5;
-      var testTitle = "Test Title";
+      const int testClientId = 1;
+      const int testPatientId = 2;
+      const int testRoomId = 3;
+      const int testAppointmentTypeId = 4;
+      const int testDoctorId = 5;
+      const string testTitle = "Test Title";
 
       var appointment =
         Appointment.Create(scheduleId, testClientId, testPatientId, testRoomId, _startTime, _endTime, testAppointmentTypeId, testDoctorId, testTitle);
-      appointment.UpdateEndTime(new AppointmentType(1, _testAppointmentTypeTitle, "01", _duration));
+      appointment.UpdateEndTime(new AppointmentType(_appointmentTypeId, _testAppointmentTypeTitle, _appointmentTypeCode, _duration));
 
       Assert.Equal(30, appointment.TimeRange.DurationInMinutes());
     }
@@ -44,7 +46,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
         .Create();
 
       Assert.Throws<ArgumentNullException>(() =>
-        appointment.UpdateEndTime(new AppointmentType(1, _testAppointmentTypeTitle, "01", _duration)));
+        appointment.UpdateEndTime(new AppointmentType(_appointmentTypeId, _testAppointmentTypeTitle, _appointmentTypeCode, _duration)));
     }
   }
 }
