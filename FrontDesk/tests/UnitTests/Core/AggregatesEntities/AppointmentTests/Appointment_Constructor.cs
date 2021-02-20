@@ -20,7 +20,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
       var startTime = new DateTime(2021, 01, 01, 10, 00, 00);
       var endTime = startTime.AddHours(3);
       var range = new DateTimeRange(startTime, endTime);
-      const int expectedDurationInMinutes = 3 * 60;
+      const int threeHours = 3 * 60;
 
       var appointment = new Appointment(appointmentTypeId, scheduleId, clientId, doctorId, patientId, roomId, range, title);
 
@@ -31,7 +31,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
       Assert.Equal(doctorId, appointment.DoctorId);
       Assert.Equal(patientId, appointment.PatientId);
       Assert.Equal(roomId, appointment.RoomId);
-      Assert.Equal(expectedDurationInMinutes, appointment.TimeRange.DurationInMinutes());
+      Assert.Equal(threeHours, appointment.TimeRange.DurationInMinutes());
       Assert.Equal(title, appointment.Title);
       Assert.NotEqual(Guid.Empty, appointment.Id);
     }

@@ -65,10 +65,11 @@ namespace FrontDesk.Core.Aggregates
     public void DeleteAppointment(Appointment appointment)
     {
       // mark the appointment for deletion by the repository
-      var appointmentToDelete = this.Appointments.Where(a => a.Id == appointment.Id).FirstOrDefault();
+      var appointmentToDelete = Appointments?.Where(a => a.Id == appointment.Id).FirstOrDefault();
       if (appointmentToDelete != null)
       {
         //appointmentToDelete.State = TrackingState.Deleted;
+        _appointments.Remove(appointmentToDelete);
       }
 
       MarkConflictingAppointments();
