@@ -25,7 +25,7 @@ namespace FunctionalTests.Api
     {
       var result = await _client.GetAndDeserialize<ListAppointmentTypeResponse>("/api/appointment-types", _outputHelper);
 
-      Assert.Equal(3, result.AppointmentTypes.Count());
+      Assert.Equal(3, result.AppointmentTypes.Count);
       Assert.Contains(result.AppointmentTypes, x => x.Name == "Wellness Exam");
     }
   }
