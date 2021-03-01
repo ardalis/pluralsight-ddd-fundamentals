@@ -25,7 +25,7 @@ namespace FunctionalTests.Api
     {
       var result = await _client.GetAndDeserialize<ListRoomResponse>("/api/rooms", _outputHelper);
 
-      Assert.Equal(5, result.Rooms.Count());
+      Assert.Equal(5, result.Rooms.Count);
       Assert.Contains(result.Rooms, room => room.Name == "Exam Room 1");
     }
   }

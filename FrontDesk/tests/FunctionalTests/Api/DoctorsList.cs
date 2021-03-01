@@ -25,7 +25,7 @@ namespace FunctionalTests.Api
     {
       var result = await _client.GetAndDeserialize<ListDoctorResponse>("/api/doctors", _outputHelper);
 
-      Assert.Equal(3, result.Doctors.Count());
+      Assert.Equal(3, result.Doctors.Count);
       Assert.Contains(result.Doctors, x => x.Name == "Dr. Smith");
     }
   }

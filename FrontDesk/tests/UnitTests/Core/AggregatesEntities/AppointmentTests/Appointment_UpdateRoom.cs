@@ -7,7 +7,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
 {
   public class Appointment_UpdateRoom
   {
-    private Fixture _fixture = new Fixture();
+    private readonly Fixture _fixture = new Fixture();
 
     [Fact]
     public void DoesNothingGivenSameRoomId()

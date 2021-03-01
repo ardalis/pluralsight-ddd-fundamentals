@@ -25,7 +25,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     public void CreateSuccess()
     {
       var appointment = Appointment.Create(_scheduleId, _testClientId, _testPatientId, _testRoomId, _startTime, _endTime, _testAppointmentTypeId, _testDoctorId, _testTitle);
-      var threeHours = 3 * 60;
+      const int threeHours = 3 * 60;
 
       Assert.Null(appointment.DateTimeConfirmed);
       Assert.Equal(_scheduleId, appointment.ScheduleId);
