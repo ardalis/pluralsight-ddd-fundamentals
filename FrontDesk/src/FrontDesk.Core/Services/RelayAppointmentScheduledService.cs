@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Events;
+using FrontDesk.Core.Exceptions;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.Specifications;
 using MediatR;
@@ -15,13 +16,19 @@ namespace FrontDesk.Core.Services
   /// </summary>
   public class RelayAppointmentScheduledService : INotificationHandler<AppointmentScheduledEvent>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Doctor> _doctorRepository;
+    private readonly IRepository<Client> _clientRepository;
+    private readonly IRepository<AppointmentType> _appointmentTypeRepository;
     private readonly IMessagePublisher _messagePublisher;
 
-    public RelayAppointmentScheduledService(IRepository repository,
-        IMessagePublisher messagePublisher)
+    public RelayAppointmentScheduledService(IRepository<Doctor> doctorRepository,
+      IRepository<Client> clientRepository,
+      IRepository<AppointmentType> appointmentTypeRepository,
+      IMessagePublisher messagePublisher)
     {
-      _repository = repository;
+      _doctorRepository = doctorRepository;
+      _clientRepository = clientRepository;
+      _appointmentTypeRepository = appointmentTypeRepository;
       _messagePublisher = messagePublisher;
     }
 
@@ -33,13 +40,18 @@ namespace FrontDesk.Core.Services
       var appt = appointmentScheduledEvent.AppointmentScheduled;
 
       // if this is slow these can be parallelized or cached. MEASURE before optimizing.
-      var doctor = await _repository.GetByIdAsync<Doctor, int>(appt.DoctorId.Value);
+      var doctor = await _doctorRepository.GetByIdAsync(appt.DoctorId ?? 0);
+      if (doctor == null) throw new DoctorNotFoundException(appt.DoctorId ?? 0);
 
       var clientWithPatientsSpec = new ClientByIdIncludePatientsSpecification(appt.ClientId);
-      var client = (await _repository.ListAsync<Client, int>(clientWithPatientsSpec))
-        .FirstOrDefault();
-      var patient = client.Patients.First(p => p.Id == appt.PatientId);
-      var apptType = await _repository.GetByIdAsync<AppointmentType, int>(appt.AppointmentTypeId);
+      var client = await _clientRepository.GetBySpecAsync(clientWithPatientsSpec);
+      if (client == null) throw new ClientNotFoundException(appt.ClientId);
+
+      var patient = client.Patients.FirstOrDefault(p => p.Id == appt.PatientId);
+      if (patient == null) throw new PatientNotFoundException(appt.PatientId);
+
+      var apptType = await _appointmentTypeRepository.GetByIdAsync(appt.AppointmentTypeId);
+      if (apptType == null) throw new AppointmentTypeNotFoundException(appt.AppointmentTypeId);
 
       newMessage.AppointmentDateTime = appointmentScheduledEvent.AppointmentScheduled.TimeRange.Start;
       newMessage.ClientName = client.FullName;

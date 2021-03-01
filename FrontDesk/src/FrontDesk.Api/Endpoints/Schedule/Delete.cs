@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
@@ -11,14 +10,18 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.ScheduleEndpoints
 {
+  /// <summary>
+  /// Not Used.
+  /// </summary>
   public class Delete : BaseAsyncEndpoint
     .WithRequest<DeleteScheduleRequest>
     .WithResponse<DeleteScheduleResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Schedule> _repository;
     private readonly IMapper _mapper;
 
-    public Delete(IRepository repository, IMapper mapper)
+    public Delete(IRepository<Schedule> repository,
+      IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -31,12 +34,13 @@ namespace FrontDesk.Api.ScheduleEndpoints
         OperationId = "schedules.delete",
         Tags = new[] { "ScheduleEndpoints" })
     ]
-    public override async Task<ActionResult<DeleteScheduleResponse>> HandleAsync([FromRoute] DeleteScheduleRequest request, CancellationToken cancellationToken)
+    public override async Task<ActionResult<DeleteScheduleResponse>> HandleAsync([FromRoute] DeleteScheduleRequest request,
+      CancellationToken cancellationToken)
     {
       var response = new DeleteScheduleResponse(request.CorrelationId());
 
       var toDelete = _mapper.Map<Schedule>(request);
-      await _repository.DeleteAsync<Schedule, Guid>(toDelete);
+      await _repository.DeleteAsync(toDelete);
 
       return Ok(response);
     }

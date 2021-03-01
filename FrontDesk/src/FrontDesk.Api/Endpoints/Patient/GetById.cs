@@ -16,10 +16,11 @@ namespace FrontDesk.Api.PatientEndpoints
     .WithRequest<GetByIdPatientRequest>
     .WithResponse<GetByIdPatientResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
 
-    public GetById(IRepository repository, IMapper mapper)
+    public GetById(IRepository<Client> repository,
+      IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -38,7 +39,7 @@ namespace FrontDesk.Api.PatientEndpoints
       var response = new GetByIdPatientResponse(request.CorrelationId());
 
       var spec = new ClientByIdIncludePatientsSpecification(request.ClientId);
-      var client = await _repository.GetAsync<Client, int>(spec);
+      var client = await _repository.GetBySpecAsync(spec);
       if (client == null) return NotFound();
 
       var patient = client.Patients.FirstOrDefault(p => p.Id == request.PatientId);

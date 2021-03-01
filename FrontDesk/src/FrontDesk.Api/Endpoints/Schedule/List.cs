@@ -16,10 +16,11 @@ namespace FrontDesk.Api.ScheduleEndpoints
     .WithRequest<ListScheduleRequest>
     .WithResponse<ListScheduleResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Schedule> _repository;
     private readonly IMapper _mapper;
 
-    public List(IRepository repository, IMapper mapper)
+    public List(IRepository<Schedule> repository,
+      IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -32,11 +33,12 @@ namespace FrontDesk.Api.ScheduleEndpoints
         OperationId = "schedules.List",
         Tags = new[] { "ScheduleEndpoints" })
     ]
-    public override async Task<ActionResult<ListScheduleResponse>> HandleAsync([FromQuery] ListScheduleRequest request, CancellationToken cancellationToken)
+    public override async Task<ActionResult<ListScheduleResponse>> HandleAsync([FromQuery] ListScheduleRequest request,
+      CancellationToken cancellationToken)
     {
       var response = new ListScheduleResponse(request.CorrelationId());
 
-      var schedules = await _repository.ListAsync<Schedule, Guid>();
+      var schedules = await _repository.ListAsync();
       if (schedules is null) return NotFound();
 
       response.Schedules = _mapper.Map<List<ScheduleDto>>(schedules);

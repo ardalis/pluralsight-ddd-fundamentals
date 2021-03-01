@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Moq;
+using PluralsightDdd.SharedKernel.Interfaces;
 using Xunit;
 
 namespace IntegrationTests
@@ -44,7 +45,7 @@ namespace IntegrationTests
       return builder.Options;
     }
 
-    protected async Task<EfRepository> GetRepositoryAsync()
+    protected async Task<EfRepository<T>> GetRepositoryAsync<T>() where T:class, IAggregateRoot
     {
       //var options = CreateInMemoryContextOptions();
       var options = CreateSqlLiteOptions();
@@ -56,7 +57,7 @@ namespace IntegrationTests
       var appDbContextSeed = new AppDbContextSeed(_dbContext, logger);
       await appDbContextSeed.SeedAsync(new OfficeSettings().TestDate);
 
-      return new EfRepository(_dbContext);
+      return new EfRepository<T>(_dbContext);
     }
   }
 }

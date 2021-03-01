@@ -7,33 +7,33 @@ using Xunit;
 
 namespace IntegrationTests.AppointmentTests
 {
-  public class Appointment_EfRepositoryCreate: BaseEfRepoTestFixture
-  {
-    private readonly EfRepository _repository;
+  //public class Appointment_EfRepositoryCreate: BaseEfRepoTestFixture
+  //{
+  //  private readonly EfRepository _repository;
 
-    public Appointment_EfRepositoryCreate()
-    {
-      _repository = GetRepositoryAsync().Result;
-    }
+  //  public Appointment_EfRepositoryCreate()
+  //  {
+  //    _repository = GetRepositoryAsync().Result;
+  //  }
 
-    [Fact]
-    public async Task CreatesAppointmentAndSetsId()
-    {
-      var appointment = await CreateAppointment();
+  //  [Fact]
+  //  public async Task CreatesAppointmentAndSetsId()
+  //  {
+  //    var appointment = await CreateAppointment();
 
-      var newAppointment = (await _repository.ListAsync<FrontDesk.Core.Aggregates.Appointment, Guid>()).LastOrDefault();
+  //    var newAppointment = (await _repository.ListAsync<FrontDesk.Core.Aggregates.Appointment, Guid>()).LastOrDefault();
 
-      Assert.Equal(appointment, newAppointment);
-      Assert.True(newAppointment?.Id != Guid.Empty);
-    }
+  //    Assert.Equal(appointment, newAppointment);
+  //    Assert.True(newAppointment?.Id != Guid.Empty);
+  //  }
 
-    private async Task<FrontDesk.Core.Aggregates.Appointment> CreateAppointment()
-    {
-      var appointment = new AppointmentBuilder().WithDefaultValues().Build();
+  //  private async Task<FrontDesk.Core.Aggregates.Appointment> CreateAppointment()
+  //  {
+  //    var appointment = new AppointmentBuilder().WithDefaultValues().Build();
 
-      await _repository.AddAsync<FrontDesk.Core.Aggregates.Appointment, Guid>(appointment);
+  //    await _repository.AddAsync<FrontDesk.Core.Aggregates.Appointment, Guid>(appointment);
 
-      return appointment;
-    }
-  }
+  //    return appointment;
+  //  }
+  //}
 }

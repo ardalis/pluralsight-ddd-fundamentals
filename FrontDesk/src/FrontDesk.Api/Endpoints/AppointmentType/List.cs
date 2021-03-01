@@ -15,12 +15,12 @@ namespace FrontDesk.Api.AppointmentTypeEndpoints
     .WithRequest<ListAppointmentTypeRequest>
     .WithResponse<ListAppointmentTypeResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<AppointmentType> _appointmentTypeRepository;
     private readonly IMapper _mapper;
 
-    public List(IRepository repository, IMapper mapper)
+    public List(IRepository<AppointmentType> appointmentTypeRepository, IMapper mapper)
     {
-      _repository = repository;
+      _appointmentTypeRepository = appointmentTypeRepository;
       _mapper = mapper;
     }
 
@@ -35,7 +35,7 @@ namespace FrontDesk.Api.AppointmentTypeEndpoints
     {
       var response = new ListAppointmentTypeResponse(request.CorrelationId());
 
-      var appointmentTypes = await _repository.ListAsync<AppointmentType, int>();
+      var appointmentTypes = await _appointmentTypeRepository.ListAsync();
       response.AppointmentTypes = _mapper.Map<List<AppointmentTypeDto>>(appointmentTypes);
       response.Count = response.AppointmentTypes.Count;
 

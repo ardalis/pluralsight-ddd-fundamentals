@@ -15,10 +15,11 @@ namespace FrontDesk.Api.DoctorEndpoints
     .WithRequest<ListDoctorRequest>
     .WithResponse<ListDoctorResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Doctor> _repository;
     private readonly IMapper _mapper;
 
-    public List(IRepository repository, IMapper mapper)
+    public List(IRepository<Doctor> repository,
+      IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -31,11 +32,12 @@ namespace FrontDesk.Api.DoctorEndpoints
         OperationId = "doctors.List",
         Tags = new[] { "DoctorEndpoints" })
     ]
-    public override async Task<ActionResult<ListDoctorResponse>> HandleAsync([FromQuery] ListDoctorRequest request, CancellationToken cancellationToken)
+    public override async Task<ActionResult<ListDoctorResponse>> HandleAsync([FromQuery] ListDoctorRequest request,
+      CancellationToken cancellationToken)
     {
       var response = new ListDoctorResponse(request.CorrelationId());
 
-      var doctors = await _repository.ListAsync<Doctor, int>();
+      var doctors = await _repository.ListAsync();
       if (doctors is null) return NotFound();
 
       response.Doctors = _mapper.Map<List<DoctorDto>>(doctors);

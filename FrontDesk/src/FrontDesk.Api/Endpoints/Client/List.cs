@@ -16,10 +16,11 @@ namespace FrontDesk.Api.ClientEndpoints
     .WithRequest<ListClientRequest>
     .WithResponse<ListClientResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
 
-    public List(IRepository repository, IMapper mapper)
+    public List(IRepository<Client> repository,
+      IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -32,12 +33,13 @@ namespace FrontDesk.Api.ClientEndpoints
         OperationId = "clients.List",
         Tags = new[] { "ClientEndpoints" })
     ]
-    public override async Task<ActionResult<ListClientResponse>> HandleAsync([FromQuery] ListClientRequest request, CancellationToken cancellationToken)
+    public override async Task<ActionResult<ListClientResponse>> HandleAsync([FromQuery] ListClientRequest request,
+      CancellationToken cancellationToken)
     {
       var response = new ListClientResponse(request.CorrelationId());
 
       var spec = new ClientsIncludePatientsSpecification();
-      var clients = await _repository.ListAsync<Client, int>(spec);
+      var clients = await _repository.ListAsync(spec);
       if (clients is null) return NotFound();
 
       response.Clients = _mapper.Map<List<ClientDto>>(clients);

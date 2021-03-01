@@ -19,15 +19,17 @@ namespace FrontDesk.Api.AppointmentEndpoints
     .WithRequest<ListAppointmentRequest>
     .WithResponse<ListAppointmentResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Schedule> _scheduleRepository;
     private readonly IMapper _mapper;
-    private readonly IApplicationSettings _settings;
+    //private readonly IApplicationSettings _settings;
 
-    public List(IRepository repository, IMapper mapper, IApplicationSettings settings)
+    public List(IRepository<Schedule> scheduleRepository,
+      IMapper mapper)
+      // IApplicationSettings settings)
     {
-      _repository = repository;
+      _scheduleRepository = scheduleRepository;
       _mapper = mapper;
-      _settings = settings;
+     // _settings = settings;
     }
 
     [HttpGet("api/appointments")]
@@ -37,26 +39,30 @@ namespace FrontDesk.Api.AppointmentEndpoints
         OperationId = "appointments.List",
         Tags = new[] { "AppointmentEndpoints" })
     ]
-    public override async Task<ActionResult<ListAppointmentResponse>> HandleAsync([FromQuery] ListAppointmentRequest request, CancellationToken cancellationToken)
+    public override async Task<ActionResult<ListAppointmentResponse>> HandleAsync([FromQuery] ListAppointmentRequest request,
+      CancellationToken cancellationToken)
     {
       var response = new ListAppointmentResponse(request.CorrelationId());
 
-      var scheduleSpec = new ScheduleForDateAndClinicSpecification(_settings.ClinicId, _settings.TestDate);
+      var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId); // TODO: Just get that day's appointments
+      var schedule = await _scheduleRepository.GetBySpecAsync(spec);
 
-      int totalSchedules = await _repository.CountAsync<Schedule, Guid>(scheduleSpec);
-      if (totalSchedules <= 0)
-      {
-        response.Appointments = new List<AppointmentDto>();
-        response.Count = 0;
-        return Ok(response);
-      }
+      //var scheduleSpec = new ScheduleForClinicAndDate(_settings.ClinicId, _settings.TestDate);
 
-      var schedule = (await _repository.ListAsync<Schedule, Guid>(scheduleSpec)).First();
+      //int totalSchedules = await _repository.CountAsync<Schedule, Guid>(scheduleSpec);
+      //if (totalSchedules <= 0)
+      //{
+      //  response.Appointments = new List<AppointmentDto>();
+      //  response.Count = 0;
+      //  return Ok(response);
+      //}
 
-      var appointmentSpec = new AppointmentByScheduleIdSpecification(schedule.Id);
-      var appointments = (await _repository.ListAsync<Appointment, Guid>(appointmentSpec)).ToList();
+      //var schedule = (await _repository.ListAsync<Schedule, Guid>(scheduleSpec)).First();
 
-      var myAppointments = _mapper.Map<List<AppointmentDto>>(appointments);
+      //var appointmentSpec = new AppointmentByScheduleIdSpecification(schedule.Id);
+      //var appointments = (await _repository.ListAsync<Appointment, Guid>(appointmentSpec)).ToList();
+
+      var myAppointments = _mapper.Map<List<AppointmentDto>>(schedule.Appointments);
 
       response.Appointments = myAppointments.OrderBy(a => a.Start).ToList();
       response.Count = response.Appointments.Count;

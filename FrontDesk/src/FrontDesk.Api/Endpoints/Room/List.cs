@@ -16,10 +16,11 @@ namespace FrontDesk.Api.RoomEndpoints
     .WithRequest<ListRoomRequest>
     .WithResponse<ListRoomResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Room> _repository;
     private readonly IMapper _mapper;
 
-    public List(IRepository repository, IMapper mapper)
+    public List(IRepository<Room> repository,
+      IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -32,12 +33,13 @@ namespace FrontDesk.Api.RoomEndpoints
         OperationId = "rooms.List",
         Tags = new[] { "RoomEndpoints" })
     ]
-    public override async Task<ActionResult<ListRoomResponse>> HandleAsync([FromQuery] ListRoomRequest request, CancellationToken cancellationToken)
+    public override async Task<ActionResult<ListRoomResponse>> HandleAsync([FromQuery] ListRoomRequest request,
+      CancellationToken cancellationToken)
     {
       var response = new ListRoomResponse(request.CorrelationId());
 
       var roomSpec = new RoomSpecification();
-      var rooms = await _repository.ListAsync<Room, int>(roomSpec);
+      var rooms = await _repository.ListAsync(roomSpec);
       if (rooms is null) return NotFound();
 
       response.Rooms = _mapper.Map<List<RoomDto>>(rooms);

@@ -3,14 +3,13 @@ using FrontDesk.Core.Aggregates;
 
 namespace FrontDesk.Core.Specifications
 {
-  public class ScheduleClinicIdSpecification : Specification<Schedule>
+  public class ScheduleClinicIdSpec : Specification<Schedule>
   {
-    public ScheduleClinicIdSpecification(int clinicId)
+    public ScheduleClinicIdSpec(int clinicId)
     {
       Query
           .Where(schedule =>
               schedule.ClinicId == clinicId);
-
     }
   }
 }

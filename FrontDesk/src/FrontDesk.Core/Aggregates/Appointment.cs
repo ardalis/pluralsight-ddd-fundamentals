@@ -7,7 +7,7 @@ using PluralsightDdd.SharedKernel.Interfaces;
 
 namespace FrontDesk.Core.Aggregates
 {
-  public class Appointment : BaseEntity<Guid>, IAggregateRoot
+  public class Appointment : BaseEntity<Guid>
   {
     public Guid ScheduleId { get; private set; }
     public int ClientId { get; private set; }
@@ -19,7 +19,6 @@ namespace FrontDesk.Core.Aggregates
     public DateTimeRange TimeRange { get; private set; }
 
     public string Title { get; private set; }
-
 
     #region More Properties
     public DateTime? DateTimeConfirmed { get; set; }

@@ -1,18 +1,19 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using FrontDesk.Core.Aggregates;
 using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
 
-namespace IntegrationTests.Doctor
+namespace IntegrationTests.DoctorTests
 {
   public class EfRepositoryList : BaseEfRepoTestFixture
   {
-    private readonly EfRepository _repository;
+    private readonly EfRepository<Doctor> _repository;
 
     public EfRepositoryList()
     {
-      _repository = GetRepositoryAsync().Result;
+      _repository = GetRepositoryAsync<Doctor>().Result;
     }
 
     [Fact]
@@ -20,7 +21,7 @@ namespace IntegrationTests.Doctor
     {
       await AddDoctor();
 
-      var doctors = (await _repository.ListAsync<FrontDesk.Core.Aggregates.Doctor, int>()).ToList();
+      var doctors = (await _repository.ListAsync()).ToList();
 
       Assert.True(doctors?.Count > 0);
     }
@@ -29,7 +30,7 @@ namespace IntegrationTests.Doctor
     {
       var doctor = new DoctorBuilder().Id(7).Build();
 
-      await _repository.AddAsync<FrontDesk.Core.Aggregates.Doctor, int>(doctor);
+      await _repository.AddAsync(doctor);
 
       return doctor;
     }

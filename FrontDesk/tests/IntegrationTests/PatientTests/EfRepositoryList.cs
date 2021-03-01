@@ -1,15 +1,15 @@
 ﻿using FrontDesk.Infrastructure.Data;
 
-namespace IntegrationTests.Client
+namespace IntegrationTests.Patient
 {
-  public class EfRepositoryList : BaseEfRepoTestFixture
-  {
-    private readonly EfRepository _repository;
+  //public class EfRepositoryList : BaseEfRepoTestFixture
+  //{
+  //  private readonly EfRepository _repository;
 
-    public EfRepositoryList()
-    {
-      _repository = GetRepositoryAsync().Result;
-    }
+  //  public EfRepositoryList()
+  //  {
+  //    _repository = GetRepositoryAsync().Result;
+  //  }
 
     //[Fact]
     //public async Task ListsPatientAfterAddingIt()
@@ -29,5 +29,5 @@ namespace IntegrationTests.Client
 
     //  return patient;
     //}
-  }
+  //}
 }

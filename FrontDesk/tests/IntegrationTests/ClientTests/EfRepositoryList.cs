@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using FrontDesk.Core.Aggregates;
 using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
@@ -8,11 +9,11 @@ namespace IntegrationTests.ClientTests
 {
   public class EfRepositoryList : BaseEfRepoTestFixture
   {
-    private readonly EfRepository _repository;
+    private readonly EfRepository<Client> _repository;
 
     public EfRepositoryList()
     {
-      _repository = GetRepositoryAsync().Result;
+      _repository = GetRepositoryAsync<Client>().Result;
     }
 
     [Fact]
@@ -20,7 +21,7 @@ namespace IntegrationTests.ClientTests
     {
       await AddClient();
 
-      var clients = (await _repository.ListAsync<FrontDesk.Core.Aggregates.Client, int>()).ToList();
+      var clients = (await _repository.ListAsync()).ToList();
 
       Assert.True(clients?.Count > 0);
     }
@@ -29,7 +30,7 @@ namespace IntegrationTests.ClientTests
     {
       var client = new ClientBuilder().Id(7).Build();
 
-      await _repository.AddAsync<FrontDesk.Core.Aggregates.Client, int>(client);
+      await _repository.AddAsync(client);
 
       return client;
     }

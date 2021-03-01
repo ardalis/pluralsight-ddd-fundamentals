@@ -15,10 +15,10 @@ namespace FrontDesk.Api.ScheduleEndpoints
     .WithRequest<GetByIdScheduleRequest>
     .WithResponse<GetByIdScheduleResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Schedule> _repository;
     private readonly IMapper _mapper;
 
-    public GetById(IRepository repository, IMapper mapper)
+    public GetById(IRepository<Schedule> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -35,7 +35,7 @@ namespace FrontDesk.Api.ScheduleEndpoints
     {
       var response = new GetByIdScheduleResponse(request.CorrelationId());
 
-      var schedule = await _repository.GetByIdAsync<Schedule, Guid>(request.ScheduleId);
+      var schedule = await _repository.GetByIdAsync(request.ScheduleId);
       if (schedule is null) return NotFound();
 
       response.Schedule = _mapper.Map<ScheduleDto>(schedule);

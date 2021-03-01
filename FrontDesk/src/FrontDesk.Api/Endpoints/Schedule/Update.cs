@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
@@ -11,14 +10,18 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.ScheduleEndpoints
 {
+  /// <summary>
+  /// Not used.
+  /// </summary>
   public class Update : BaseAsyncEndpoint
     .WithRequest<UpdateScheduleRequest>
     .WithResponse<UpdateScheduleResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Schedule> _repository;
     private readonly IMapper _mapper;
 
-    public Update(IRepository repository, IMapper mapper)
+    public Update(IRepository<Schedule> repository,
+      IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -31,12 +34,13 @@ namespace FrontDesk.Api.ScheduleEndpoints
         OperationId = "schedules.update",
         Tags = new[] { "ScheduleEndpoints" })
     ]
-    public override async Task<ActionResult<UpdateScheduleResponse>> HandleAsync(UpdateScheduleRequest request, CancellationToken cancellationToken)
+    public override async Task<ActionResult<UpdateScheduleResponse>> HandleAsync(UpdateScheduleRequest request,
+      CancellationToken cancellationToken)
     {
       var response = new UpdateScheduleResponse(request.CorrelationId());
 
       var toUpdate = _mapper.Map<Schedule>(request);
-      await _repository.UpdateAsync<Schedule, Guid>(toUpdate);
+      await _repository.UpdateAsync(toUpdate);
 
       var dto = _mapper.Map<ScheduleDto>(toUpdate);
       response.Schedule = dto;

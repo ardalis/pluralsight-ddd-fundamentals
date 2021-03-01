@@ -14,10 +14,11 @@ namespace FrontDesk.Api.ClientEndpoints
     .WithRequest<GetByIdClientRequest>
     .WithResponse<GetByIdClientResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
 
-    public GetById(IRepository repository, IMapper mapper)
+    public GetById(IRepository<Client> repository,
+      IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -30,11 +31,12 @@ namespace FrontDesk.Api.ClientEndpoints
         OperationId = "clients.GetById",
         Tags = new[] { "ClientEndpoints" })
     ]
-    public override async Task<ActionResult<GetByIdClientResponse>> HandleAsync([FromRoute] GetByIdClientRequest request, CancellationToken cancellationToken)
+    public override async Task<ActionResult<GetByIdClientResponse>> HandleAsync([FromRoute] GetByIdClientRequest request,
+      CancellationToken cancellationToken)
     {
       var response = new GetByIdClientResponse(request.CorrelationId());
 
-      var client = await _repository.GetByIdAsync<Client, int>(request.ClientId);
+      var client = await _repository.GetByIdAsync(request.ClientId);
       if (client is null) return NotFound();
 
       response.Client = _mapper.Map<ClientDto>(client);
@@ -42,6 +44,4 @@ namespace FrontDesk.Api.ClientEndpoints
       return Ok(response);
     }
   }
-
-
 }

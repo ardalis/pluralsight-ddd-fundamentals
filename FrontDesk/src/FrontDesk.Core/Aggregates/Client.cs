@@ -12,7 +12,11 @@ namespace FrontDesk.Core.Aggregates
       Patients = new List<Patient>();
     }
 
-    public Client(string fullName, string preferredName, string salutation, int preferredDoctorId, string emailAddress)
+    public Client(string fullName,
+      string preferredName,
+      string salutation,
+      int preferredDoctorId,
+      string emailAddress)
     {
       FullName = fullName;
       PreferredName = preferredName;
@@ -21,6 +25,7 @@ namespace FrontDesk.Core.Aggregates
       EmailAddress = emailAddress;
       Patients = new List<Patient>();
     }
+
     private Client() //required for EF
     {
     }

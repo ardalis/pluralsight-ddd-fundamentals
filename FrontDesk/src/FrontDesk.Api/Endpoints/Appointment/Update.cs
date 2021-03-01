@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Appointment;
 using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
@@ -15,12 +17,12 @@ namespace FrontDesk.Api.AppointmentEndpoints
     .WithRequest<UpdateAppointmentRequest>
     .WithResponse<UpdateAppointmentResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Schedule> _scheduleRepository;
     private readonly IMapper _mapper;
 
-    public Update(IRepository repository, IMapper mapper)
+    public Update(IRepository<Schedule> scheduleRepository, IMapper mapper)
     {
-      _repository = repository;
+      _scheduleRepository = scheduleRepository;
       _mapper = mapper;
     }
 
@@ -31,18 +33,23 @@ namespace FrontDesk.Api.AppointmentEndpoints
         OperationId = "appointments.update",
         Tags = new[] { "AppointmentEndpoints" })
     ]
-    public override async Task<ActionResult<UpdateAppointmentResponse>> HandleAsync(UpdateAppointmentRequest request, CancellationToken cancellationToken)
+    public override async Task<ActionResult<UpdateAppointmentResponse>> HandleAsync(UpdateAppointmentRequest request,
+      CancellationToken cancellationToken)
     {
       var response = new UpdateAppointmentResponse(request.CorrelationId());
 
-      var toUpdate = _mapper.Map<Appointment>(request);
+      var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId); // TODO: Just get that day's appointments
+      var schedule = await _scheduleRepository.GetBySpecAsync(spec);
 
-      var appointmentType = await _repository.GetByIdAsync<AppointmentType, int>(toUpdate.AppointmentTypeId);
-      toUpdate.UpdateEndTime(appointmentType);
+      var apptToUpdate = schedule.Appointments.FirstOrDefault(a => a.Id == request.Id);
+      apptToUpdate.UpdateRoom(request.RoomId);
+      apptToUpdate.UpdateTime(new PluralsightDdd.SharedKernel.DateTimeRange(request.Start, request.End));
 
-      await _repository.UpdateAsync<Appointment, Guid>(toUpdate);
+      // TODO: Implement updating other properties
 
-      var dto = _mapper.Map<AppointmentDto>(toUpdate);
+      await _scheduleRepository.UpdateAsync(schedule);
+
+      var dto = _mapper.Map<AppointmentDto>(apptToUpdate);
       response.Appointment = dto;
 
       return Ok(response);

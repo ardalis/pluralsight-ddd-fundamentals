@@ -16,10 +16,10 @@ namespace FrontDesk.Api.PatientEndpoints
     .WithRequest<ListPatientRequest>
     .WithResponse<ListPatientResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
 
-    public List(IRepository repository, IMapper mapper)
+    public List(IRepository<Client> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -37,7 +37,7 @@ namespace FrontDesk.Api.PatientEndpoints
       var response = new ListPatientResponse(request.CorrelationId());
 
       var spec = new ClientByIdIncludePatientsSpecification(request.ClientId);
-      var client = await _repository.GetAsync<Client, int>(spec);
+      var client = await _repository.GetBySpecAsync(spec);
       if (client == null) return NotFound();
 
       response.Patients = _mapper.Map<List<PatientDto>>(client.Patients);

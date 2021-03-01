@@ -8,9 +8,9 @@ namespace FrontDesk.Core.ValueObjects
     public string Species { get; private set; }
     public string Breed { get; private set; }
 
-    public AnimalType()
+    private AnimalType()
     {
-
+      // EF
     }
     public AnimalType(string species, string breed)
     {

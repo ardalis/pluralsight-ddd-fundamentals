@@ -1,17 +1,18 @@
 ﻿using System.Threading.Tasks;
+using FrontDesk.Core.Aggregates;
 using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
 
-namespace IntegrationTests.Room
+namespace IntegrationTests.RoomTests
 {
   public class EfRepositoryGetById : BaseEfRepoTestFixture
   {
-    private readonly EfRepository _repository;
+    private readonly EfRepository<Room> _repository;
 
     public EfRepositoryGetById()
     {
-      _repository = GetRepositoryAsync().Result;
+      _repository = GetRepositoryAsync<Room>().Result;
     }
 
     [Fact]
@@ -20,7 +21,7 @@ namespace IntegrationTests.Room
       var id = 9;
       var room = await AddRoom(id);
 
-      var newRoom = await _repository.GetByIdAsync<FrontDesk.Core.Aggregates.Room, int>(id);
+      var newRoom = await _repository.GetByIdAsync(id);
 
       Assert.Equal(room, newRoom);
       Assert.True(newRoom?.Id == id);
@@ -30,7 +31,7 @@ namespace IntegrationTests.Room
     {
       var room = new RoomBuilder().Id(id).Build();
 
-      await _repository.AddAsync<FrontDesk.Core.Aggregates.Room, int>(room);
+      await _repository.AddAsync(room);
 
       return room;
     }

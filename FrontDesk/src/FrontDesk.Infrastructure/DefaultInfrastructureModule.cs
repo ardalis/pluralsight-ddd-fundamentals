@@ -2,6 +2,7 @@
 using System.Reflection;
 using Autofac;
 using FrontDesk.Core;
+using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Infrastructure.Data;
 using MediatR;
@@ -19,8 +20,8 @@ namespace FrontDesk.Infrastructure
     public DefaultInfrastructureModule(bool isDevelopment, Assembly callingAssembly = null)
     {
       _isDevelopment = isDevelopment;
-      var coreAssembly = Assembly.GetAssembly(typeof(DatabasePopulator));
-      var infrastructureAssembly = Assembly.GetAssembly(typeof(EfRepository));
+      var coreAssembly = Assembly.GetAssembly(typeof(Schedule));
+      var infrastructureAssembly = Assembly.GetAssembly(typeof(AppDbContext));
       _assemblies.Add(coreAssembly);
       _assemblies.Add(infrastructureAssembly);
       if (callingAssembly != null)
@@ -44,7 +45,7 @@ namespace FrontDesk.Infrastructure
 
     private void RegisterCommonDependencies(ContainerBuilder builder)
     {
-      builder.RegisterType<EfRepository>().As<IRepository>()
+      builder.RegisterGeneric(typeof(EfRepository<>)).As(typeof(IRepository<>))
           .InstancePerLifetimeScope();
 
       builder
