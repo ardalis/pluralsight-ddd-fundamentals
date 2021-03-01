@@ -4,7 +4,7 @@ using FrontDesk.Core.Aggregates;
 
 namespace FrontDesk.Core.Specifications
 {
-  public class ScheduleByIdWithAppointmentsSpec : Specification<Schedule>
+  public class ScheduleByIdWithAppointmentsSpec : Specification<Schedule>, ISingleResultSpecification
   {
     public ScheduleByIdWithAppointmentsSpec(Guid scheduleId)
     {

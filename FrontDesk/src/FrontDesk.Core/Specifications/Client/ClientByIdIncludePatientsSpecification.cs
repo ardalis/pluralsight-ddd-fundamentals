@@ -3,7 +3,7 @@ using FrontDesk.Core.Aggregates;
 
 namespace FrontDesk.Core.Specifications
 {
-  public class ClientByIdIncludePatientsSpecification : Specification<Client>
+  public class ClientByIdIncludePatientsSpecification : Specification<Client>, ISingleResultSpecification
   {
     public ClientByIdIncludePatientsSpecification(int clientId)
     {
