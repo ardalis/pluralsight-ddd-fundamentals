@@ -33,7 +33,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       _settings = settings;
     }
 
-    [HttpGet("api/appointments")]
+    [HttpGet(ListAppointmentRequest.Route)]
     [SwaggerOperation(
         Summary = "List Appointments",
         Description = "List Appointments",
