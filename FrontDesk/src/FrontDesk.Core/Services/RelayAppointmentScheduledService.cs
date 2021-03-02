@@ -60,7 +60,8 @@ namespace FrontDesk.Core.Services
       newMessage.PatientName = patient.Name;
       newMessage.ProcedureName = apptType.Name;
 
-      _messagePublisher.Publish(newMessage);
+      // TODO: uncomment this after finish ServiceBrokerMessagePublisher 
+      // messagePublisher.Publish(newMessage);
     }
   }
 }
