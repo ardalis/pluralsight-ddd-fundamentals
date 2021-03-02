@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Appointment;
+using BlazorShared.Models.Schedule;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +18,12 @@ namespace FrontDesk.Api.AppointmentEndpoints
     .WithResponse<DeleteAppointmentResponse>
   {
     private readonly IRepository<Schedule> _scheduleRepository;
+    private readonly IMapper _mapper;
 
-    public Delete(IRepository<Schedule> scheduleRepository)
+    public Delete(IRepository<Schedule> scheduleRepository, IMapper mapper)
     {
       _scheduleRepository = scheduleRepository;
+      _mapper = mapper;
     }
 
     [HttpDelete(DeleteAppointmentRequest.Route)]
@@ -46,8 +48,8 @@ namespace FrontDesk.Api.AppointmentEndpoints
       await _scheduleRepository.UpdateAsync(schedule);
 
       // verify we can still get the schedule
-      var s = await _scheduleRepository.GetBySpecAsync(spec);
-
+      response.Schedule = _mapper.Map<ScheduleDto>(await _scheduleRepository.GetBySpecAsync(spec));
+ 
       return Ok(response);
     }
   }

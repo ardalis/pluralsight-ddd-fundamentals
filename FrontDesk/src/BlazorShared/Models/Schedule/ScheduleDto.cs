@@ -10,6 +10,6 @@ namespace BlazorShared.Models.Schedule
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
 
-    private List<Guid> AppointmentIds { get; set; } = new List<Guid>();
+    public List<Guid> AppointmentIds { get; set; } = new List<Guid>();
   }
 }
