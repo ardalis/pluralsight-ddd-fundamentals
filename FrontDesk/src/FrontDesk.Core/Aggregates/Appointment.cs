@@ -114,6 +114,9 @@ namespace FrontDesk.Core.Aggregates
       appointment.DoctorId = doctorId ?? 1;
       appointment.Title = title;
 
+      var appointmentScheduledEvent = new AppointmentScheduledEvent(appointment);
+      appointment.Events.Add(appointmentScheduledEvent);
+
       return appointment;
     }
   }

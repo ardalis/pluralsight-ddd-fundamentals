@@ -7,11 +7,11 @@ namespace FrontDesk.Infrastructure.Data
   // https://github.com/ardalis/Specification/blob/v5/ArdalisSpecificationEF/src/Ardalis.Specification.EF/RepositoryBaseOfT.cs
   public class EfRepository<T> : RepositoryBase<T>, IRepository<T> where T : class, IAggregateRoot
   {
-    private readonly AppDbContext _dbContext;
+    //private readonly AppDbContext _dbContext;
 
     public EfRepository(AppDbContext dbContext) : base(dbContext)
     {
-      _dbContext = dbContext;
+      //_dbContext = dbContext;
     }
   }
     //public class EfRepository : IRepository

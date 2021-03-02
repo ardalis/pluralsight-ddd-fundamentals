@@ -4,6 +4,7 @@ using Autofac;
 using FrontDesk.Core;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Interfaces;
+using FrontDesk.Core.Services;
 using FrontDesk.Infrastructure.Data;
 using MediatR;
 using MediatR.Pipeline;
@@ -20,10 +21,13 @@ namespace FrontDesk.Infrastructure
     public DefaultInfrastructureModule(bool isDevelopment, Assembly callingAssembly = null)
     {
       _isDevelopment = isDevelopment;
+
       var coreAssembly = Assembly.GetAssembly(typeof(Schedule));
-      var infrastructureAssembly = Assembly.GetAssembly(typeof(AppDbContext));
       _assemblies.Add(coreAssembly);
+
+      var infrastructureAssembly = Assembly.GetAssembly(typeof(AppDbContext));
       _assemblies.Add(infrastructureAssembly);
+
       if (callingAssembly != null)
       {
         _assemblies.Add(callingAssembly);
@@ -48,6 +52,9 @@ namespace FrontDesk.Infrastructure
       builder.RegisterGeneric(typeof(EfRepository<>)).As(typeof(IRepository<>))
           .InstancePerLifetimeScope();
 
+      builder.RegisterType(typeof(ServiceBrokerMessagePublisher)).As(typeof(IMessagePublisher))
+        .InstancePerLifetimeScope();
+
       builder
           .RegisterType<Mediator>()
           .As<IMediator>()
@@ -61,11 +68,11 @@ namespace FrontDesk.Infrastructure
 
       var mediatrOpenTypes = new[]
       {
-                typeof(IRequestHandler<,>),
-                typeof(IRequestExceptionHandler<,,>),
-                typeof(IRequestExceptionAction<,>),
-                typeof(INotificationHandler<>),
-            };
+        typeof(IRequestHandler<,>),
+        typeof(IRequestExceptionHandler<,,>),
+        typeof(IRequestExceptionAction<,>),
+        typeof(INotificationHandler<>),
+      };
 
       foreach (var mediatrOpenType in mediatrOpenTypes)
       {
