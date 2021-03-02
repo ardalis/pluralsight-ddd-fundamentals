@@ -26,7 +26,7 @@ namespace FrontDesk.Core.Services
 
     public async Task Handle(AppointmentConfirmedEvent appointmentConfirmedEvent, CancellationToken cancellationToken)
     {
-      var scheduleSpec = new ScheduleForClinicAndDate(_settings.ClinicId, _settings.TestDate);
+      var scheduleSpec = new ScheduleForClinicAndDateWithAppointmentsSpec(_settings.ClinicId, _settings.TestDate);
       // Note: In this demo this only works for appointments scheduled on TestDate
       var schedule = (await _scheduleRepository.GetBySpecAsync(scheduleSpec));
       Guard.Against.Null(schedule, nameof(Schedule));

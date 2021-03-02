@@ -7,6 +7,7 @@ using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Appointment;
 using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.Exceptions;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
@@ -21,15 +22,15 @@ namespace FrontDesk.Api.AppointmentEndpoints
   {
     private readonly IRepository<Schedule> _scheduleRepository;
     private readonly IMapper _mapper;
-    //private readonly IApplicationSettings _settings;
+    private readonly IApplicationSettings _settings;
 
     public List(IRepository<Schedule> scheduleRepository,
-      IMapper mapper)
-      // IApplicationSettings settings)
+      IMapper mapper,
+      IApplicationSettings settings)
     {
       _scheduleRepository = scheduleRepository;
       _mapper = mapper;
-     // _settings = settings;
+      _settings = settings;
     }
 
     [HttpGet("api/appointments")]
@@ -44,23 +45,13 @@ namespace FrontDesk.Api.AppointmentEndpoints
     {
       var response = new ListAppointmentResponse(request.CorrelationId());
 
-      var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId); // TODO: Just get that day's appointments
+
+      //var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId); // TODO: Just get that day's appointments
+      
+      var spec = new ScheduleForClinicAndDateWithAppointmentsSpec(_settings.ClinicId, _settings.TestDate);
       var schedule = await _scheduleRepository.GetBySpecAsync(spec);
 
-      //var scheduleSpec = new ScheduleForClinicAndDate(_settings.ClinicId, _settings.TestDate);
-
-      //int totalSchedules = await _repository.CountAsync<Schedule, Guid>(scheduleSpec);
-      //if (totalSchedules <= 0)
-      //{
-      //  response.Appointments = new List<AppointmentDto>();
-      //  response.Count = 0;
-      //  return Ok(response);
-      //}
-
-      //var schedule = (await _repository.ListAsync<Schedule, Guid>(scheduleSpec)).First();
-
-      //var appointmentSpec = new AppointmentByScheduleIdSpecification(schedule.Id);
-      //var appointments = (await _repository.ListAsync<Appointment, Guid>(appointmentSpec)).ToList();
+      if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for clinic {_settings.ClinicId}.");
 
       var myAppointments = _mapper.Map<List<AppointmentDto>>(schedule.Appointments);
 

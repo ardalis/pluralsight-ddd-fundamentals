@@ -5,9 +5,9 @@ using FrontDesk.Core.Aggregates;
 
 namespace FrontDesk.Core.Specifications
 {
-  public class ScheduleForClinicAndDate : Specification<Schedule>, ISingleResultSpecification
+  public class ScheduleForClinicAndDateWithAppointmentsSpec : Specification<Schedule>, ISingleResultSpecification
   {
-    public ScheduleForClinicAndDate(int clinicId, DateTime date)
+    public ScheduleForClinicAndDateWithAppointmentsSpec(int clinicId, DateTime date)
     {
       Query
           .Include(nameof(Schedule.Appointments))
