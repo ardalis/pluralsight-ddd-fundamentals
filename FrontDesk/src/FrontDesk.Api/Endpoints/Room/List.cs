@@ -26,7 +26,7 @@ namespace FrontDesk.Api.RoomEndpoints
       _mapper = mapper;
     }
 
-    [HttpGet("api/rooms")]
+    [HttpGet(ListRoomRequest.Route)]
     [SwaggerOperation(
         Summary = "List Rooms",
         Description = "List Rooms",

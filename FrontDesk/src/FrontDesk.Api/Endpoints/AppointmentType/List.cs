@@ -24,7 +24,7 @@ namespace FrontDesk.Api.AppointmentTypeEndpoints
       _mapper = mapper;
     }
 
-    [HttpGet("api/appointment-types")]
+    [HttpGet(ListAppointmentTypeRequest.Route)]
     [SwaggerOperation(
         Summary = "List Appointment Types",
         Description = "List Appointment Types",

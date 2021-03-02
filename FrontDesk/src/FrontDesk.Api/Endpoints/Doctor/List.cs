@@ -25,7 +25,7 @@ namespace FrontDesk.Api.DoctorEndpoints
       _mapper = mapper;
     }
 
-    [HttpGet("api/doctors")]
+    [HttpGet(ListDoctorRequest.Route)]
     [SwaggerOperation(
         Summary = "List Doctors",
         Description = "List Doctors",
