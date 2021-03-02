@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Ardalis.HttpClientTestExtensions;
 using BlazorShared.Models.Appointment;
+using BlazorShared.Models.Schedule;
 using FrontDesk.Api;
 using Xunit;
 using Xunit.Abstractions;
@@ -32,13 +33,15 @@ namespace FunctionalTests.AppointmentEndpoints
 
       // delete it
       string route = DeleteAppointmentRequest.Route.Replace("{appointmentId}", firstAppt.AppointmentId.ToString());
-      route = route.Replace("{scheduleId}", firstAppt.ScheduleId.ToString());
+      var scheduleId = firstAppt.ScheduleId.ToString();
+
+      route = route.Replace("{scheduleId}", scheduleId);
       var deleteResponse = await _client.DeleteAsync(route);
       deleteResponse.EnsureSuccessStatusCode();
-      
-      result = await _client.GetAndDeserialize<ListAppointmentResponse>(ListAppointmentRequest.Route, _outputHelper);
 
-      Assert.Empty(result.Appointments);
+      var response = await _client.GetAndDeserialize<GetByIdScheduleResponse>(GetByIdScheduleRequest.Route.Replace("{scheduleId}", scheduleId), _outputHelper);
+
+      Assert.Empty(response.Schedule.AppointmentIds);
     }
   }
 }
