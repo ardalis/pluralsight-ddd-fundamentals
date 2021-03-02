@@ -8,6 +8,7 @@ using Xunit.Abstractions;
 
 namespace FunctionalTests.RoomEndpoints
 {
+  [Collection("Sequential")]
   public class List : IClassFixture<CustomWebApplicationFactory<Startup>>
   {
     private readonly HttpClient _client;

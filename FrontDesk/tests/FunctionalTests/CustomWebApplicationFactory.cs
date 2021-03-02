@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Xunit;
+
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace FunctionalTests
 {
@@ -19,7 +22,9 @@ namespace FunctionalTests
 
     public CustomWebApplicationFactory()
     {
-      _connection = new SqliteConnection(_connectionString);
+      string guid = Guid.NewGuid().ToString();
+      string connString = _connectionString.Replace(".db", $"-{guid}.db");
+      _connection = new SqliteConnection(connString);
       _connection.Open();
     }
 

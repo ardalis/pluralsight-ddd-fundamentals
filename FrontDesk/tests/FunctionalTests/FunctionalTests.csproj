@@ -23,6 +23,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="xunit.runner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\BlazorShared\BlazorShared.csproj" />
     <ProjectReference Include="..\..\src\FrontDesk.Api\FrontDesk.Api.csproj" />
     <ProjectReference Include="..\..\src\FrontDesk.Infrastructure\FrontDesk.Infrastructure.csproj" />
