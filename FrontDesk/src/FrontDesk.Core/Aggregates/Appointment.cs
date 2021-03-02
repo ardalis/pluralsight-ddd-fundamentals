@@ -104,7 +104,7 @@ namespace FrontDesk.Core.Aggregates
       Guard.Against.NegativeOrZero(roomId, "roomId");
       Guard.Against.NegativeOrZero(appointmentTypeId, "appointmentTypeId");
       Guard.Against.NullOrEmpty(title, "title");
-      var appointment = new Appointment(Guid.NewGuid());
+      var appointment = new Appointment(Guid.Empty);
       appointment.ScheduleId = scheduleId;
       appointment.PatientId = patientId;
       appointment.ClientId = clientId;
