@@ -35,7 +35,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       _logger = logger;
     }
 
-    [HttpPost("api/appointments")]
+    [HttpPost(CreateAppointmentRequest.Route)]
     [SwaggerOperation(
         Summary = "Creates a new Appointment",
         Description = "Creates a new Appointment",

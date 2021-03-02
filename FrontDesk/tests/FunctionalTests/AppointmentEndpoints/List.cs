@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Ardalis.HttpClientTestExtensions;
 using BlazorShared.Models.Appointment;
-using BlazorShared.Models.AppointmentType;
 using FrontDesk.Api;
 using Xunit;
 using Xunit.Abstractions;

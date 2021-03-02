@@ -4,6 +4,8 @@ namespace BlazorShared.Models.Appointment
 {
   public class CreateAppointmentRequest : BaseRequest
   {
+    public const string Route = "api/appointments/{scheduleId}";
+
     public int PatientId { get; set; }
     public Guid ScheduleId { get; set; }
     public int AppointmentTypeId { get; set; }

@@ -7,14 +7,14 @@ using FrontDesk.Api;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace FunctionalTests.Api
+namespace FunctionalTests.ClientEndpoints
 {
-  public class ClientsList : IClassFixture<CustomWebApplicationFactory<Startup>>
+  public class List : IClassFixture<CustomWebApplicationFactory<Startup>>
   {
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _outputHelper;
 
-    public ClientsList(CustomWebApplicationFactory<Startup> factory,
+    public List(CustomWebApplicationFactory<Startup> factory,
       ITestOutputHelper outputHelper)
     {
       _client = factory.CreateClient();
@@ -24,7 +24,7 @@ namespace FunctionalTests.Api
     [Fact]
     public async Task Returns2Clients()
     {
-      var result = await _client.GetAndDeserialize<ListClientResponse>("/api/clients", _outputHelper);
+      var result = await _client.GetAndDeserialize<ListClientResponse>(ListClientRequest.Route, _outputHelper);
 
       Assert.Equal(2, result.Clients.Count);
       Assert.Contains(result.Clients, x => x.FullName == "Steve Smith");
@@ -33,7 +33,7 @@ namespace FunctionalTests.Api
     [Fact]
     public async Task IncludesPatientIds()
     {
-      var result = await _client.GetAndDeserialize<ListClientResponse>("/api/clients", _outputHelper);
+      var result = await _client.GetAndDeserialize<ListClientResponse>(ListClientRequest.Route, _outputHelper);
 
       Assert.NotEmpty(result.Clients.First().Patients);
     }

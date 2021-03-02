@@ -45,7 +45,6 @@ namespace FrontDesk.Api.AppointmentEndpoints
     {
       var response = new ListAppointmentResponse(request.CorrelationId());
 
-
       //var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId); // TODO: Just get that day's appointments
       
       var spec = new ScheduleForClinicAndDateWithAppointmentsSpec(_settings.ClinicId, _settings.TestDate);

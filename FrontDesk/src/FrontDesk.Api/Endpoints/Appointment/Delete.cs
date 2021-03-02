@@ -18,16 +18,13 @@ namespace FrontDesk.Api.AppointmentEndpoints
     .WithResponse<DeleteAppointmentResponse>
   {
     private readonly IRepository<Schedule> _scheduleRepository;
-    private readonly IMapper _mapper;
 
-    public Delete(IRepository<Schedule> scheduleRepository,
-      IMapper mapper)
+    public Delete(IRepository<Schedule> scheduleRepository)
     {
       _scheduleRepository = scheduleRepository;
-      _mapper = mapper;
     }
 
-    [HttpDelete("api/appointments/{id}")]
+    [HttpDelete(DeleteAppointmentRequest.Route)]
     [SwaggerOperation(
         Summary = "Deletes a Appointment",
         Description = "Deletes a Appointment",
@@ -47,6 +44,9 @@ namespace FrontDesk.Api.AppointmentEndpoints
       schedule.DeleteAppointment(apptToDelete);
 
       await _scheduleRepository.UpdateAsync(schedule);
+
+      // verify we can still get the schedule
+      var s = await _scheduleRepository.GetBySpecAsync(spec);
 
       return Ok(response);
     }
