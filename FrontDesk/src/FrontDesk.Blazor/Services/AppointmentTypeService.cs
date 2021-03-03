@@ -20,14 +20,14 @@ namespace FrontDesk.Blazor.Services
     {
       _logger.LogInformation("Fetching appointment types from API.");
 
-      return (await _httpService.HttpGetAsync<ListAppointmentTypeResponse>($"appointment-types")).AppointmentTypes;
+      return (await _httpService.HttpGetAsync<ListAppointmentTypeResponse>(ListAppointmentTypeRequest.Route)).AppointmentTypes;
     }
 
     public async Task<List<AppointmentTypeDto>> ListAsync()
     {
       _logger.LogInformation("Fetching appointment types from API.");
 
-      return (await _httpService.HttpGetAsync<ListAppointmentTypeResponse>($"appointment-types")).AppointmentTypes;
+      return (await _httpService.HttpGetAsync<ListAppointmentTypeResponse>(ListAppointmentTypeRequest.Route)).AppointmentTypes;
     }
   }
 }

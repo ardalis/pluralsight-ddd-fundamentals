@@ -19,20 +19,22 @@ namespace FrontDesk.Api.PatientEndpoints
     private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
 
-    public List(IRepository<Client> repository, IMapper mapper)
+    public List(IRepository<Client> repository,
+      IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
     }
 
-    [HttpGet("api/patients")]
+    [HttpGet(ListPatientRequest.Route)]
     [SwaggerOperation(
         Summary = "List Patients",
         Description = "List Patients",
         OperationId = "patients.List",
         Tags = new[] { "PatientEndpoints" })
     ]
-    public override async Task<ActionResult<ListPatientResponse>> HandleAsync([FromQuery] ListPatientRequest request, CancellationToken cancellationToken)
+    public override async Task<ActionResult<ListPatientResponse>> HandleAsync([FromRoute] ListPatientRequest request,
+      CancellationToken cancellationToken)
     {
       var response = new ListPatientResponse(request.CorrelationId());
 

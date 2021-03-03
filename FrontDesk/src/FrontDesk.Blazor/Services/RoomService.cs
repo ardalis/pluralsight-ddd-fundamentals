@@ -40,14 +40,14 @@ namespace FrontDesk.Blazor.Services
     {
       _logger.LogInformation("Fetching rooms from API.");
 
-      return (await _httpService.HttpGetAsync<ListRoomResponse>($"rooms")).Rooms;
+      return (await _httpService.HttpGetAsync<ListRoomResponse>(ListRoomRequest.Route)).Rooms;
     }
 
     public async Task<List<RoomDto>> ListAsync()
     {
       _logger.LogInformation("Fetching rooms from API.");
 
-      return (await _httpService.HttpGetAsync<ListRoomResponse>($"rooms")).Rooms;
+      return (await _httpService.HttpGetAsync<ListRoomResponse>(ListRoomRequest.Route)).Rooms;
     }
   }
 }

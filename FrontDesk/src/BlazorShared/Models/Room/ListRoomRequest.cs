@@ -2,7 +2,7 @@
 {
   public class ListRoomRequest : BaseRequest
   {
-    public const string Route = "/api/rooms";
+    public const string Route = "api/rooms";
 
   }
 }

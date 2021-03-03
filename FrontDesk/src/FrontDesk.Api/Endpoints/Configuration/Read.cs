@@ -9,7 +9,6 @@ namespace FrontDesk.Api.ConfigurationEndpoints
   public class Read : BaseAsyncEndpoint
     .WithoutRequest
     .WithResponse<string>
-
   {
     public Read()
     {

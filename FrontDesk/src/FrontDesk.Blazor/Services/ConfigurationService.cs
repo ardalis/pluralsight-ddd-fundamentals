@@ -19,7 +19,7 @@ namespace FrontDesk.Blazor.Services
     {
       _logger.LogInformation("Read today date/time from configuration.");
 
-      return Convert.ToDateTime(await _httpService.HttpGetAsync($"configurations"));
+      return Convert.ToDateTime(await _httpService.HttpGetAsync($"api/configurations"));
     }
   }
 }
