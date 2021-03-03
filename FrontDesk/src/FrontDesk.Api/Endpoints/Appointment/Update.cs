@@ -42,6 +42,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       var schedule = await _scheduleRepository.GetBySpecAsync(spec);
 
       var apptToUpdate = schedule.Appointments.FirstOrDefault(a => a.Id == request.Id);
+      apptToUpdate.UpdateAppointmentType(request.AppointmentTypeId);
       apptToUpdate.UpdateRoom(request.RoomId);
       apptToUpdate.UpdateTime(new PluralsightDdd.SharedKernel.DateTimeRange(request.Start.ToLocalTime(), request.End.ToLocalTime()));
 

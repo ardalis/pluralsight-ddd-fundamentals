@@ -30,51 +30,8 @@ namespace FrontDesk.Infrastructure.Data
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-      // TODO: Move to individual configuration files
-
-      modelBuilder.Entity<Client>(x =>
-      {
-        x.ToTable("Clients").HasKey(k => k.Id);
-      });
-
-      modelBuilder.Entity<Schedule>(x =>
-      {
-        x.ToTable("Schedules").HasKey(k => k.Id);
-      });
-
-      modelBuilder.Entity<Patient>(x =>
-      {
-        x.ToTable("Patients").HasKey(k => k.Id);
-        x.OwnsOne(p => p.AnimalType, p =>
-              {
-            p.Property(pp => pp.Breed).HasColumnName("AnimalType_Breed").HasMaxLength(50);
-            p.Property(pp => pp.Species).HasColumnName("AnimalType_Species").HasMaxLength(50);
-          });
-      });
-
-      modelBuilder.Entity<Doctor>(x =>
-      {
-        x.ToTable("Doctors").HasKey(k => k.Id);
-      });
-
-      modelBuilder.Entity<Room>(x =>
-      {
-        x.ToTable("Rooms").HasKey(k => k.Id);
-      });
-
-      modelBuilder.Entity<Appointment>(x =>
-      {
-        x.ToTable("Appointments").HasKey(k => k.Id);
-        x.OwnsOne(p => p.TimeRange, p =>
-              {
-            p.Property(pp => pp.Start).HasColumnName("TimeRange_Start");
-            p.Property(pp => pp.End).HasColumnName("TimeRange_End");
-          });
-      });
-
       base.OnModelCreating(modelBuilder);
       modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -84,8 +41,6 @@ namespace FrontDesk.Infrastructure.Data
       // ignore events if no dispatcher provided
       if (_mediator == null) return result;
 
-      //TODO: need to fix
-      // dispatch events only if save was successful
       var entitiesWithEvents = ChangeTracker
           .Entries()
           .Select(e => e.Entity as BaseEntity<Guid>)

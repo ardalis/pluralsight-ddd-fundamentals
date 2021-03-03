@@ -90,13 +90,12 @@ namespace FrontDesk.Infrastructure
 
     private void RegisterDevelopmentOnlyDependencies(ContainerBuilder builder)
     {
-      // TODO: Add development only services
+      // Add development only services
     }
 
     private void RegisterProductionOnlyDependencies(ContainerBuilder builder)
     {
-      // TODO: Add production only services
+      // Add production only services
     }
-
   }
 }

@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FrontDesk.Infrastructure.Data.Config
 {
-  public class ScheduleConfiguration : IEntityTypeConfiguration<Schedule>
+  public class ClientConfiguration : IEntityTypeConfiguration<Client>
   {
-    public void Configure(EntityTypeBuilder<Schedule> builder)
+    public void Configure(EntityTypeBuilder<Client> builder)
     {
-      builder.ToTable("Schedules").HasKey(x => x.Id);
+      builder.ToTable("Clients").HasKey(x => x.Id);
     }
   }
 }

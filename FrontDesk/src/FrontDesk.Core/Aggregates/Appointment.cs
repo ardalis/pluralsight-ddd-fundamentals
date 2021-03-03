@@ -40,7 +40,16 @@ namespace FrontDesk.Core.Aggregates
       Id = Guid.NewGuid();
     }
 
-    public Appointment(int appointmentTypeId, Guid scheduleId, int clientId, int doctorId, int patientId, int roomId, DateTimeRange timeRange, string title, DateTime? dateTimeConfirmed = null)
+    public Appointment(int appointmentTypeId,
+      Guid scheduleId,
+      int clientId,
+      int doctorId,
+      int patientId,
+      int roomId,
+      DateTimeRange
+      timeRange,
+      string title,
+      DateTime? dateTimeConfirmed = null)
     {
       Id = Guid.NewGuid();
       AppointmentTypeId = appointmentTypeId;
@@ -69,6 +78,16 @@ namespace FrontDesk.Core.Aggregates
       if (newStartEnd == TimeRange) return;
 
       TimeRange = newStartEnd;
+
+      var appointmentUpdatedEvent = new AppointmentUpdatedEvent(this);
+      Events.Add(appointmentUpdatedEvent);
+    }
+
+    public void UpdateAppointmentType(int appointmentTypeId)
+    {
+      if (AppointmentTypeId == appointmentTypeId) return;
+
+      AppointmentTypeId = appointmentTypeId;
 
       var appointmentUpdatedEvent = new AppointmentUpdatedEvent(this);
       Events.Add(appointmentUpdatedEvent);
