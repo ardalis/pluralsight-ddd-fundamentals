@@ -4,6 +4,8 @@ namespace BlazorShared.Models.Appointment
 {
   public class UpdateAppointmentRequest : BaseRequest
   {
+    public const string Route = "api/schedule/{scheduleId}/appointments/{appointmentId}";
+
     public Guid Id { get; set; }
     public Guid ScheduleId { get; set; }
     public string Title { get; set; }
@@ -31,6 +33,5 @@ namespace BlazorShared.Models.Appointment
         End = appointmentDto.End,
       };
     }
-
   }
 }

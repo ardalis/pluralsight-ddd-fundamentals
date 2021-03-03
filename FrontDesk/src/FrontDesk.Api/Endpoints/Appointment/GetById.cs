@@ -26,7 +26,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       _mapper = mapper;
     }
 
-    [HttpGet("api/appointments/{AppointmentId}")]
+    [HttpGet(GetByIdAppointmentRequest.Route)]
     [SwaggerOperation(
         Summary = "Get a Appointment by Id",
         Description = "Gets a Appointment by Id",

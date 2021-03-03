@@ -44,13 +44,19 @@ namespace FrontDesk.Api.AppointmentEndpoints
       CancellationToken cancellationToken)
     {
       var response = new ListAppointmentResponse(request.CorrelationId());
-
-      //var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId); // TODO: Just get that day's appointments
-      
-      var spec = new ScheduleForClinicAndDateWithAppointmentsSpec(_settings.ClinicId, _settings.TestDate);
-      var schedule = await _scheduleRepository.GetBySpecAsync(spec);
-
-      if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for clinic {_settings.ClinicId}.");
+      Schedule schedule = null;
+      if (request.ScheduleId == Guid.Empty)
+      {
+        var spec = new ScheduleForClinicAndDateWithAppointmentsSpec(_settings.ClinicId, _settings.TestDate);
+        schedule = await _scheduleRepository.GetBySpecAsync(spec);
+        if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for clinic {_settings.ClinicId}.");
+      }
+      else
+      {
+        var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId);
+        schedule = await _scheduleRepository.GetBySpecAsync(spec);
+        if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for id {request.ScheduleId}.");
+      }
 
       var myAppointments = _mapper.Map<List<AppointmentDto>>(schedule.Appointments);
 

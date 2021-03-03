@@ -19,7 +19,7 @@ namespace FrontDesk.Blazor.Services
 
     public async Task<AppointmentDto> CreateAsync(CreateAppointmentRequest appointment)
     {
-      return (await _httpService.HttpPostAsync<CreateAppointmentResponse>("appointments", appointment)).Appointment;
+      return (await _httpService.HttpPostAsync<CreateAppointmentResponse>(CreateAppointmentRequest.Route, appointment)).Appointment;
     }
 
     public async Task<AppointmentDto> EditAsync(UpdateAppointmentRequest appointment)
@@ -27,28 +27,28 @@ namespace FrontDesk.Blazor.Services
       return (await _httpService.HttpPutAsync<UpdateAppointmentResponse>("appointments", appointment)).Appointment;
     }
 
-    public async Task DeleteAsync(Guid appointmentId)
+    public Task DeleteAsync(Guid appointmentId)
     {
-      await _httpService.HttpDeleteAsync<DeleteAppointmentResponse>("appointments", appointmentId);
+      return _httpService.HttpDeleteAsync<DeleteAppointmentResponse>(DeleteAppointmentRequest.Route, appointmentId);
     }
 
     public async Task<AppointmentDto> GetByIdAsync(Guid appointmentId)
     {
-      return (await _httpService.HttpGetAsync<GetByIdAppointmentResponse>($"appointments/{appointmentId}")).Appointment;
+      return (await _httpService.HttpGetAsync<GetByIdAppointmentResponse>(GetByIdAppointmentRequest.Route)).Appointment;
     }
 
     public async Task<List<AppointmentDto>> ListPagedAsync(int pageSize)
     {
       _logger.LogInformation("Fetching appointments from API.");
 
-      return (await _httpService.HttpGetAsync<ListAppointmentResponse>($"appointments")).Appointments;
+      return (await _httpService.HttpGetAsync<ListAppointmentResponse>(ListAppointmentRequest.Route)).Appointments;
     }
 
     public async Task<List<AppointmentDto>> ListAsync()
     {
       _logger.LogInformation("Fetching appointments from API.");
 
-      return (await _httpService.HttpGetAsync<ListAppointmentResponse>($"appointments")).Appointments;
+      return (await _httpService.HttpGetAsync<ListAppointmentResponse>(ListAppointmentRequest.Route)).Appointments;
     }
   }
 }

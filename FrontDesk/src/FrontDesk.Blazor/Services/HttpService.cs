@@ -8,18 +8,18 @@ namespace FrontDesk.Blazor.Services
   public class HttpService
   {
     private readonly HttpClient _httpClient;
-    private readonly string _apiUrl;
+    private readonly string _apiBaseUrl;
 
     public HttpService(HttpClient httpClient)
     {
       _httpClient = httpClient;
-      _apiUrl = _httpClient.BaseAddress.ToString();
+      _apiBaseUrl = _httpClient.BaseAddress.ToString();
     }
 
     public async Task<T> HttpGetAsync<T>(string uri)
         where T : class
     {
-      var result = await _httpClient.GetAsync($"{_apiUrl}{uri}");
+      var result = await _httpClient.GetAsync($"{_apiBaseUrl}{uri}");
       if (!result.IsSuccessStatusCode)
       {
         return null;
@@ -30,7 +30,7 @@ namespace FrontDesk.Blazor.Services
 
     public async Task<string> HttpGetAsync(string uri)
     {
-      var result = await _httpClient.GetAsync($"{_apiUrl}{uri}");
+      var result = await _httpClient.GetAsync($"{_apiBaseUrl}{uri}");
       if (!result.IsSuccessStatusCode)
       {
         return null;
@@ -42,7 +42,7 @@ namespace FrontDesk.Blazor.Services
     public async Task<T> HttpDeleteAsync<T>(string uri, object id)
         where T : class
     {
-      var result = await _httpClient.DeleteAsync($"{_apiUrl}{uri}/{id}");
+      var result = await _httpClient.DeleteAsync($"{_apiBaseUrl}{uri}/{id}");
       if (!result.IsSuccessStatusCode)
       {
         return null;
@@ -56,7 +56,7 @@ namespace FrontDesk.Blazor.Services
     {
       var content = ToJson(dataToSend);
 
-      var result = await _httpClient.PostAsync($"{_apiUrl}{uri}", content);
+      var result = await _httpClient.PostAsync($"{_apiBaseUrl}{uri}", content);
       if (!result.IsSuccessStatusCode)
       {
         return null;
@@ -70,7 +70,7 @@ namespace FrontDesk.Blazor.Services
     {
       var content = ToJson(dataToSend);
 
-      var result = await _httpClient.PutAsync($"{_apiUrl}{uri}", content);
+      var result = await _httpClient.PutAsync($"{_apiBaseUrl}{uri}", content);
       if (!result.IsSuccessStatusCode)
       {
         return null;
