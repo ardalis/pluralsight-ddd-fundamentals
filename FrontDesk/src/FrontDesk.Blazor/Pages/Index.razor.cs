@@ -189,7 +189,7 @@ namespace FrontDesk.Blazor.Pages
     private async Task DeleteAppointmentAsync(SchedulerDeleteEventArgs args)
     {
       AppointmentDto item = (AppointmentDto)args.Item;
-      await AppointmentService.DeleteAsync(item.AppointmentId);
+      await AppointmentService.DeleteAsync(item.ScheduleId, item.AppointmentId);
       SchedulerService.Appointments.Remove(item);
     }
 

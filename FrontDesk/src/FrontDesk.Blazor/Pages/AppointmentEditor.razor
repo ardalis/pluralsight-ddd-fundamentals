@@ -40,14 +40,14 @@
         {
             <label class="width100">
                 Start:<br />
-                <TelerikDatePicker Value="@Appointment.Start" ValueChanged="@( (DateTime d) => StartChanged(d) )"
-                                   ValueExpression="@( () => Appointment.Start )"
+                <TelerikDatePicker Value="@Appointment.Start.DateTime" ValueChanged="@( (DateTime d) => StartChanged(d) )"
+                                   ValueExpression="@( () => Appointment.Start.DateTime )"
                                    Max="@GetHigherDate()" Width="100%" />
             </label>
             <label class="width100">
                 End:<br />
-                <TelerikDatePicker Value="@Appointment.End" ValueChanged="@( (DateTime d) => EndChanged(d) )"
-                                   ValueExpression="@( () => Appointment.End)"
+                <TelerikDatePicker Value="@Appointment.End.DateTime" ValueChanged="@( (DateTime d) => EndChanged(d) )"
+                                   ValueExpression="@( () => Appointment.End.DateTime)"
                                    Min="@GetLowerDate()" Width="100%" />
             </label>
         }
@@ -55,14 +55,14 @@
         {
             <label class="width100">
                 Start:<br />
-                <TelerikDateTimePicker Value="@Appointment.Start" ValueChanged="@( (DateTime d) => StartChanged(d) )"
-                                       ValueExpression="@( () => Appointment.Start)"
+                <TelerikDateTimePicker Value="@Appointment.Start.DateTime" ValueChanged="@( (DateTime d) => StartChanged(d) )"
+                                       ValueExpression="@( () => Appointment.Start.DateTime)"
                                        Max="@GetHigherDate()" Width="100%" />
             </label>
             <label class="width100">
                 End:<br />
-                <TelerikDateTimePicker Value="@Appointment.End" ValueChanged="@( (DateTime d) => EndChanged(d) )"
-                                       ValueExpression="@( () => Appointment.End )"
+                <TelerikDateTimePicker Value="@Appointment.End.DateTime" ValueChanged="@( (DateTime d) => EndChanged(d) )"
+                                       ValueExpression="@( () => Appointment.End.DateTime )"
                                        Min="@GetLowerDate()" Width="100%" />
             </label>
         }

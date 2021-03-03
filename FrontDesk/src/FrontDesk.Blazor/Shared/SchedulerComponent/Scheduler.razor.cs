@@ -95,7 +95,7 @@ namespace FrontDesk.Blazor.Shared.SchedulerComponent
       else if (action == "delete")
       {
         var result = JsonSerializer.Deserialize<AppointmentDto>(jsonData, JsonOptions);
-        await AppointmentService.DeleteAsync(result.AppointmentId);
+        await AppointmentService.DeleteAsync(result.ScheduleId, result.AppointmentId);
         SchedulerService.Appointments.Remove(SchedulerService.Appointments.First(x => x.AppointmentId == result.AppointmentId));
         CallJSMethod();
       }

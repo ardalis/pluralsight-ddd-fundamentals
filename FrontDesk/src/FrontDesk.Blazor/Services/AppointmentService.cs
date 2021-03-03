@@ -27,14 +27,19 @@ namespace FrontDesk.Blazor.Services
       return (await _httpService.HttpPutAsync<UpdateAppointmentResponse>(UpdateAppointmentRequest.Route, appointment)).Appointment;
     }
 
-    public Task DeleteAsync(Guid appointmentId)
+    public Task DeleteAsync(Guid scheduleId, Guid appointmentId)
     {
-      return _httpService.HttpDeleteAsync<DeleteAppointmentResponse>(DeleteAppointmentRequest.Route, appointmentId);
+      string route = GetByIdAppointmentRequest.Route.Replace("{scheduleId}", scheduleId.ToString());
+      route = route.Replace("{appointmentId}", appointmentId.ToString());
+
+      return _httpService.HttpDeleteAsync<DeleteAppointmentResponse>(route);
     }
 
-    public async Task<AppointmentDto> GetByIdAsync(Guid appointmentId)
+    public async Task<AppointmentDto> GetByIdAsync(Guid scheduleId, Guid appointmentId)
     {
-      return (await _httpService.HttpGetAsync<GetByIdAppointmentResponse>(GetByIdAppointmentRequest.Route)).Appointment;
+      string route = GetByIdAppointmentRequest.Route.Replace("{scheduleId}", scheduleId.ToString());
+      route = route.Replace("{appointmentId}", appointmentId.ToString());
+      return (await _httpService.HttpGetAsync<GetByIdAppointmentResponse>(route)).Appointment;
     }
 
     public async Task<List<AppointmentDto>> ListPagedAsync(int pageSize)

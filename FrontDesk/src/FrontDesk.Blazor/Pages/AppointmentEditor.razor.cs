@@ -126,7 +126,7 @@ namespace FrontDesk.Blazor.Pages
             ScheduleId = ScheduleId,
             RoomId = Appointment.RoomId,
             AppointmentTypeId = Appointment.AppointmentTypeId,
-            DateOfAppointment = Appointment.Start,
+            DateOfAppointment = Appointment.Start.DateTime,
           };
 
           await AppointmentService.CreateAsync(toCreate);
@@ -143,8 +143,8 @@ namespace FrontDesk.Blazor.Pages
             ScheduleId = ScheduleId,
             RoomId = Appointment.RoomId,
             AppointmentTypeId = Appointment.AppointmentTypeId,
-            Start = Appointment.Start,
-            End = Appointment.End,
+            Start = Appointment.Start.DateTime,
+            End = Appointment.End.DateTime,
           };
           await AppointmentService.EditAsync(toUpdate);
         }
@@ -155,7 +155,7 @@ namespace FrontDesk.Blazor.Pages
 
     private async Task DeleteAppointment()
     {
-      await AppointmentService.DeleteAsync(Appointment.AppointmentId);
+      await AppointmentService.DeleteAsync(Appointment.ScheduleId, Appointment.AppointmentId);
       await OnAppointmentChanged.InvokeAsync(Appointment.Title);
     }
 
@@ -192,12 +192,12 @@ namespace FrontDesk.Blazor.Pages
 
     private DateTime GetLowerDate()
     {
-      return Appointment.Start <= Appointment.End ? Appointment.Start : Appointment.End;
+      return Appointment.Start <= Appointment.End ? Appointment.Start.DateTime : Appointment.End.DateTime;
     }
 
     private DateTime GetHigherDate()
     {
-      return Appointment.Start >= Appointment.End ? Appointment.Start : Appointment.End;
+      return Appointment.Start >= Appointment.End ? Appointment.Start.DateTime : Appointment.End.DateTime;
     }
 
     private void AppointmentTypeSelected(int? id)

@@ -16,10 +16,10 @@ namespace BlazorShared.Models.Appointment
     public string ClientName { get; set; }
 
     [Required(ErrorMessage = "The Start field is required")]
-    public DateTime Start { get; set; }
+    public DateTimeOffset Start { get; set; }
 
     [Required(ErrorMessage = "The End field is required")]
-    public DateTime End { get; set; }
+    public DateTimeOffset End { get; set; }
 
     [Required(ErrorMessage = "The Title is required")]
     public string Title { get; set; }

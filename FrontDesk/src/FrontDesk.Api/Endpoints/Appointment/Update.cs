@@ -26,7 +26,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       _mapper = mapper;
     }
 
-    [HttpPut("api/appointments")]
+    [HttpPut(UpdateAppointmentRequest.Route)]
     [SwaggerOperation(
         Summary = "Updates a Appointment",
         Description = "Updates a Appointment",
@@ -43,7 +43,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
 
       var apptToUpdate = schedule.Appointments.FirstOrDefault(a => a.Id == request.Id);
       apptToUpdate.UpdateRoom(request.RoomId);
-      apptToUpdate.UpdateTime(new PluralsightDdd.SharedKernel.DateTimeRange(request.Start, request.End));
+      apptToUpdate.UpdateTime(new PluralsightDdd.SharedKernel.DateTimeRange(request.Start.ToLocalTime(), request.End.ToLocalTime()));
 
       // TODO: Implement updating other properties
 

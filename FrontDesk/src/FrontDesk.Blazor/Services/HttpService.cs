@@ -39,10 +39,16 @@ namespace FrontDesk.Blazor.Services
       return await result.Content.ReadAsStringAsync();
     }
 
-    public async Task<T> HttpDeleteAsync<T>(string uri, object id)
+    public Task<T> HttpDeleteAsync<T>(string uri, object id)
         where T : class
     {
-      var result = await _httpClient.DeleteAsync($"{_apiBaseUrl}{uri}/{id}");
+      return HttpDeleteAsync<T>($"{uri}/{id}");
+    }
+
+    public async Task<T> HttpDeleteAsync<T>(string uri)
+        where T : class
+    {
+      var result = await _httpClient.DeleteAsync($"{_apiBaseUrl}{uri}");
       if (!result.IsSuccessStatusCode)
       {
         return null;
