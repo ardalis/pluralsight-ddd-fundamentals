@@ -59,5 +59,28 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
       Assert.True(lisaAppointment.IsPotentiallyConflicting);
       Assert.True(mimiAppointment.IsPotentiallyConflicting);
     }
+
+    [Fact]
+    public async Task MarksConflictingAppointmentsForSameAnimalInTwoRoomsAtSameTime()
+    {
+      // given appts with conflicts verify it marks them
+
+      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId, null);
+      var appointmentType = 1;
+      var doctorId = 2;
+      var patientId = 3;
+      var roomId = 4;
+
+      var lisaTitle = "Lisa Appointment";
+      var lisaAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, lisaTitle);
+      schedule.AddNewAppointment(lisaAppointment);
+
+      var lisaTitle2 = "Lisa Appointment 2";
+      var lisaAppointment2 = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId+1, _dateRange, lisaTitle2);
+      schedule.AddNewAppointment(lisaAppointment2);
+
+      Assert.True(lisaAppointment.IsPotentiallyConflicting);
+      Assert.True(lisaAppointment2.IsPotentiallyConflicting);
+    }
   }
 }

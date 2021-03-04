@@ -60,7 +60,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
         schedule = await _scheduleRepository.GetBySpecAsync(spec);
         if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for id {request.ScheduleId}.");
       }
-
+      schedule.Handle(null); // mark conflicts
       var myAppointments = _mapper.Map<List<AppointmentDto>>(schedule.Appointments);
 
       // load names - only do this kind of thing if you have caching!

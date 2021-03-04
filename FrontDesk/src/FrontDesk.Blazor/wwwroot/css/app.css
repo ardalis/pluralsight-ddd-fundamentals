@@ -70,3 +70,11 @@ form label.width100 {
 .k-window-content, .k-prompt-container {
     overflow: hidden !important;
 }
+
+[role=gridcell] [data-is-conflicted=true] {
+    border: solid 5px red;
+}
+
+[role=gridcell] [data-is-confirmed=true] {
+    border-top: solid 10px green;
+}

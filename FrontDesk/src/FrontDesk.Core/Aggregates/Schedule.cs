@@ -82,7 +82,8 @@ namespace FrontDesk.Core.Aggregates
         var potentiallyConflictingAppointments = _appointments
             .Where(a => a.PatientId == appointment.PatientId &&
             a.TimeRange.Overlaps(appointment.TimeRange) &&
-            a.Id != appointment.Id).ToList();
+            a.Id != appointment.Id)
+            .ToList();
         //  && a.State != TrackingState.Deleted).ToList();
 
         potentiallyConflictingAppointments.ForEach(a => a.IsPotentiallyConflicting = true);

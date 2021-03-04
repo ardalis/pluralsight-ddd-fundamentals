@@ -203,11 +203,11 @@
                     e.preventDefault();
                 },
                 moveEnd: function (e) {
-                    if (!checkAvailability(e.start, e.end, e.event, e.resources)) {
-                        e.preventDefault();
-                    } else {
+                    //if (!checkAvailability(e.start, e.end, e.event, e.resources)) {
+                    //    e.preventDefault();
+                    //} else {
                         onMoveEnd(e);
-                    }
+                    //}
                 },
                 views: [
                     { type: "day", selected: true, allDaySlot: false, minorTickCount: 4 },
@@ -257,26 +257,26 @@
             return result;
         }
 
-        function roomIsOccupied(start, end, event, resources) {
-            var occurrences = occurrencesInRangeByResource(start, end, "roomId", event, resources);
-            if (occurrences.length > 0) {
-                return true;
-            }
-            return false;
-        }
+        //function roomIsOccupied(start, end, event, resources) {
+        //    var occurrences = occurrencesInRangeByResource(start, end, "roomId", event, resources);
+        //    if (occurrences.length > 0) {
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
-        function checkAvailability(start, end, event, resources) {
+        //function checkAvailability(start, end, event, resources) {
 
-            if (roomIsOccupied(start, end, event, resources)) {
-                setTimeout(function () {
-                    alert("This room is not available in this time period.");
-                }, 0);
+        //    if (roomIsOccupied(start, end, event, resources)) {
+        //        setTimeout(function () {
+        //            alert("This room is not available in this time period.");
+        //        }, 0);
 
-                return false;
-            }
+        //        return false;
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
 
         function onMoveEnd(e) {
             createAppointment(e.event);

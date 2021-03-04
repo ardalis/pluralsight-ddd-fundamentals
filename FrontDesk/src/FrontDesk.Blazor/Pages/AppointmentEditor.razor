@@ -1,60 +1,65 @@
-﻿<div id="appointmentEditor">
+﻿<div id="appointmentEditor" class="container-fluid">
     <EditForm Model="@Appointment" OnValidSubmit="@SaveAppointment">
         <DataAnnotationsValidator />
+        <div class="row">
+            <div class="col-sm">
+                <label class="width100">
+                    Title:<br />
+                    <InputText @bind-Value="Appointment.Title" Width="100%" Enabled="false"></InputText>
+                </label>
+                <br />
 
-        <label class="width100">
-            Title:<br />
-            <InputText @bind-Value="Appointment.Title" Width="100%" Enabled="false"></InputText>
-        </label>
-        <br />
+                <label class="width100">
+                    Doctor:<br />
+                    <InputSelect @bind-Value="Appointment.DoctorId">
+                        @foreach (var doctor in Doctors)
+                        {
+                            <option value="@doctor.DoctorId">@doctor.Name</option>
+                        }
+                    </InputSelect>
+                </label>
+                <br />
 
-        <label class="width100">
-            Doctor:<br />
-            <InputSelect @bind-Value="Appointment.DoctorId">
-                @foreach (var doctor in Doctors)
+                <label class="width100">
+                    Appointment Type:<br />
+                    <InputSelect @bind-Value="Appointment.AppointmentTypeId" @onchange="AppointmentTypeUpdated">
+                        @foreach (var appointmentType in AppointmentTypes)
+                        {
+                            <option value="@appointmentType.AppointmentTypeId">@appointmentType.Name</option>
+                        }
+                    </InputSelect>
+                </label>
+                <br />
+
+                <label class="width100">
+                    Duration:<br />
+                    @GetDuration
+                </label>
+                <br />
+            </div>
+            <div class="col-sm">
+                <label class="width100">
+                    Patient: @Appointment.PatientName<br />
+                    @if (!string.IsNullOrEmpty(Picture))
+                    {
+                        <img class="appointment-editor-image" src="@Picture" />
+                    }
+                </label>
+                <br />
+
+                @if (@Appointment.IsConfirmed)
                 {
-                    <option value="@doctor.DoctorId">@doctor.Name</option>
+                    <button type="button" class="btn btn-success appointment-editor-confirm-button">Confirmed</button>
                 }
-            </InputSelect>
-        </label>
-        <br />
-
-        <label class="width100">
-            Appointment Type:<br />
-            <InputSelect @bind-Value="Appointment.AppointmentTypeId" @onchange="AppointmentTypeUpdated">
-                @foreach (var appointmentType in AppointmentTypes)
+                else
                 {
-                    <option value="@appointmentType.AppointmentTypeId">@appointmentType.Name</option>
+                    <button type="button" class="btn btn-danger appointment-editor-confirm-button">Not Confirmed</button>
                 }
-            </InputSelect>
-        </label>
-        <br />
+                <br />
+                <br />
+            </div>
+        </div>
 
-        <label class="width100">
-            Duration:<br />
-            @GetDuration
-        </label>
-        <br />
-
-        <label class="width100">
-            Patient: @Appointment.PatientName<br />
-            @if (!string.IsNullOrEmpty(Picture))
-            {
-                <img class="appointment-editor-image" src="@Picture" />
-            }
-        </label>
-        <br />
-
-        @if (@Appointment.IsConfirmed)
-        {
-            <button type="button" class="btn btn-success appointment-editor-confirm-button">Confirmed</button>
-        }
-        else
-        {
-            <button type="button" class="btn btn-danger appointment-editor-confirm-button">Not Confirmed</button>
-        }
-        <br />
-        <br />
 
         <ValidationSummary />
         @if (ShowErrorMessage)
@@ -63,7 +68,7 @@
         }
 
         <input type="submit" value="Save" class="k-button k-primary" />
-        <button type="button" class="k-button" @onclick="CancelEditing" >Cancel</button>
+        <button type="button" class="k-button" @onclick="CancelEditing">Cancel</button>
         <button type="button" class="k-button" @onclick="DeleteAppointment">Delete</button>
     </EditForm>
 </div>
