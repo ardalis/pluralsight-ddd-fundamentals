@@ -133,19 +133,20 @@ namespace FrontDesk.Blazor.Pages
         }
         else
         {
-          UpdateAppointmentRequest toUpdate = new UpdateAppointmentRequest()
-          {
-            Id = Appointment.AppointmentId,
-            DoctorId = (int)Appointment.DoctorId,
-            PatientId = Patient.PatientId,
-            Title = Appointment.Title,
-            ClientId = Patient.ClientId,
-            ScheduleId = ScheduleId,
-            RoomId = Appointment.RoomId,
-            AppointmentTypeId = Appointment.AppointmentTypeId,
-            Start = Appointment.Start.DateTime,
-            End = Appointment.End.DateTime,
-          };
+          var toUpdate = UpdateAppointmentRequest.FromDto(Appointment);
+          //UpdateAppointmentRequest toUpdate = new UpdateAppointmentRequest()
+          //{
+          //  Id = Appointment.AppointmentId,
+          //  DoctorId = (int)Appointment.DoctorId,
+          //  PatientId = Patient.PatientId,
+          //  Title = Appointment.Title,
+          //  ClientId = Patient.ClientId,
+          //  ScheduleId = ScheduleId,
+          //  RoomId = Appointment.RoomId,
+          //  AppointmentTypeId = Appointment.AppointmentTypeId,
+          //  Start = Appointment.Start.DateTime,
+          //  End = Appointment.End.DateTime,
+          //};
           await AppointmentService.EditAsync(toUpdate);
         }
 

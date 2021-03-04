@@ -73,6 +73,16 @@ namespace FrontDesk.Core.Aggregates
       Events.Add(appointmentUpdatedEvent);
     }
 
+    public void UpdateDoctor(int? newDoctorId)
+    {
+      if (newDoctorId == DoctorId) return;
+
+      DoctorId = newDoctorId;
+
+      var appointmentUpdatedEvent = new AppointmentUpdatedEvent(this);
+      Events.Add(appointmentUpdatedEvent);
+    }
+
     public void UpdateTime(DateTimeRange newStartEnd)
     {
       if (newStartEnd == TimeRange) return;

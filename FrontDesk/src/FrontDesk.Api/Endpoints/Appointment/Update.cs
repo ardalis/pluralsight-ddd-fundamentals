@@ -46,6 +46,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       apptToUpdate.UpdateRoom(request.RoomId);
       apptToUpdate.UpdateTime(new PluralsightDdd.SharedKernel.DateTimeRange(request.Start.ToLocalTime(), request.End.ToLocalTime()));
       apptToUpdate.UpdateTitle(request.Title);
+      apptToUpdate.UpdateDoctor(request.DoctorId);
 
       // TODO: Implement updating other properties
 

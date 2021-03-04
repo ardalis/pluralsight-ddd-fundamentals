@@ -1,6 +1,4 @@
-﻿
-
-<div id="appointmentEditor">
+﻿<div id="appointmentEditor">
     <EditForm Model="@Appointment" OnValidSubmit="@SaveAppointment">
         <DataAnnotationsValidator />
 
@@ -12,21 +10,23 @@
 
         <label class="width100">
             Doctor:<br />
-            <TelerikComboBox Data="@Doctors" Placeholder="Doctor" ClearButton="false"
-                             TextField="@nameof(DoctorDto.Name)" ValueField="@nameof(DoctorDto.DoctorId)" Filterable="true"
-                             Id="@nameof(DoctorDto.DoctorId)"
-                             @bind-Value="@Appointment.DoctorId">
-            </TelerikComboBox>
+            <InputSelect @bind-Value="Appointment.DoctorId">
+                @foreach (var doctor in Doctors)
+                {
+                    <option value="@doctor.DoctorId">@doctor.Name</option>
+                }
+            </InputSelect>
         </label>
         <br />
 
         <label class="width100">
             Appointment Type:<br />
-            <TelerikComboBox Data="@AppointmentTypes" Placeholder="Appointment Type" ClearButton="false"
-                             TextField="@nameof(AppointmentTypeDto.Name)" ValueField="@nameof(AppointmentTypeDto.AppointmentTypeId)" Filterable="true"
-                             Id="@nameof(AppointmentTypeDto.AppointmentTypeId)"
-                             @bind-Value="@Appointment.AppointmentTypeId">
-            </TelerikComboBox>
+            <InputSelect @bind-Value="Appointment.AppointmentTypeId">
+                @foreach (var appointmentType in AppointmentTypes)
+                {
+                    <option value="@appointmentType.AppointmentTypeId">@appointmentType.Name</option>
+                }
+            </InputSelect>
         </label>
         <br />
 
@@ -34,38 +34,6 @@
             Duration:<br />
             @GetDuration
         </label>
-        <br />
-
-        @*@if (Appointment.IsAllDay)
-        {*@
-            @*<label class="width100">
-                Start:<br />
-                <TelerikDatePicker Value="@Appointment.Start.DateTime" ValueChanged="@( (DateTime d) => StartChanged(d) )"
-                                   ValueExpression="@( () => Appointment.Start.DateTime )"
-                                   Max="@GetHigherDate()" Width="100%" />
-            </label>
-            <label class="width100">
-                End:<br />
-                <TelerikDatePicker Value="@Appointment.End.DateTime" ValueChanged="@( (DateTime d) => EndChanged(d) )"
-                                   ValueExpression="@( () => Appointment.End.DateTime)"
-                                   Min="@GetLowerDate()" Width="100%" />
-            </label>*@
-        @*}
-        else
-        {
-            <label class="width100">
-                Start:<br />
-                <TelerikDateTimePicker Value="@Appointment.Start.DateTime" ValueChanged="@( (DateTime d) => StartChanged(d) )"
-                                       ValueExpression="@( () => Appointment.Start.DateTime)"
-                                       Max="@GetHigherDate()" Width="100%" />
-            </label>
-            <label class="width100">
-                End:<br />
-                <TelerikDateTimePicker Value="@Appointment.End.DateTime" ValueChanged="@( (DateTime d) => EndChanged(d) )"
-                                       ValueExpression="@( () => Appointment.End.DateTime )"
-                                       Min="@GetLowerDate()" Width="100%" />
-            </label>
-        }*@
         <br />
 
         <label class="width100">
@@ -94,11 +62,8 @@
             <span class="appointment-editor-msg">@WrongRangeMessage</span>
         }
 
-        <TelerikButton Enabled="@IsValid()" Primary="true">
-            Save
-        </TelerikButton>
-        <TelerikButton OnClick="@CancelEditing" ButtonType="ButtonType.Button">Cancel</TelerikButton>
-        <TelerikButton OnClick="@DeleteAppointment" ButtonType="ButtonType.Button">Delete</TelerikButton>
-
+        <input type="submit" value="Save" class="k-button k-primary" />
+        <button type="button" class="k-button" @onclick="CancelEditing" >Cancel</button>
+        <button type="button" class="k-button" @onclick="DeleteAppointment">Delete</button>
     </EditForm>
 </div>
