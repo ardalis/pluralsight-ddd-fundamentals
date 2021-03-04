@@ -26,9 +26,9 @@ namespace FrontDesk.Blazor.Services
       return (await _httpService.HttpPutAsync<UpdateDoctorResponse>("doctors", doctor)).Doctor;
     }
 
-    public async Task DeleteAsync(int doctorId)
+    public Task DeleteAsync(int doctorId)
     {
-      await _httpService.HttpDeleteAsync<DeleteDoctorResponse>("doctors", doctorId);
+      return _httpService.HttpDeleteAsync<DeleteDoctorResponse>("doctors", doctorId);
     }
 
     public async Task<DoctorDto> GetByIdAsync(int doctorId)
@@ -40,14 +40,14 @@ namespace FrontDesk.Blazor.Services
     {
       _logger.LogInformation("Fetching doctors from API.");
 
-      return (await _httpService.HttpGetAsync<ListDoctorResponse>($"doctors")).Doctors;
+      return (await _httpService.HttpGetAsync<ListDoctorResponse>(ListDoctorRequest.Route)).Doctors;
     }
 
     public async Task<List<DoctorDto>> ListAsync()
     {
       _logger.LogInformation("Fetching doctors from API.");
 
-      return (await _httpService.HttpGetAsync<ListDoctorResponse>($"doctors")).Doctors;
+      return (await _httpService.HttpGetAsync<ListDoctorResponse>(ListDoctorRequest.Route)).Doctors;
     }
   }
 }

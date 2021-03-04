@@ -83,6 +83,16 @@ namespace FrontDesk.Core.Aggregates
       Events.Add(appointmentUpdatedEvent);
     }
 
+    public void UpdateTitle(string newTitle)
+    {
+      if (newTitle == Title) return;
+
+      Title = newTitle;
+
+      var appointmentUpdatedEvent = new AppointmentUpdatedEvent(this);
+      Events.Add(appointmentUpdatedEvent);
+    }
+
     public void UpdateAppointmentType(int appointmentTypeId)
     {
       if (AppointmentTypeId == appointmentTypeId) return;

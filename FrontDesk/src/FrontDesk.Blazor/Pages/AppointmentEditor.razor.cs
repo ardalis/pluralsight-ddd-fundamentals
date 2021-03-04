@@ -100,7 +100,7 @@ namespace FrontDesk.Blazor.Pages
 
     private bool IsValid()
     {
-      //re-implements the model validation to ensure the exra functionality in the form works
+      //re-implements the model validation to ensure the extra functionality in the form works
       //there are ways to extend the validators to also support range date validation but they
       //are beyond the scope of this example, and here we will do things in a simpler, more straightforward way
       //this is why range validation is also implemented with code here, not as validation attributes

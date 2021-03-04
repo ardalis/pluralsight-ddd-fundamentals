@@ -2,6 +2,6 @@
 {
   public class ListDoctorRequest : BaseRequest
   {
-    public const string Route = "/api/doctors";
+    public const string Route = "api/doctors";
   }
 }

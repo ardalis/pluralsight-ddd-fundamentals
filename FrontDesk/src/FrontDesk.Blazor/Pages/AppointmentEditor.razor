@@ -6,7 +6,7 @@
 
         <label class="width100">
             Title:<br />
-            <TelerikTextBox Value="@Title" ValueExpression="@( () => Title )" Width="100%" Enabled="false"></TelerikTextBox>
+            <InputText @bind-Value="Appointment.Title" Width="100%" Enabled="false"></InputText>
         </label>
         <br />
 
@@ -36,9 +36,9 @@
         </label>
         <br />
 
-        @if (Appointment.IsAllDay)
-        {
-            <label class="width100">
+        @*@if (Appointment.IsAllDay)
+        {*@
+            @*<label class="width100">
                 Start:<br />
                 <TelerikDatePicker Value="@Appointment.Start.DateTime" ValueChanged="@( (DateTime d) => StartChanged(d) )"
                                    ValueExpression="@( () => Appointment.Start.DateTime )"
@@ -49,8 +49,8 @@
                 <TelerikDatePicker Value="@Appointment.End.DateTime" ValueChanged="@( (DateTime d) => EndChanged(d) )"
                                    ValueExpression="@( () => Appointment.End.DateTime)"
                                    Min="@GetLowerDate()" Width="100%" />
-            </label>
-        }
+            </label>*@
+        @*}
         else
         {
             <label class="width100">
@@ -65,7 +65,7 @@
                                        ValueExpression="@( () => Appointment.End.DateTime )"
                                        Min="@GetLowerDate()" Width="100%" />
             </label>
-        }
+        }*@
         <br />
 
         <label class="width100">

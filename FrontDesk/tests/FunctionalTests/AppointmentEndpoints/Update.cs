@@ -22,6 +22,7 @@ namespace FunctionalTests.AppointmentEndpoints
     private int _testPatientId = 1;
     private int _testRoomId = 2;
     private int _testDoctorId = 1;
+    private string _testTitle = "updated title";
 
     public Update(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
     {
@@ -46,6 +47,7 @@ namespace FunctionalTests.AppointmentEndpoints
       Assert.Equal(firstAppt.AppointmentId, endResult.Appointment.AppointmentId);
       Assert.Equal(_testAppointmentTypeId, endResult.Appointment.AppointmentTypeId);
       Assert.Equal(_testRoomId, endResult.Appointment.RoomId);
+      Assert.Equal(_testTitle, endResult.Appointment.Title);
 
       // TODO: Any other fields need updated? Remove unused ones from UpdateAppointmentRequest
     }
@@ -60,7 +62,8 @@ namespace FunctionalTests.AppointmentEndpoints
 
         // fields to update
         AppointmentTypeId = _testAppointmentTypeId,
-        RoomId = _testRoomId
+        RoomId = _testRoomId,
+        Title = _testTitle
 
         // things we shouldn't update with this method
         //ClientId = originalAppointment.ClientId,
