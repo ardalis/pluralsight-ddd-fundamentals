@@ -13,7 +13,6 @@ namespace BlazorShared.Models.Appointment
     public int? DoctorId { get; set; }
     public int AppointmentTypeId { get; set; }
     public DateTime Start { get; set; }
-    public DateTime End { get; set; }
 
     public static UpdateAppointmentRequest FromDto(AppointmentDto appointmentDto)
     {
@@ -25,8 +24,7 @@ namespace BlazorShared.Models.Appointment
         ScheduleId = appointmentDto.ScheduleId,
         RoomId = appointmentDto.RoomId,
         AppointmentTypeId = appointmentDto.AppointmentTypeId,
-        Start = appointmentDto.Start.DateTime,
-        End = appointmentDto.End.DateTime,
+        Start = appointmentDto.Start.DateTime
       };
     }
   }

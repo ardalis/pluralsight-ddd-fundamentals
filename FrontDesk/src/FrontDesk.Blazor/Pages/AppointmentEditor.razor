@@ -21,7 +21,7 @@
 
         <label class="width100">
             Appointment Type:<br />
-            <InputSelect @bind-Value="Appointment.AppointmentTypeId">
+            <InputSelect @bind-Value="Appointment.AppointmentTypeId" @onchange="AppointmentTypeUpdated">
                 @foreach (var appointmentType in AppointmentTypes)
                 {
                     <option value="@appointmentType.AppointmentTypeId">@appointmentType.Name</option>

@@ -21,14 +21,17 @@ namespace FrontDesk.Api.AppointmentEndpoints
     .WithResponse<ListAppointmentResponse>
   {
     private readonly IRepository<Schedule> _scheduleRepository;
+    private readonly IRepository<Client> _clientRepository;
     private readonly IMapper _mapper;
     private readonly IApplicationSettings _settings;
 
     public List(IRepository<Schedule> scheduleRepository,
+      IRepository<Client> clientRepository,
       IMapper mapper,
       IApplicationSettings settings)
     {
       _scheduleRepository = scheduleRepository;
+      _clientRepository = clientRepository;
       _mapper = mapper;
       _settings = settings;
     }
@@ -59,6 +62,18 @@ namespace FrontDesk.Api.AppointmentEndpoints
       }
 
       var myAppointments = _mapper.Map<List<AppointmentDto>>(schedule.Appointments);
+
+      // load names - only do this kind of thing if you have caching!
+      foreach (var appt in myAppointments)
+      {
+        var clientSpec = new ClientByIdIncludePatientsSpecification(appt.ClientId);
+        var client = await _clientRepository.GetBySpecAsync(clientSpec);
+        var patient = client.Patients.First(p => p.Id == appt.PatientId);
+
+        appt.ClientName = client.FullName;
+        appt.PatientName = patient.Name;
+      }
+
 
       response.Appointments = myAppointments.OrderBy(a => a.Start).ToList();
       response.Count = response.Appointments.Count;

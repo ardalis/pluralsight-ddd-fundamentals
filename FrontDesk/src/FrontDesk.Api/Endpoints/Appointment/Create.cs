@@ -50,8 +50,9 @@ namespace FrontDesk.Api.AppointmentEndpoints
       var schedule = await _scheduleRepository.GetBySpecAsync(spec);
 
       var appointmentType = await _appointmentTypeRepository.GetByIdAsync(request.AppointmentTypeId);
+      var appointmentStart = request.DateOfAppointment.ToLocalTime();
 
-      var newAppointment = Appointment.Create(request.ScheduleId, request.ClientId, request.PatientId, request.RoomId, request.DateOfAppointment, request.DateOfAppointment.AddMinutes(appointmentType.Duration), request.AppointmentTypeId, request.SelectedDoctor, request.Details);
+      var newAppointment = Appointment.Create(request.ScheduleId, request.ClientId, request.PatientId, request.RoomId, appointmentStart, appointmentStart.AddMinutes(appointmentType.Duration), request.AppointmentTypeId, request.SelectedDoctor, request.Details);
 
       schedule.AddNewAppointment(newAppointment);
 

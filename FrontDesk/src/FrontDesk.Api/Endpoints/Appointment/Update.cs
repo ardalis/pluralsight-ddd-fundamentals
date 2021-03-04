@@ -8,6 +8,7 @@ using BlazorShared.Models.Appointment;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
+using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -18,11 +19,15 @@ namespace FrontDesk.Api.AppointmentEndpoints
     .WithResponse<UpdateAppointmentResponse>
   {
     private readonly IRepository<Schedule> _scheduleRepository;
+    private readonly IRepository<AppointmentType> _appointmentTypeRepository;
     private readonly IMapper _mapper;
 
-    public Update(IRepository<Schedule> scheduleRepository, IMapper mapper)
+    public Update(IRepository<Schedule> scheduleRepository,
+      IRepository<AppointmentType> appointmentTypeRepository,
+      IMapper mapper)
     {
       _scheduleRepository = scheduleRepository;
+      _appointmentTypeRepository = appointmentTypeRepository;
       _mapper = mapper;
     }
 
@@ -38,13 +43,15 @@ namespace FrontDesk.Api.AppointmentEndpoints
     {
       var response = new UpdateAppointmentResponse(request.CorrelationId());
 
+      var apptType = await _appointmentTypeRepository.GetByIdAsync(request.AppointmentTypeId);
+
       var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId); // TODO: Just get that day's appointments
       var schedule = await _scheduleRepository.GetBySpecAsync(spec);
 
       var apptToUpdate = schedule.Appointments.FirstOrDefault(a => a.Id == request.Id);
       apptToUpdate.UpdateAppointmentType(request.AppointmentTypeId);
       apptToUpdate.UpdateRoom(request.RoomId);
-      apptToUpdate.UpdateTime(new PluralsightDdd.SharedKernel.DateTimeRange(request.Start.ToLocalTime(), request.End.ToLocalTime()));
+      apptToUpdate.UpdateTime(new DateTimeRange(request.Start.ToLocalTime(), TimeSpan.FromMinutes(apptType.Duration)));
       apptToUpdate.UpdateTitle(request.Title);
       apptToUpdate.UpdateDoctor(request.DoctorId);
 

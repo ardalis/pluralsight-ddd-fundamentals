@@ -13,9 +13,6 @@ namespace FrontDesk.Api.MappingProfiles
           .ForMember(dto => dto.Start, options => options.MapFrom(src => src.TimeRange.Start))
           .ForMember(dto => dto.End, options => options.MapFrom(src => src.TimeRange.End))
           .ForMember(dto => dto.IsAllDay, options => options.MapFrom(src => false))
-          .ForMember(dto => dto.Description, options => options.MapFrom(src => "No Description")) // TODO: Fix
-          .ForMember(dto => dto.PatientName, options => options.MapFrom(src => src.PatientId.ToString())) // TODO: Fix
-          .ForMember(dto => dto.ClientName, options => options.MapFrom(src => src.ClientId.ToString())) // TODO: Fix
           .ForMember(dto => dto.IsConfirmed, options => options.MapFrom(src => src.DateTimeConfirmed.HasValue));
       CreateMap<AppointmentDto, Appointment>()
           .ForPath(dto => dto.TimeRange.Start, options => options.MapFrom(src => src.Start))
@@ -26,8 +23,7 @@ namespace FrontDesk.Api.MappingProfiles
           .ForPath(dto => dto.TimeRange.Start, options => options.MapFrom(src => src.DateOfAppointment))
           .ForPath(dto => dto.TimeRange.End, options => options.MapFrom(src => src.DateOfAppointment));
       CreateMap<UpdateAppointmentRequest, Appointment>()
-          .ForPath(dto => dto.TimeRange.Start, options => options.MapFrom(src => src.Start))
-          .ForPath(dto => dto.TimeRange.End, options => options.MapFrom(src => src.End));
+          .ForPath(dto => dto.TimeRange.Start, options => options.MapFrom(src => src.Start));
       CreateMap<DeleteAppointmentRequest, Appointment>();
     }
   }
