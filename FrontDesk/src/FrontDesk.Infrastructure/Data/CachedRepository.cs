@@ -8,7 +8,7 @@ using PluralsightDdd.SharedKernel.Interfaces;
 
 namespace FrontDesk.Infrastructure.Data
 {
-  public class CachedRepository<T> : IRepository<T> where T : class, IAggregateRoot
+  public class CachedRepository<T> : IReadRepository<T> where T : class, IAggregateRoot
   {
     private readonly IMemoryCache _cache;
     private readonly ILogger<CachedRepository<T>> _logger;

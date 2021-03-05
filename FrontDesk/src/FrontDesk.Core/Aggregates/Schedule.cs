@@ -31,19 +31,21 @@ namespace FrontDesk.Core.Aggregates
     // not persisted
     [NotMapped]
     public virtual DateTimeRange DateRange { get; private set; }
-
     private List<Appointment> _appointments = new List<Appointment>();
-    public IEnumerable<Appointment> Appointments
-    {
-      get
-      {
-        return _appointments.AsEnumerable();
-      }
-      private set
-      {
-        _appointments = (List<Appointment>)value;
-      }
-    }
+    public IEnumerable<Appointment> Appointments => _appointments.AsReadOnly();
+
+    //public IEnumerable<Appointment> Appointments
+    //{
+    //  get
+    //  {
+    //    return _appointments.AsEnumerable();
+    //  }
+    //  private set
+    //  {
+    //    _appointments = (List<Appointment>)value;
+    //    MarkConflictingAppointments();
+    //  }
+    //}
 
     public Appointment AddNewAppointment(Appointment appointment)
     {

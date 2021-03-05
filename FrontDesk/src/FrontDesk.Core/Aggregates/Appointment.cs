@@ -17,18 +17,11 @@ namespace FrontDesk.Core.Aggregates
     public int AppointmentTypeId { get; private set; }
 
     public DateTimeRange TimeRange { get; private set; }
-
     public string Title { get; private set; }
-
-    #region More Properties
     public DateTime? DateTimeConfirmed { get; set; }
 
-    // not persisted
-    //[NotMapped]
-    //public TrackingState State { get; set; }
     [NotMapped]
     public bool IsPotentiallyConflicting { get; set; }
-    #endregion
 
     public Appointment(Guid id)
     {

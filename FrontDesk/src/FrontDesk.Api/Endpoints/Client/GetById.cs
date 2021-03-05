@@ -36,6 +36,7 @@ namespace FrontDesk.Api.ClientEndpoints
     {
       var response = new GetByIdClientResponse(request.CorrelationId());
 
+      // TODO: Use specification
       var client = await _repository.GetByIdAsync(request.ClientId);
       if (client is null) return NotFound();
 

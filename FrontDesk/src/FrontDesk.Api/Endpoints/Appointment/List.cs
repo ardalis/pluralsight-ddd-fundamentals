@@ -60,10 +60,11 @@ namespace FrontDesk.Api.AppointmentEndpoints
         schedule = await _scheduleRepository.GetBySpecAsync(spec);
         if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for id {request.ScheduleId}.");
       }
-      schedule.Handle(null); // mark conflicts
       var myAppointments = _mapper.Map<List<AppointmentDto>>(schedule.Appointments);
 
       // load names - only do this kind of thing if you have caching!
+      // N+1 query problem
+      // Possibly use custom SQL or view or stored procedure instead
       foreach (var appt in myAppointments)
       {
         var clientSpec = new ClientByIdIncludePatientsSpecification(appt.ClientId);
@@ -74,11 +75,50 @@ namespace FrontDesk.Api.AppointmentEndpoints
         appt.PatientName = patient.Name;
       }
 
-
       response.Appointments = myAppointments.OrderBy(a => a.Start).ToList();
       response.Count = response.Appointments.Count;
 
       return Ok(response);
     }
+
+  //  public override async Task<ActionResult<ListAppointmentResponse>> HandleAsync([FromQuery] ListAppointmentRequest request,
+  //CancellationToken cancellationToken)
+  //  {
+  //    var response = new ListAppointmentResponse(request.CorrelationId());
+  //    Schedule schedule = null;
+  //    if (request.ScheduleId == Guid.Empty)
+  //    {
+  //      var spec = new ScheduleForClinicAndDateWithAppointmentsSpec(_settings.ClinicId, _settings.TestDate);
+  //      schedule = await _scheduleRepository.GetBySpecAsync(spec);
+  //      if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for clinic {_settings.ClinicId}.");
+  //    }
+  //    else
+  //    {
+  //      var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId);
+  //      schedule = await _scheduleRepository.GetBySpecAsync(spec);
+  //      if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for id {request.ScheduleId}.");
+  //    }
+  //    schedule.Handle(null); // mark conflicts
+  //    var myAppointments = _mapper.Map<List<AppointmentDto>>(schedule.Appointments);
+
+  //    // load names - only do this kind of thing if you have caching!
+  //    // N+1 query problem
+  //    // Possibly use custom SQL or view or stored procedure instead
+  //    foreach (var appt in myAppointments)
+  //    {
+  //      var clientSpec = new ClientByIdIncludePatientsSpecification(appt.ClientId);
+  //      var client = await _clientRepository.GetBySpecAsync(clientSpec);
+  //      var patient = client.Patients.First(p => p.Id == appt.PatientId);
+
+  //      appt.ClientName = client.FullName;
+  //      appt.PatientName = patient.Name;
+  //    }
+
+  //    response.Appointments = myAppointments.OrderBy(a => a.Start).ToList();
+  //    response.Count = response.Appointments.Count;
+
+  //    return Ok(response);
+  //  }
+
   }
 }
