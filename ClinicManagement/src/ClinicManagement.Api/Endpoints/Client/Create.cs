@@ -14,10 +14,10 @@ namespace ClinicManagement.Api.ClientEndpoints
     .WithRequest<CreateClientRequest>
     .WithResponse<CreateClientResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
 
-    public Create(IRepository repository, IMapper mapper)
+    public Create(IRepository<Client> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -35,7 +35,7 @@ namespace ClinicManagement.Api.ClientEndpoints
       var response = new CreateClientResponse(request.CorrelationId());
 
       var toAdd = _mapper.Map<Client>(request);
-      toAdd = await _repository.AddAsync<Client, int>(toAdd);
+      toAdd = await _repository.AddAsync(toAdd);
 
       var dto = _mapper.Map<ClientDto>(toAdd);
       response.Client = dto;

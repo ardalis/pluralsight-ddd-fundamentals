@@ -1,17 +1,18 @@
 ﻿using System.Threading.Tasks;
+using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
 
-namespace IntegrationTests.Room
+namespace IntegrationTests.RoomTests
 {
   public class EfRepositoryGetById : BaseEfRepoTestFixture
   {
-    private readonly EfRepository _repository;
+    private readonly EfRepository<Room> _repository;
 
     public EfRepositoryGetById()
     {
-      _repository = GetRepository();
+      _repository = GetRepository<Room>();
     }
 
     [Fact]
@@ -20,17 +21,17 @@ namespace IntegrationTests.Room
       var id = 9;
       var room = await AddRoom(id);
 
-      var newRoom = await _repository.GetByIdAsync<ClinicManagement.Core.Aggregates.Room, int>(id);
+      var newRoom = await _repository.GetByIdAsync(id);
 
       Assert.Equal(room, newRoom);
       Assert.True(newRoom?.Id == id);
     }
 
-    private async Task<ClinicManagement.Core.Aggregates.Room> AddRoom(int id)
+    private async Task<Room> AddRoom(int id)
     {
       var room = new RoomBuilder().Id(id).Build();
 
-      await _repository.AddAsync<ClinicManagement.Core.Aggregates.Room, int>(room);
+      await _repository.AddAsync(room);
 
       return room;
     }

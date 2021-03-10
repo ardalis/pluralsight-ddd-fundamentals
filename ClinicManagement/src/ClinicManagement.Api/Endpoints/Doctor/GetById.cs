@@ -14,10 +14,10 @@ namespace ClinicManagement.Api.DoctorEndpoints
     .WithRequest<GetByIdDoctorRequest>
     .WithResponse<GetByIdDoctorResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Doctor> _repository;
     private readonly IMapper _mapper;
 
-    public GetById(IRepository repository, IMapper mapper)
+    public GetById(IRepository<Doctor> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -34,7 +34,7 @@ namespace ClinicManagement.Api.DoctorEndpoints
     {
       var response = new GetByIdDoctorResponse(request.CorrelationId());
 
-      var doctor = await _repository.GetByIdAsync<Doctor, int>(request.DoctorId);
+      var doctor = await _repository.GetByIdAsync(request.DoctorId);
       if (doctor is null) return NotFound();
 
       response.Doctor = _mapper.Map<DoctorDto>(doctor);

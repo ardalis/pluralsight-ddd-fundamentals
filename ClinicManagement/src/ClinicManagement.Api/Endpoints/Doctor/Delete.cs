@@ -14,10 +14,10 @@ namespace ClinicManagement.Api.DoctorEndpoints
     .WithRequest<DeleteDoctorRequest>
     .WithResponse<DeleteDoctorResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Doctor> _repository;
     private readonly IMapper _mapper;
 
-    public Delete(IRepository repository, IMapper mapper)
+    public Delete(IRepository<Doctor> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -35,7 +35,7 @@ namespace ClinicManagement.Api.DoctorEndpoints
       var response = new DeleteDoctorResponse(request.CorrelationId());
 
       var toDelete = _mapper.Map<Doctor>(request);
-      await _repository.DeleteAsync<Doctor, int>(toDelete);
+      await _repository.DeleteAsync(toDelete);
 
       return Ok(response);
     }

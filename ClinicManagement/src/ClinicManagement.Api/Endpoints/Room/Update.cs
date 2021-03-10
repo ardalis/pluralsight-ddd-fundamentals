@@ -14,10 +14,10 @@ namespace ClinicManagement.Api.RoomEndpoints
     .WithRequest<UpdateRoomRequest>
     .WithResponse<UpdateRoomResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Room> _repository;
     private readonly IMapper _mapper;
 
-    public Update(IRepository repository, IMapper mapper)
+    public Update(IRepository<Room> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -35,7 +35,7 @@ namespace ClinicManagement.Api.RoomEndpoints
       var response = new UpdateRoomResponse(request.CorrelationId());
 
       var toUpdate = _mapper.Map<Room>(request);
-      await _repository.UpdateAsync<Room, int>(toUpdate);
+      await _repository.UpdateAsync(toUpdate);
 
       var dto = _mapper.Map<RoomDto>(toUpdate);
       response.Room = dto;

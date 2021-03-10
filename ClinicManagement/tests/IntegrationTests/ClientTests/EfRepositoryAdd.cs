@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
@@ -8,11 +9,11 @@ namespace IntegrationTests.ClientTests
 {
   public class EfRepositoryAdd : BaseEfRepoTestFixture
   {
-    private readonly EfRepository _repository;
+    private readonly EfRepository<Client> _repository;
 
     public EfRepositoryAdd()
     {
-      _repository = GetRepository();
+      _repository = GetRepository<Client>();
     }
 
     [Fact]
@@ -20,7 +21,7 @@ namespace IntegrationTests.ClientTests
     {
       var client = await AddClient();
 
-      var newClient = (await _repository.ListAsync<ClinicManagement.Core.Aggregates.Client, int>()).FirstOrDefault();
+      var newClient = (await _repository.ListAsync()).FirstOrDefault();
 
       Assert.Equal(client, newClient);
       Assert.True(newClient?.Id > 0);
@@ -30,7 +31,7 @@ namespace IntegrationTests.ClientTests
     {
       var client = new ClientBuilder().Id(2).Build();
 
-      await _repository.AddAsync<ClinicManagement.Core.Aggregates.Client, int>(client);
+      await _repository.AddAsync(client);
 
       return client;
     }

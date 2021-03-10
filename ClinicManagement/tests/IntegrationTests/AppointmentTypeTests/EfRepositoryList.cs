@@ -1,34 +1,33 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
 
-namespace IntegrationTests.ClientTests
+namespace IntegrationTests.AppointmentTypeTests
 {
   public class EfRepositoryList : BaseEfRepoTestFixture
   {
-    private readonly EfRepository<Client> _repository;
+    private readonly EfRepository<AppointmentType> _repository;
 
     public EfRepositoryList()
     {
-      _repository = GetRepository<Client>();
+      _repository = GetRepository<AppointmentType>();
     }
 
     [Fact]
-    public async Task ListsClientAfterAddingIt()
+    public async Task ListsAppointmentTypeAfterAddingIt()
     {
-      await AddClient();
+      await AddAppointmentType();
 
       var clients = await _repository.ListAsync();
 
       Assert.True(clients?.Count > 0);
     }
 
-    private async Task<ClinicManagement.Core.Aggregates.Client> AddClient()
+    private async Task<AppointmentType> AddAppointmentType()
     {
-      var client = new ClientBuilder().Id(7).Build();
+      var client = new AppointmentTypeBuilder().Id(7).Build();
 
       await _repository.AddAsync(client);
 

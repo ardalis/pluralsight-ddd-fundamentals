@@ -4,6 +4,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using PluralsightDdd.SharedKernel.Interfaces;
 using Xunit;
 
 namespace IntegrationTests
@@ -43,14 +44,14 @@ namespace IntegrationTests
       return builder.Options;
     }
 
-    protected EfRepository GetRepository()
+    protected EfRepository<T> GetRepository<T>() where T : class, IAggregateRoot
     {
       //var options = CreateInMemoryContextOptions();
       var options = CreateSqlLiteOptions();
       var mockMediator = new Mock<IMediator>();
 
       _dbContext = new TestContext(options, mockMediator.Object);
-      return new EfRepository(_dbContext);
+      return new EfRepository<T>(_dbContext);
     }
   }
 }

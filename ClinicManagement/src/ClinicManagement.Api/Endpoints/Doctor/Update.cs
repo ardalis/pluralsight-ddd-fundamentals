@@ -14,10 +14,10 @@ namespace ClinicManagement.Api.DoctorEndpoints
     .WithRequest<UpdateDoctorRequest>
     .WithResponse<UpdateDoctorResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Doctor> _repository;
     private readonly IMapper _mapper;
 
-    public Update(IRepository repository, IMapper mapper)
+    public Update(IRepository<Doctor> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -35,7 +35,7 @@ namespace ClinicManagement.Api.DoctorEndpoints
       var response = new UpdateDoctorResponse(request.CorrelationId());
 
       var toUpdate = _mapper.Map<Doctor>(request);
-      await _repository.UpdateAsync<Doctor, int>(toUpdate);
+      await _repository.UpdateAsync(toUpdate);
 
       var dto = _mapper.Map<DoctorDto>(toUpdate);
       response.Doctor = dto;

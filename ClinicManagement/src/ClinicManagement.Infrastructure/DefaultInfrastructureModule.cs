@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Autofac;
-using ClinicManagement.Core;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Interfaces;
 using ClinicManagement.Infrastructure.Data;
@@ -21,7 +20,7 @@ namespace ClinicManagement.Infrastructure
     {
       _isDevelopment = isDevelopment;
       var coreAssembly = Assembly.GetAssembly(typeof(Room));
-      var infrastructureAssembly = Assembly.GetAssembly(typeof(EfRepository));
+      var infrastructureAssembly = Assembly.GetAssembly(typeof(DefaultInfrastructureModule));
       _assemblies.Add(coreAssembly);
       _assemblies.Add(infrastructureAssembly);
       if (callingAssembly != null)
@@ -45,8 +44,9 @@ namespace ClinicManagement.Infrastructure
 
     private void RegisterCommonDependencies(ContainerBuilder builder)
     {
-      builder.RegisterType<EfRepository>().As<IRepository>()
-          .InstancePerLifetimeScope();
+      builder.RegisterGeneric(typeof(EfRepository<>))
+        .As(typeof(IRepository<>))
+        .InstancePerLifetimeScope();
 
       builder
           .RegisterType<Mediator>()

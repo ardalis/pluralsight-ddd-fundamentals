@@ -1,17 +1,18 @@
 ﻿using System.Threading.Tasks;
+using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
 
-namespace IntegrationTests.Doctor
+namespace IntegrationTests.DoctorTests
 {
   public class EfRepositoryUpdate : BaseEfRepoTestFixture
   {
-    private readonly EfRepository _repository;
+    private readonly EfRepository<Doctor> _repository;
 
     public EfRepositoryUpdate()
     {
-      _repository = GetRepository();
+      _repository = GetRepository<Doctor>();
     }
 
     [Fact]
@@ -23,18 +24,18 @@ namespace IntegrationTests.Doctor
       var doctor = await AddDoctor(id);
 
       doctor.UpdateName(name);
-      await _repository.UpdateAsync<ClinicManagement.Core.Aggregates.Doctor, int>(doctor);
+      await _repository.UpdateAsync(doctor);
 
-      var updatedDoctor = await _repository.GetByIdAsync<ClinicManagement.Core.Aggregates.Doctor, int>(id);
+      var updatedDoctor = await _repository.GetByIdAsync(id);
 
       Assert.Equal(name, updatedDoctor.Name);
     }
 
-    private async Task<ClinicManagement.Core.Aggregates.Doctor> AddDoctor(int id)
+    private async Task<Doctor> AddDoctor(int id)
     {
       var doctor = new DoctorBuilder().Id(id).Build();
 
-      await _repository.AddAsync<ClinicManagement.Core.Aggregates.Doctor, int>(doctor);
+      await _repository.AddAsync(doctor);
 
       return doctor;
     }

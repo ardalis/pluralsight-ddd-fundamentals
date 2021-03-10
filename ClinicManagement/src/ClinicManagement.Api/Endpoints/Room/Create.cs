@@ -14,10 +14,10 @@ namespace ClinicManagement.Api.RoomEndpoints
     .WithRequest<CreateRoomRequest>
     .WithResponse<CreateRoomResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Room> _repository;
     private readonly IMapper _mapper;
 
-    public Create(IRepository repository, IMapper mapper)
+    public Create(IRepository<Room> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -35,7 +35,7 @@ namespace ClinicManagement.Api.RoomEndpoints
       var response = new CreateRoomResponse(request.CorrelationId());
 
       var toAdd = _mapper.Map<Room>(request);
-      toAdd = await _repository.AddAsync<Room, int>(toAdd);
+      toAdd = await _repository.AddAsync(toAdd);
 
       var dto = _mapper.Map<RoomDto>(toAdd);
       response.Room = dto;

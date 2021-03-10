@@ -2,16 +2,17 @@
 using ClinicManagement.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
+using ClinicManagement.Core.Aggregates;
 
-namespace IntegrationTests.Room
+namespace IntegrationTests.RoomTests
 {
   public class EfRepositoryDelete : BaseEfRepoTestFixture
   {
-    private readonly EfRepository _repository;
+    private readonly EfRepository<Room> _repository;
 
     public EfRepositoryDelete()
     {
-      _repository = GetRepository();
+      _repository = GetRepository<Room>();
     }
 
     [Fact]
@@ -20,17 +21,17 @@ namespace IntegrationTests.Room
       var id = 8;
 
       var room = await AddRoom(id);
-      await _repository.DeleteAsync<ClinicManagement.Core.Aggregates.Room, int>(room);
+      await _repository.DeleteAsync(room);
 
-      Assert.DoesNotContain(await _repository.ListAsync<ClinicManagement.Core.Aggregates.Room, int>(),
+      Assert.DoesNotContain(await _repository.ListAsync(),
           i => i.Id == id);
     }
 
-    private async Task<ClinicManagement.Core.Aggregates.Room> AddRoom(int id)
+    private async Task<Room> AddRoom(int id)
     {
       var room = new RoomBuilder().Id(id).Build();
 
-      await _repository.AddAsync<ClinicManagement.Core.Aggregates.Room, int>(room);
+      await _repository.AddAsync(room);
 
       return room;
     }

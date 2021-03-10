@@ -15,10 +15,10 @@ namespace ClinicManagement.Api.AppointmentTypeEndpoints
     .WithRequest<ListAppointmentTypeRequest>
     .WithResponse<ListAppointmentTypeResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<AppointmentType> _repository;
     private readonly IMapper _mapper;
 
-    public List(IRepository repository, IMapper mapper)
+    public List(IRepository<AppointmentType> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -35,7 +35,7 @@ namespace ClinicManagement.Api.AppointmentTypeEndpoints
     {
       var response = new ListAppointmentTypeResponse(request.CorrelationId());
 
-      var appointmentTypes = await _repository.ListAsync<AppointmentType, int>();
+      var appointmentTypes = await _repository.ListAsync();
       response.AppointmentTypes = _mapper.Map<List<AppointmentTypeDto>>(appointmentTypes);
       response.Count = response.AppointmentTypes.Count;
 

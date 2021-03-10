@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
-using BlazorShared.Models;
 using BlazorShared.Models.Patient;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Specifications;
@@ -16,10 +15,10 @@ namespace ClinicManagement.Api.PatientEndpoints
     .WithRequest<CreatePatientRequest>
     .WithResponse<CreatePatientResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
 
-    public Create(IRepository repository, IMapper mapper)
+    public Create(IRepository<Client> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -36,14 +35,14 @@ namespace ClinicManagement.Api.PatientEndpoints
     {
       var response = new CreatePatientResponse(request.CorrelationId());
 
-      var spec = new ClientByIdIncludePatientsSpecification(request.ClientId);
-      var client = await _repository.GetAsync<Client, int>(spec);
+      var spec = new ClientByIdIncludePatientsSpec(request.ClientId);
+      var client = await _repository.GetBySpecAsync(spec);
       if (client == null) return NotFound();
 
       var newPatient = new Patient(client.Id, request.PatientName, "", new Core.ValueObjects.AnimalType("Dog", "Husky"));
       client.Patients.Add(newPatient);
 
-      await _repository.UpdateAsync<Client, int>(client);
+      await _repository.UpdateAsync(client);
 
       var dto = _mapper.Map<PatientDto>(newPatient);
       response.Patient = dto;

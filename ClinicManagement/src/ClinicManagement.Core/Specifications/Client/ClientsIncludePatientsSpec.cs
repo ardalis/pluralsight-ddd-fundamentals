@@ -3,9 +3,9 @@ using ClinicManagement.Core.Aggregates;
 
 namespace ClinicManagement.Core.Specifications
 {
-  public class ClientsIncludePatientsSpecification : Specification<Client>
+  public class ClientsIncludePatientsSpec : Specification<Client>
   {
-    public ClientsIncludePatientsSpecification()
+    public ClientsIncludePatientsSpec()
     {
       Query
         .Include(client => client.Patients)

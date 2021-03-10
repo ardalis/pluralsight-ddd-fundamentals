@@ -15,10 +15,10 @@ namespace ClinicManagement.Api.DoctorEndpoints
     .WithRequest<ListDoctorRequest>
     .WithResponse<ListDoctorResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Doctor> _repository;
     private readonly IMapper _mapper;
 
-    public List(IRepository repository, IMapper mapper)
+    public List(IRepository<Doctor> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -35,7 +35,7 @@ namespace ClinicManagement.Api.DoctorEndpoints
     {
       var response = new ListDoctorResponse(request.CorrelationId());
 
-      var doctors = await _repository.ListAsync<Doctor, int>();
+      var doctors = await _repository.ListAsync();
       if (doctors is null) return NotFound();
 
       response.Doctors = _mapper.Map<List<DoctorDto>>(doctors);

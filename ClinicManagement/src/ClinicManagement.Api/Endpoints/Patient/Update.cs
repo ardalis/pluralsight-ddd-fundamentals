@@ -16,10 +16,10 @@ namespace ClinicManagement.Api.PatientEndpoints
     .WithRequest<UpdatePatientRequest>
     .WithResponse<UpdatePatientResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
 
-    public Update(IRepository repository, IMapper mapper)
+    public Update(IRepository<Client> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -36,8 +36,8 @@ namespace ClinicManagement.Api.PatientEndpoints
     {
       var response = new UpdatePatientResponse(request.CorrelationId());
 
-      var spec = new ClientByIdIncludePatientsSpecification(request.ClientId);
-      var client = await _repository.GetAsync<Client, int>(spec);
+      var spec = new ClientByIdIncludePatientsSpec(request.ClientId);
+      var client = await _repository.GetBySpecAsync(spec);
       if (client == null) return NotFound();
 
       var patientToUpdate = client.Patients.FirstOrDefault(p => p.Id == request.PatientId);
@@ -45,7 +45,7 @@ namespace ClinicManagement.Api.PatientEndpoints
 
       patientToUpdate.UpdateName(request.Name);
 
-      await _repository.UpdateAsync<Client, int>(client);
+      await _repository.UpdateAsync(client);
 
       var dto = _mapper.Map<PatientDto>(patientToUpdate);
       response.Patient = dto;

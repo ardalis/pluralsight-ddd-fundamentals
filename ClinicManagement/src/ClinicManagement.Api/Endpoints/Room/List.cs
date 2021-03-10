@@ -16,10 +16,10 @@ namespace ClinicManagement.Api.RoomEndpoints
     .WithRequest<ListRoomRequest>
     .WithResponse<ListRoomResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Room> _repository;
     private readonly IMapper _mapper;
 
-    public List(IRepository repository, IMapper mapper)
+    public List(IRepository<Room> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -37,7 +37,7 @@ namespace ClinicManagement.Api.RoomEndpoints
       var response = new ListRoomResponse(request.CorrelationId());
 
       var roomSpec = new RoomSpecification();
-      var rooms = await _repository.ListAsync<Room, int>(roomSpec);
+      var rooms = await _repository.ListAsync(roomSpec);
       if (rooms is null) return NotFound();
 
       response.Rooms = _mapper.Map<List<RoomDto>>(rooms);

@@ -16,10 +16,10 @@ namespace ClinicManagement.Api.PatientEndpoints
     .WithRequest<DeletePatientRequest>
     .WithResponse<DeletePatientResponse>
   {
-    private readonly IRepository _repository;
+    private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
 
-    public Delete(IRepository repository, IMapper mapper)
+    public Delete(IRepository<Client> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;
@@ -36,14 +36,14 @@ namespace ClinicManagement.Api.PatientEndpoints
     {
       var response = new DeletePatientResponse(request.CorrelationId());
 
-      var spec = new ClientByIdIncludePatientsSpecification(request.ClientId);
-      var client = await _repository.GetAsync<Client, int>(spec);
+      var spec = new ClientByIdIncludePatientsSpec(request.ClientId);
+      var client = await _repository.GetBySpecAsync(spec);
       if (client == null) return NotFound();
 
       var patientToDelete = client.Patients.FirstOrDefault(p => p.Id == request.PatientId);
       client.Patients.Remove(patientToDelete);
 
-      await _repository.UpdateAsync<Client, int>(client);
+      await _repository.UpdateAsync(client);
 
       return Ok(response);
     }

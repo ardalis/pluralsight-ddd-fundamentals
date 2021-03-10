@@ -1,17 +1,18 @@
 ﻿using System.Threading.Tasks;
+using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
 
-namespace IntegrationTests.Doctor
+namespace IntegrationTests.DoctorTests
 {
   public class EfRepositoryDelete : BaseEfRepoTestFixture
   {
-    private readonly EfRepository _repository;
+    private readonly EfRepository<Doctor> _repository;
 
     public EfRepositoryDelete()
     {
-      _repository = GetRepository();
+      _repository = GetRepository<Doctor>();
     }
 
     [Fact]
@@ -20,17 +21,17 @@ namespace IntegrationTests.Doctor
       var id = 8;
 
       var doctor = await AddDoctor(id);
-      await _repository.DeleteAsync<ClinicManagement.Core.Aggregates.Doctor, int>(doctor);
+      await _repository.DeleteAsync(doctor);
 
-      Assert.DoesNotContain(await _repository.ListAsync<ClinicManagement.Core.Aggregates.Doctor, int>(),
+      Assert.DoesNotContain(await _repository.ListAsync(),
           i => i.Id == id);
     }
 
-    private async Task<ClinicManagement.Core.Aggregates.Doctor> AddDoctor(int id)
+    private async Task<Doctor> AddDoctor(int id)
     {
       var doctor = new DoctorBuilder().Id(id).Build();
 
-      await _repository.AddAsync<ClinicManagement.Core.Aggregates.Doctor, int>(doctor);
+      await _repository.AddAsync(doctor);
 
       return doctor;
     }
