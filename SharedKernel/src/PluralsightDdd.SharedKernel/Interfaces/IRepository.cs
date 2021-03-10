@@ -6,6 +6,9 @@ namespace PluralsightDdd.SharedKernel.Interfaces
   {
   }
 
+  // You can add your own interface or extend the one provided in Ardalis.Specification, which is designed
+  // to work with specifications
+  //
   //public interface IRepository
   //{
   //  Task<T> GetByIdAsync<T, TId>(TId id) where T : BaseEntity<TId>, IAggregateRoot;
