@@ -14,10 +14,15 @@ namespace ClinicManagement.Api
     // https://codereview.stackexchange.com/questions/152117/rabbitmq-wrapper-to-work-in-a-concurrent-environment
     private IModel channel = null;
     private IConnection connection = null;
-    //private const string hostname = "localhost"; // when running in VS, no docker, rabbitmq running on localhost / or in a container
+    private const string hostname = "localhost"; // when running in VS, no docker, rabbitmq running on localhost / or in a container
     //private const string hostname = "host.docker.internal"; // rabbit running on machine; app running in docker
-    private const string hostname = "rabbit1"; // everything in docker via docker-compose
+    //private const string hostname = "rabbit1"; // everything in docker via docker-compose
     private const string queuein = "testqueue";
+    private const string exchangeName = "exchange";
+
+    // Manually Run RabbitMQ
+    // docker run --rm -it --hostname ddd-sample-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+
 
     // Initiate RabbitMQ and start listening to an input queue
     private void Run()
@@ -36,7 +41,10 @@ namespace ClinicManagement.Api
       this.channel = this.connection.CreateModel();
 
       // ! Declare an exchange, need to be updated !
-      this.channel.ExchangeDeclare("exchange", "direct", true, false, null);
+      this.channel.ExchangeDeclare(exchangeName, "direct", 
+        durable: true,  
+        autoDelete: false,
+        arguments: null);
 
       // A queue to read messages
       this.channel.QueueDeclare(queue: queuein,
@@ -44,7 +52,7 @@ namespace ClinicManagement.Api
                           exclusive: false,
                           autoDelete: false,
                           arguments: null);
-      this.channel.QueueBind(queuein, "exchange", "in");
+      this.channel.QueueBind(queuein, exchangeName, "in");
 
       // A queue to write messages
       this.channel.QueueDeclare(queue: "queue.out",
@@ -52,7 +60,7 @@ namespace ClinicManagement.Api
                           exclusive: false,
                           autoDelete: false,
                           arguments: null);
-      this.channel.QueueBind("queue.out", "exchange", "out");
+      this.channel.QueueBind("queue.out", exchangeName, "out");
 
       this.channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
@@ -93,7 +101,7 @@ namespace ClinicManagement.Api
       string outMessage = "reply:" + message;
       body = Encoding.UTF8.GetBytes(outMessage);
 
-      this.channel.BasicPublish(exchange: "exchange",
+      this.channel.BasicPublish(exchange: exchangeName,
                            routingKey: "out",
                            basicProperties: this.channel.CreateBasicProperties(),
                            body: body);

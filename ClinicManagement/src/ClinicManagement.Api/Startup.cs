@@ -103,7 +103,9 @@ namespace ClinicManagement.Api
       services.AddAutoMapper(typeof(Startup).Assembly);
       services.AddSwaggerGenCustom();
 
-      //services.AddHostedService<RabbitMQService>();
+      // RabbitMQ service must be running on port 5673
+      // 
+      services.AddHostedService<RabbitMQService>();
     }
 
     public void ConfigureContainer(ContainerBuilder builder)
