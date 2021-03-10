@@ -9,6 +9,7 @@ using Xunit.Abstractions;
 
 namespace FunctionalTests.Api
 {
+  [Collection("Sequential")]
   public class DoctorsList : IClassFixture<CustomWebApplicationFactory<Startup>>
   {
     private readonly HttpClient _client;
