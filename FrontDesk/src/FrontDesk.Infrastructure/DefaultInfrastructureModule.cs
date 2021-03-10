@@ -50,13 +50,16 @@ namespace FrontDesk.Infrastructure
     private void RegisterCommonDependencies(ContainerBuilder builder)
     {
       builder.RegisterGeneric(typeof(EfRepository<>))
+          .As(typeof(IRepository<>))
           .InstancePerLifetimeScope();
 
       // add a cache
-      builder.RegisterGeneric(typeof(CachedRepository<>)).As(typeof(IRepository<>))
+      builder.RegisterGeneric(typeof(CachedRepository<>))
+        .As(typeof(IReadRepository<>))
           .InstancePerLifetimeScope();
 
-      builder.RegisterType(typeof(ServiceBrokerMessagePublisher)).As(typeof(IMessagePublisher))
+      builder.RegisterType(typeof(ServiceBrokerMessagePublisher))
+        .As(typeof(IMessagePublisher))
         .InstancePerLifetimeScope();
 
       builder
