@@ -12,8 +12,8 @@
     <Summary>Includes common abstractions and base types.</Summary>
     <RepositoryUrl>https://github.com/ardalis/pluralsight-ddd-fundamentals</RepositoryUrl>
     <PackageTags>aspnet asp.net aspnetcore asp.net core ddd dddesign value object entity aggregate domain event pluralsight</PackageTags>
-    <PackageReleaseNotes>Updating to Ardalis.Specification v5.0.2.</PackageReleaseNotes>
-    <Version>1.1.2-beta</Version>
+    <PackageReleaseNotes>Updating to Ardalis.Specification v5 initial release.</PackageReleaseNotes>
+    <Version>1.1.3</Version>
     <AssemblyName>PluralsightDdd.SharedKernel</AssemblyName>
     <PackageIconUrl>https://user-images.githubusercontent.com/782127/33497760-facf6550-d69c-11e7-94e4-b3856da259a9.png</PackageIconUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
