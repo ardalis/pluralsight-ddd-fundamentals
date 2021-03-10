@@ -14,6 +14,16 @@ The easiest way to run the sample is using docker. Download the source and run t
 TBD
 ```
 
+### Visual Studio
+
+Running the sample from Visual Studio requires some additional setup. You will need to run multiple solutions side by side. You will also need to run RabbitMQ, ideally as a docker image, which you can so using this command:
+
+```powershell
+docker run --rm -it --hostname ddd-sample-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
+```
+
+You should be able to open [localhost:15672](http://localhost:15672/#/) to view RabbitMQ management interface.
+
 ## Architecture Notes
 
 ## Deveoper Notes
