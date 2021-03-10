@@ -4,10 +4,10 @@
     "anonymousAuthentication": true
   },
   "profiles": {
-    "FrontDesk.Blazor.Host": {
+    "ClinicManagement.Blazor.Host": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "blazor-frontdesk-demo",
+      "launchUrl": "blazor-clinicmanagement-demo",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

@@ -3,11 +3,12 @@
 FROM mcr.microsoft.com/dotnet/sdk:5.0.100-rc.1-buster-slim AS build
 WORKDIR /app
 
-COPY FrontDesk/src/FrontDesk.Blazor ./FrontDesk.Blazor
-COPY FrontDesk/src/BlazorShared ./BlazorShared
-RUN dotnet restore /app/FrontDesk.Blazor/FrontDesk.Blazor.csproj
+COPY ClinicManagement/src/ClinicManagement.Blazor ./ClinicManagement.Blazor
+COPY ClinicManagement/src/ClinicManagement.Blazor ./ClinicManagement.Blazor
+COPY ClinicManagement/src/BlazorShared ./BlazorShared
+RUN dotnet restore /app/ClinicManagement.Blazor/ClinicManagement.Blazor.csproj
 
-WORKDIR /app/FrontDesk.Blazor
+WORKDIR /app/ClinicManagement.Blazor
 RUN dotnet build -c Release -o /bin/Release/net5.0
 
 FROM build AS publish

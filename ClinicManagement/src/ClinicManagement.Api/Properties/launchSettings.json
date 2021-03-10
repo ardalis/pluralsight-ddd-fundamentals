@@ -4,7 +4,7 @@
     "anonymousAuthentication": true,
   },
   "profiles": {
-    "FrontDesk.Api": {
+    "ClinicManagement.Api": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
