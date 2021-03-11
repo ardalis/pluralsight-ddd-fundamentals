@@ -2,8 +2,10 @@
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using FrontDesk.Api.Hubs;
 using FrontDesk.Infrastructure.Data.Sync;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -22,15 +24,18 @@ namespace FrontDesk.Api
     private readonly string _exchangeName = MessagingConstants.Exchanges.FRONTDESK_CLINICMANAGEMENT_EXCHANGE;
     private readonly ILogger<ClinicManagementRabbitMqService> _logger;
     private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly IHubContext<ScheduleHub> _scheduleHub;
 
     public ClinicManagementRabbitMqService(
       IOptions<RabbitMqConfiguration> rabbitMqOptions,
       ILogger<ClinicManagementRabbitMqService> logger,
-      IServiceScopeFactory serviceScopeFactory)
+      IServiceScopeFactory serviceScopeFactory,
+      IHubContext<ScheduleHub> scheduleHub)
     {
       var settings = rabbitMqOptions.Value;
       _logger = logger;
       _serviceScopeFactory = serviceScopeFactory;
+      _scheduleHub = scheduleHub;
       InitializeConnection(settings);
     }
 
@@ -99,12 +104,17 @@ namespace FrontDesk.Api
 
       if (eventType.GetString() == "Doctor-Created")
       {
+        int id = entity.GetProperty("Id").GetInt32();
+        string name = entity.GetProperty("Name").GetString();
         var command = new CreateDoctorCommand
         {
-          Id = entity.GetProperty("Id").GetInt32(),
-          Name = entity.GetProperty("Name").GetString()
+          Id = id,
+          Name = name
         };
         await mediator.Send(command);
+
+        string notification = $"New Doctor Added: {name}";
+        await _scheduleHub.Clients.All.SendAsync("ReceiveMessage", notification);
       }
     }
 
