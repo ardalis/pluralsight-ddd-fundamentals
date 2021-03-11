@@ -85,7 +85,7 @@ namespace FrontDesk.Api
       services.Configure<RabbitMqConfiguration>(messagingConfig);
       if (messagingSettings.Enabled)
       {
-        services.AddHostedService<RabbitMQService>();
+        services.AddHostedService<ClinicManagementRabbitMqService>();
       }
 
       services.AddCors(options =>

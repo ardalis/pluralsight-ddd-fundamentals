@@ -1,30 +1,37 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using FrontDesk.Infrastructure.Data;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PluralsightDdd.SharedKernel;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Microsoft.EntityFrameworkCore;
 
 namespace FrontDesk.Api
 {
-  public class RabbitMQService : BackgroundService
+  public class ClinicManagementRabbitMqService : BackgroundService
   {
     private IModel _channel;
     private IConnection _connection;
     private readonly string _queuein = MessagingConstants.Queues.FDCM_FRONTDESK_IN;
     private readonly string _exchangeName = MessagingConstants.Exchanges.FRONTDESK_CLINICMANAGEMENT_EXCHANGE;
-    private readonly ILogger<RabbitMQService> _logger;
+    private readonly ILogger<ClinicManagementRabbitMqService> _logger;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    public RabbitMQService(IOptions<RabbitMqConfiguration> rabbitMqOptions,
-      ILogger<RabbitMQService> logger)
+    public ClinicManagementRabbitMqService(
+      IOptions<RabbitMqConfiguration> rabbitMqOptions,
+      ILogger<ClinicManagementRabbitMqService> logger,
+      IServiceScopeFactory serviceScopeFactory)
     {
       var settings = rabbitMqOptions.Value;
       _logger = logger;
-
+      _serviceScopeFactory = serviceScopeFactory;
       InitializeConnection(settings);
     }
 
@@ -83,6 +90,25 @@ namespace FrontDesk.Api
     private void HandleMessage(string message)
     {
       _logger.LogInformation($"Handling Message: {message}");
+      using var doc = JsonDocument.Parse(message);
+      var root = doc.RootElement;
+      var eventType = root.GetProperty("EventType");
+      var entity = root.GetProperty("Entity");
+      string insertSQLFormat = "SET IDENTITY_INSERT {0} ON\nINSERT INTO {0} (Id, Name) VALUES (@Id, @Name)\nSET IDENTITY_INSERT {0} OFF";
+
+      using (var scope = _serviceScopeFactory.CreateScope())
+      {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        if(eventType.GetString() == "Doctor-Created")
+        {
+          string command = string.Format(insertSQLFormat, "Doctors");
+          var idParam = new SqlParameter("@Id", entity.GetProperty("Id").GetInt32());
+          var nameParam = new SqlParameter("@Name", entity.GetProperty("Name").GetString());
+          db.Database.ExecuteSqlRaw(command, idParam, nameParam);
+          _logger.LogInformation(command, "Doctors");
+        }
+      }
     }
 
     public override void Dispose()
