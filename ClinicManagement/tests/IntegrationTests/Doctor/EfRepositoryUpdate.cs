@@ -23,7 +23,7 @@ namespace IntegrationTests.DoctorTests
 
       var doctor = await AddDoctor(id);
 
-      doctor.UpdateName(name);
+      doctor.Name = name;
       await _repository.UpdateAsync(doctor);
 
       var updatedDoctor = await _repository.GetByIdAsync(id);

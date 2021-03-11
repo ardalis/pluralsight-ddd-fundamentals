@@ -186,7 +186,9 @@ namespace ClinicManagement.Infrastructure.Data
 
       var clientSmith = (CreateClientWithPatient("Steve Smith", "Steve", "Mr.", drSmith.Id, MALE_SEX, "Darwin", "Dog",
         "Poodle"));
-      clientSmith.Patients.Add(new Patient(1, "Rumor", FEMALE_SEX, new AnimalType("Cat", "Alley"), drWho.Id));
+      var rumor = new Patient(1, "Rumor", FEMALE_SEX, drWho.Id);
+        rumor.AnimalType = new AnimalType("Cat", "Alley");
+      clientSmith.Patients.Add(rumor);
 
       clientGraphs.Add(clientSmith);
 
@@ -205,7 +207,10 @@ namespace ClinicManagement.Infrastructure.Data
         string breed)
     {
       var client = new Client(fullName, preferredName, salutation, doctorId, "client@example.com");
-      client.Patients.Add(new Patient(1, patient1Name, patient1Sex, new AnimalType(animalType, breed), doctorId));
+
+      var patient = new Patient(1, patient1Name, patient1Sex, doctorId);
+      patient.AnimalType = new AnimalType(animalType, breed);
+      client.Patients.Add(patient);
 
       return client;
     }

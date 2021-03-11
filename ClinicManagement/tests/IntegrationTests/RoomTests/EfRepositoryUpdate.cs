@@ -23,7 +23,7 @@ namespace IntegrationTests.RoomTests
 
       var room = await AddRoom(id);
 
-      room.UpdateName(name);
+      room.Name = name;
       await _repository.UpdateAsync(room);
 
       var updatedRoom = await _repository.GetByIdAsync(id);

@@ -43,7 +43,7 @@ namespace ClinicManagement.Api.PatientEndpoints
       var patientToUpdate = client.Patients.FirstOrDefault(p => p.Id == request.PatientId);
       if (patientToUpdate == null) return NotFound();
 
-      patientToUpdate.UpdateName(request.Name);
+      patientToUpdate.Name = request.Name;
 
       await _repository.UpdateAsync(client);
 

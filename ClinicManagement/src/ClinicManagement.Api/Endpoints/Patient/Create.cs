@@ -39,7 +39,8 @@ namespace ClinicManagement.Api.PatientEndpoints
       var client = await _repository.GetBySpecAsync(spec);
       if (client == null) return NotFound();
 
-      var newPatient = new Patient(client.Id, request.PatientName, "", new Core.ValueObjects.AnimalType("Dog", "Husky"));
+      var newPatient = new Patient(client.Id, request.PatientName, "");
+      newPatient.AnimalType = new Core.ValueObjects.AnimalType("Dog", "Husky");
       client.Patients.Add(newPatient);
 
       await _repository.UpdateAsync(client);

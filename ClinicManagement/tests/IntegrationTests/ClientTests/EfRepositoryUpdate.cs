@@ -23,7 +23,7 @@ namespace IntegrationTests.ClientTests
 
       var client = await AddClient(id);
 
-      client.UpdateFullName(fullName);
+      client.FullName = fullName;
       await _repository.UpdateAsync(client);
 
       var updatedClient = await _repository.GetByIdAsync(id);

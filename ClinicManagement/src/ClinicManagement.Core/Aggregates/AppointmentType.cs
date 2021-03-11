@@ -17,14 +17,9 @@ namespace ClinicManagement.Core.Aggregates
       Duration = duration;
     }
 
-    private AppointmentType() // required for EF
-    {
-    }
-
     public override string ToString()
     {
       return Name;
     }
-
   }
 }

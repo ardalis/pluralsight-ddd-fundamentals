@@ -5,7 +5,7 @@ namespace ClinicManagement.Core.Aggregates
 {
   public class Room : BaseEntity<int>, IAggregateRoot
   {
-    public virtual string Name { get; private set; }
+    public string Name { get; set; }
 
     public Room(int id, string name)
     {
@@ -15,17 +15,7 @@ namespace ClinicManagement.Core.Aggregates
 
     public override string ToString()
     {
-      return Name.ToString();
-    }
-
-    public Room UpdateName(string name)
-    {
-      Name = name;
-      return this;
-    }
-
-    private Room() // required for EF
-    {
+      return Name;
     }
   }
 }

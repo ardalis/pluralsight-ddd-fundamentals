@@ -26,7 +26,8 @@ namespace UnitTests.Builders
 
     public PatientBuilder WithDefaultValues()
     {
-      _patient = new Patient(1, "Test Patient", "MALE", new AnimalType("Cat", "Mixed"));
+      _patient = new Patient(1, "Test Patient", "MALE");
+      _patient.AnimalType = new AnimalType("Cat", "Mixed");
 
       return this;
     }
