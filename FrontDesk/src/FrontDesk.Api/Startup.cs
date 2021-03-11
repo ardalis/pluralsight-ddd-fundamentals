@@ -4,6 +4,7 @@ using System.Reflection;
 using Autofac;
 using BlazorShared;
 using FrontDesk.Api.Hubs;
+using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Infrastructure;
 using FrontDesk.Infrastructure.Data;
@@ -79,15 +80,6 @@ namespace FrontDesk.Api
       var baseUrlConfig = new BaseUrlConfiguration();
       Configuration.Bind(BaseUrlConfiguration.CONFIG_NAME, baseUrlConfig);
 
-      // configure messaging
-      var messagingConfig = Configuration.GetSection("RabbitMq");
-      var messagingSettings = messagingConfig.Get<RabbitMqConfiguration>();
-      services.Configure<RabbitMqConfiguration>(messagingConfig);
-      if (messagingSettings.Enabled)
-      {
-        services.AddHostedService<ClinicManagementRabbitMqService>();
-      }
-
       services.AddCors(options =>
       {
         options.AddPolicy(name: CORS_POLICY,
@@ -101,7 +93,14 @@ namespace FrontDesk.Api
       });
 
       services.AddControllers();
-      services.AddMediatR(typeof(Startup).Assembly);
+
+      var assemblies = new Assembly[]
+      {
+        typeof(Startup).Assembly,
+        typeof(AppDbContext).Assembly,
+        typeof(Appointment).Assembly
+      };
+      services.AddMediatR(assemblies);
 
       services.AddResponseCompression(opts =>
       {
@@ -112,6 +111,14 @@ namespace FrontDesk.Api
       services.AddAutoMapper(typeof(Startup).Assembly);
       services.AddSwaggerGenCustom();
 
+      // configure messaging
+      var messagingConfig = Configuration.GetSection("RabbitMq");
+      var messagingSettings = messagingConfig.Get<RabbitMqConfiguration>();
+      services.Configure<RabbitMqConfiguration>(messagingConfig);
+      if (messagingSettings.Enabled)
+      {
+        services.AddHostedService<ClinicManagementRabbitMqService>();
+      }
     }
 
     public void ConfigureContainer(ContainerBuilder builder)

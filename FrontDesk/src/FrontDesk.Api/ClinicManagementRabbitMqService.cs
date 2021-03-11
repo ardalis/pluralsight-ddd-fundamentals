@@ -2,8 +2,8 @@
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using FrontDesk.Infrastructure.Data;
-using Microsoft.Data.SqlClient;
+using FrontDesk.Infrastructure.Data.Sync;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -11,7 +11,6 @@ using Microsoft.Extensions.Options;
 using PluralsightDdd.SharedKernel;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using Microsoft.EntityFrameworkCore;
 
 namespace FrontDesk.Api
 {
@@ -78,36 +77,34 @@ namespace FrontDesk.Api
 
       return Task.CompletedTask;
     }
-    private void OnMessageReceived(object model, BasicDeliverEventArgs args)
+    private async void OnMessageReceived(object model, BasicDeliverEventArgs args)
     {
       var body = args.Body.ToArray();
       var message = Encoding.UTF8.GetString(body);
       _logger.LogInformation(" [x] Received {0}", message);
 
-      HandleMessage(message);
+      await HandleMessage(message);
     }
 
-    private void HandleMessage(string message)
+    private async Task HandleMessage(string message)
     {
       _logger.LogInformation($"Handling Message: {message}");
       using var doc = JsonDocument.Parse(message);
       var root = doc.RootElement;
       var eventType = root.GetProperty("EventType");
       var entity = root.GetProperty("Entity");
-      string insertSQLFormat = "SET IDENTITY_INSERT {0} ON\nINSERT INTO {0} (Id, Name) VALUES (@Id, @Name)\nSET IDENTITY_INSERT {0} OFF";
 
-      using (var scope = _serviceScopeFactory.CreateScope())
+      using var scope = _serviceScopeFactory.CreateScope();
+      var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+      if (eventType.GetString() == "Doctor-Created")
       {
-        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-        if(eventType.GetString() == "Doctor-Created")
+        var command = new CreateDoctorCommand
         {
-          string command = string.Format(insertSQLFormat, "Doctors");
-          var idParam = new SqlParameter("@Id", entity.GetProperty("Id").GetInt32());
-          var nameParam = new SqlParameter("@Name", entity.GetProperty("Name").GetString());
-          db.Database.ExecuteSqlRaw(command, idParam, nameParam);
-          _logger.LogInformation(command, "Doctors");
-        }
+          Id = entity.GetProperty("Id").GetInt32(),
+          Name = entity.GetProperty("Name").GetString()
+        };
+        await mediator.Send(command);
       }
     }
 
