@@ -9,6 +9,9 @@ namespace FrontDesk.Infrastructure.Data.Config
     public void Configure(EntityTypeBuilder<Room> builder)
     {
       builder.ToTable("Rooms").HasKey(x => x.Id);
+
+      builder.Property(r => r.Name)
+        .HasMaxLength(ColumnConstants.DEFAULT_NAME_LENGTH);
     }
   }
 }

@@ -14,6 +14,8 @@ namespace FrontDesk.Infrastructure.Data.Config
         p.Property(pp => pp.Start).HasColumnName("TimeRange_Start");
         p.Property(pp => pp.End).HasColumnName("TimeRange_End");
       });
+      builder.Property(p => p.Title)
+        .HasMaxLength(ColumnConstants.DEFAULT_NAME_LENGTH);
     }
   }
 }

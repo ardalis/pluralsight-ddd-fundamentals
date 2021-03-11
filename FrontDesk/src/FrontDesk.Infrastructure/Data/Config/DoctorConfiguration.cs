@@ -9,6 +9,9 @@ namespace FrontDesk.Infrastructure.Data.Config
     public void Configure(EntityTypeBuilder<Doctor> builder)
     {
       builder.ToTable("Doctors").HasKey(x => x.Id);
+
+      builder.Property(d => d.Name)
+        .HasMaxLength(ColumnConstants.DEFAULT_NAME_LENGTH);
     }
   }
 }

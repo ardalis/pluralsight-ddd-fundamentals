@@ -14,6 +14,10 @@ namespace FrontDesk.Infrastructure.Data.Config
         p.Property(pp => pp.Breed).HasColumnName("AnimalType_Breed").HasMaxLength(ColumnConstants.DEFAULT_NAME_LENGTH);
         p.Property(pp => pp.Species).HasColumnName("AnimalType_Species").HasMaxLength(ColumnConstants.DEFAULT_NAME_LENGTH);
       });
+      builder.Property(p => p.Name)
+        .HasMaxLength(ColumnConstants.DEFAULT_NAME_LENGTH);
+      builder.Property(p => p.Sex)
+        .HasMaxLength(ColumnConstants.DEFAULT_NAME_LENGTH);
     }
   }
 }
