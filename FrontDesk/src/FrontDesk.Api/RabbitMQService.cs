@@ -14,9 +14,9 @@ namespace FrontDesk.Api
     // https://codereview.stackexchange.com/questions/152117/rabbitmq-wrapper-to-work-in-a-concurrent-environment
     private IModel channel = null;
     private IConnection connection = null;
-    //private const string hostname = "localhost"; // when running in VS, no docker, rabbitmq running on localhost / or in a container
+    private const string hostname = "localhost"; // when running in VS, no docker, rabbitmq running on localhost / or in a container
     //private const string hostname = "host.docker.internal"; // rabbit running on machine; app running in docker
-    private const string hostname = "rabbit1"; // everything in docker via docker-compose
+    //private const string hostname = "rabbit1"; // everything in docker via docker-compose
     private const string queuein = "testqueue";
 
     // Initiate RabbitMQ and start listening to an input queue

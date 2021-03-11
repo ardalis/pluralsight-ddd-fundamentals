@@ -14,7 +14,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" PrivateAssets="all" Version="5.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.4" />
-    <PackageReference Include="PluralsightDdd.SharedKernel" Version="1.1.3" />
+    <PackageReference Include="PluralsightDdd.SharedKernel" Version="1.1.4" />
     <PackageReference Include="SQLite" Version="3.13.0" />
     <PackageReference Include="NETStandard.Library" Version="2.0.3" />
   </ItemGroup>

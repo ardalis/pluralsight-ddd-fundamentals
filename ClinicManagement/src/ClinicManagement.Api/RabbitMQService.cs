@@ -17,8 +17,9 @@ namespace ClinicManagement.Api
     private const string hostname = "localhost"; // when running in VS, no docker, rabbitmq running on localhost / or in a container
     //private const string hostname = "host.docker.internal"; // rabbit running on machine; app running in docker
     //private const string hostname = "rabbit1"; // everything in docker via docker-compose
-    private const string queuein = "testqueue";
-    private const string exchangeName = "exchange";
+    private const string queuein = "cm-queue-in";
+    private const string queueout = "fd-queue-in";
+    private const string exchangeName = "frontdesk-clinicmanagement";
 
     // Manually Run RabbitMQ
     // docker run --rm -it --hostname ddd-sample-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
@@ -52,15 +53,15 @@ namespace ClinicManagement.Api
                           exclusive: false,
                           autoDelete: false,
                           arguments: null);
-      this.channel.QueueBind(queuein, exchangeName, "in");
+      this.channel.QueueBind(queuein, exchangeName, routingKey: "in");
 
       // A queue to write messages
-      this.channel.QueueDeclare(queue: "queue.out",
+      this.channel.QueueDeclare(queue: queueout,
                           durable: true,
                           exclusive: false,
                           autoDelete: false,
                           arguments: null);
-      this.channel.QueueBind("queue.out", exchangeName, "out");
+      this.channel.QueueBind(queueout, exchangeName, routingKey: "out");
 
       this.channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
 
