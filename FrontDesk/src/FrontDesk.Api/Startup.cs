@@ -79,6 +79,15 @@ namespace FrontDesk.Api
       var baseUrlConfig = new BaseUrlConfiguration();
       Configuration.Bind(BaseUrlConfiguration.CONFIG_NAME, baseUrlConfig);
 
+      // configure messaging
+      var messagingConfig = Configuration.GetSection("RabbitMq");
+      var messagingSettings = messagingConfig.Get<RabbitMqConfiguration>();
+      services.Configure<RabbitMqConfiguration>(messagingConfig);
+      if (messagingSettings.Enabled)
+      {
+        services.AddHostedService<RabbitMQService>();
+      }
+
       services.AddCors(options =>
       {
         options.AddPolicy(name: CORS_POLICY,
@@ -103,7 +112,6 @@ namespace FrontDesk.Api
       services.AddAutoMapper(typeof(Startup).Assembly);
       services.AddSwaggerGenCustom();
 
-      //services.AddHostedService<RabbitMQService>();
     }
 
     public void ConfigureContainer(ContainerBuilder builder)

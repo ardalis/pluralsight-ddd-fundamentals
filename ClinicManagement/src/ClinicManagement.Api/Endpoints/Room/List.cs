@@ -5,6 +5,7 @@ using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Room;
 using ClinicManagement.Core.Aggregates;
+using ClinicManagement.Core.Interfaces;
 using ClinicManagement.Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using PluralsightDdd.SharedKernel.Interfaces;
@@ -19,7 +20,8 @@ namespace ClinicManagement.Api.RoomEndpoints
     private readonly IRepository<Room> _repository;
     private readonly IMapper _mapper;
 
-    public List(IRepository<Room> repository, IMapper mapper)
+    public List(IRepository<Room> repository,
+      IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;

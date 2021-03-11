@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BlazorShared.Models.Doctor;
+using ClinicManagement.Api.DoctorEndpoints;
 using ClinicManagement.Core.Aggregates;
 
 namespace ClinicManagement.Api.MappingProfiles
@@ -16,6 +17,7 @@ namespace ClinicManagement.Api.MappingProfiles
       CreateMap<UpdateDoctorRequest, Doctor>()
           .ForMember(dto => dto.Id, options => options.MapFrom(src => src.DoctorId));
       CreateMap<DeleteDoctorRequest, Doctor>();
+      CreateMap<Doctor, NamedEntity>();
     }
   }
 }

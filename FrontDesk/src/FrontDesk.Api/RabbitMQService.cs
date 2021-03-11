@@ -3,105 +3,95 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using PluralsightDdd.SharedKernel;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
 namespace FrontDesk.Api
 {
-  public class RabbitMQService : IHostedService
+  public class RabbitMQService : BackgroundService
   {
-    // Create a wrapper around RabbitMQ consumer similar to this one:
-    // https://codereview.stackexchange.com/questions/152117/rabbitmq-wrapper-to-work-in-a-concurrent-environment
-    private IModel channel = null;
-    private IConnection connection = null;
-    private const string hostname = "localhost"; // when running in VS, no docker, rabbitmq running on localhost / or in a container
-    //private const string hostname = "host.docker.internal"; // rabbit running on machine; app running in docker
-    //private const string hostname = "rabbit1"; // everything in docker via docker-compose
-    private const string queuein = "testqueue";
+    private IModel _channel;
+    private IConnection _connection;
+    private readonly string _queuein = MessagingConstants.Queues.FDCM_FRONTDESK_IN;
+    private readonly string _exchangeName = MessagingConstants.Exchanges.FRONTDESK_CLINICMANAGEMENT_EXCHANGE;
+    private readonly ILogger<RabbitMQService> _logger;
 
-    // Initiate RabbitMQ and start listening to an input queue
-    private void Run()
+    public RabbitMQService(IOptions<RabbitMqConfiguration> rabbitMqOptions,
+      ILogger<RabbitMQService> logger)
     {
-      // ! Fill in your data here !
-      var factory = new ConnectionFactory()
+      var settings = rabbitMqOptions.Value;
+      _logger = logger;
+
+      InitializeConnection(settings);
+    }
+
+    private void InitializeConnection(RabbitMqConfiguration settings)
+    {
+      var factory = new ConnectionFactory
       {
-        HostName = hostname,
-        // port = 5672, default value
-        VirtualHost = "/",
-        UserName = "guest",
-        Password = "guest"
+        HostName = settings.Hostname,
+        UserName = settings.UserName,
+        Password = settings.Password,
+        VirtualHost = settings.VirtualHost,
+        Port = settings.Port
       };
+      _connection = factory.CreateConnection();
+      _channel = _connection.CreateModel();
 
-      this.connection = factory.CreateConnection();
-      this.channel = this.connection.CreateModel();
+      _channel.ExchangeDeclare(_exchangeName, "direct",
+                              durable: true,
+                              autoDelete: false,
+                              arguments: null);
 
-      // ! Declare an exchange, need to be updated !
-      this.channel.ExchangeDeclare("exchange", "direct", true, false, null);
-
-      // A queue to read messages
-      this.channel.QueueDeclare(queue: queuein,
+      _channel.QueueDeclare(queue: _queuein,
                           durable: true,
                           exclusive: false,
                           autoDelete: false,
                           arguments: null);
-      this.channel.QueueBind(queuein, "exchange", "in");
 
-      // A queue to write messages
-      this.channel.QueueDeclare(queue: "queue.out",
-                          durable: true,
-                          exclusive: false,
-                          autoDelete: false,
-                          arguments: null);
-      this.channel.QueueBind("queue.out", "exchange", "out");
+      string routingKey = "entity-changes";
+      _channel.QueueBind(_queuein, _exchangeName, routingKey: "entity-changes");
 
-      this.channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
+      _logger.LogInformation($"*** Listening for messages on {_exchangeName}-{routingKey}...");
+    }
 
-      Console.WriteLine(" [*] Waiting for messages.");
+    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+      stoppingToken.ThrowIfCancellationRequested();
 
-      var consumer = new EventingBasicConsumer(this.channel);
+      var consumer = new EventingBasicConsumer(_channel);
       consumer.Received += OnMessageReceived;
 
-      this.channel.BasicConsume(queue: queuein,
-                          autoAck: false,
-                          consumer: consumer);
-    }
+      _channel.BasicConsume(queue: _queuein,
+                    autoAck: true,
+                    consumer: consumer);
 
-    public Task StartAsync(CancellationToken cancellationToken)
-    {
-      // TODO: Wrap in a loop, with try-catch, with retry logic
-      this.Run();
       return Task.CompletedTask;
     }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-      this.channel.Dispose();
-      this.connection.Dispose();
-      return Task.CompletedTask;
-    }
-
-    // Publish a received  message with "reply:" prefix
     private void OnMessageReceived(object model, BasicDeliverEventArgs args)
     {
       var body = args.Body.ToArray();
       var message = Encoding.UTF8.GetString(body);
-      Console.WriteLine(" [x] Received {0}", message);
+      _logger.LogInformation(" [x] Received {0}", message);
 
-      int dots = message.Split('.').Length - 1;
-
-      // Publish a response
-      string outMessage = "reply:" + message;
-      body = Encoding.UTF8.GetBytes(outMessage);
-
-      this.channel.BasicPublish(exchange: "exchange",
-                           routingKey: "out",
-                           basicProperties: this.channel.CreateBasicProperties(),
-                           body: body);
-      Console.WriteLine(" [x] Sent {0}", outMessage);
-
-      Console.WriteLine(" [x] Done");
-      this.channel.BasicAck(deliveryTag: args.DeliveryTag, multiple: false);
+      HandleMessage(message);
     }
 
+    private void HandleMessage(string message)
+    {
+      _logger.LogInformation($"Handling Message: {message}");
+    }
+
+    public override void Dispose()
+    {
+      _channel.Close();
+      _channel.Dispose();
+      _connection.Close();
+      _connection.Dispose();
+      base.Dispose();
+    }
   }
 }

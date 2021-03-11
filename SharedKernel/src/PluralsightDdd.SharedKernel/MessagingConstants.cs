@@ -15,6 +15,12 @@
       public const string FRONTDESK_VETCLINICPUBLIC_EXCHANGE = "frontdesk-vetclinicpublic";
     }
 
+    public static class NetworkConfig
+    {
+      public const int DEFAULT_PORT = 5672;
+      public const string DEFAULT_VIRTUAL_HOST = "/";
+    }
+
     public static class Queues
     {
       public const string FDCM_CLINICMANAGEMENT_IN = "fdcm-clinicmanagement-in";

@@ -4,9 +4,12 @@ using Autofac;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Interfaces;
 using ClinicManagement.Infrastructure.Data;
+using ClinicManagement.Infrastructure.Messaging;
 using MediatR;
 using MediatR.Pipeline;
+using Microsoft.Extensions.ObjectPool;
 using PluralsightDdd.SharedKernel.Interfaces;
+using RabbitMQ.Client;
 using Module = Autofac.Module;
 
 namespace ClinicManagement.Infrastructure
@@ -79,6 +82,17 @@ namespace ClinicManagement.Infrastructure
           .InstancePerLifetimeScope();
 
       builder.RegisterType<AppDbContextSeed>().InstancePerLifetimeScope();
+
+      // register RabbitMQ types
+      builder.RegisterType<RabbitMessagePublisher>()
+        .As<IMessagePublisher>()
+        .SingleInstance();
+      builder.RegisterType<DefaultObjectPoolProvider>()
+        .As<ObjectPoolProvider>()
+        .SingleInstance();
+      builder.RegisterType<RabbitModelPooledObjectPolicy>()
+        .As<IPooledObjectPolicy<IModel>>()
+        .SingleInstance();
     }
 
     private void RegisterDevelopmentOnlyDependencies(ContainerBuilder builder)
