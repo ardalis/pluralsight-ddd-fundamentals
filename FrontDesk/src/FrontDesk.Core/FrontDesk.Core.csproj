@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Aggregates\" />
+    <Folder Include="SyncedAggregates\" />
   </ItemGroup>
 
 </Project>

@@ -10,7 +10,7 @@ namespace BlazorShared.Models.Appointment
     public Guid ScheduleId { get; set; }
     public string Title { get; set; }
     public int RoomId { get; set; }
-    public int? DoctorId { get; set; }
+    public int DoctorId { get; set; }
     public int AppointmentTypeId { get; set; }
     public DateTime Start { get; set; }
 
@@ -19,7 +19,7 @@ namespace BlazorShared.Models.Appointment
       return new UpdateAppointmentRequest()
       {
         Id = appointmentDto.AppointmentId,
-        DoctorId = (int)appointmentDto.DoctorId,
+        DoctorId = appointmentDto.DoctorId,
         Title = appointmentDto.Title,
         ScheduleId = appointmentDto.ScheduleId,
         RoomId = appointmentDto.RoomId,

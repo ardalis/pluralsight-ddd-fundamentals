@@ -22,8 +22,12 @@ namespace FrontDesk.Core.Aggregates
       MarkConflictingAppointments();
     }
 
-    private Schedule() // required for EF
+    public Schedule(Guid id,
+      int clinicId)
     {
+      Id = id;
+      ClinicId = clinicId;
+      MarkConflictingAppointments();
     }
 
     public int ClinicId { get; private set; }
@@ -34,27 +38,14 @@ namespace FrontDesk.Core.Aggregates
     private List<Appointment> _appointments = new List<Appointment>();
     public IEnumerable<Appointment> Appointments => _appointments.AsReadOnly();
 
-    //public IEnumerable<Appointment> Appointments
-    //{
-    //  get
-    //  {
-    //    return _appointments.AsEnumerable();
-    //  }
-    //  private set
-    //  {
-    //    _appointments = (List<Appointment>)value;
-    //    MarkConflictingAppointments();
-    //  }
-    //}
-
     public Appointment AddNewAppointment(Appointment appointment)
     {
-      if (_appointments.Any(a => a.Id == appointment.Id))
+      if (appointment.Id != Guid.Empty &&
+        _appointments.Any(a => a.Id == appointment.Id))
       {
         throw new ArgumentException("Cannot add duplicate appointment to schedule.", nameof(appointment));
       }
 
-      //appointment.State = TrackingState.Added;
       _appointments.Add(appointment);
 
       MarkConflictingAppointments();
@@ -84,7 +75,7 @@ namespace FrontDesk.Core.Aggregates
         var potentiallyConflictingAppointments = _appointments
             .Where(a => a.PatientId == appointment.PatientId &&
             a.TimeRange.Overlaps(appointment.TimeRange) &&
-            a.Id != appointment.Id)
+            a != appointment)
             .ToList();
         //  && a.State != TrackingState.Deleted).ToList();
 

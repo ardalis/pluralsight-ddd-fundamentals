@@ -9,7 +9,7 @@ namespace BlazorShared.Models.Appointment
     public Guid AppointmentId { get; set; }
     public Guid ScheduleId { get; set; }
     public int RoomId { get; set; }
-    public int? DoctorId { get; set; }
+    public int DoctorId { get; set; }
     public int ClientId { get; set; }
     public int PatientId { get; set; }
     public string PatientName { get; set; }

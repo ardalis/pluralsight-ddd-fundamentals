@@ -5,7 +5,7 @@ using Xunit;
 
 namespace UnitTests.Core.AggregatesEntities.AppointmentTests
 {
-  public class Appointment_UpdateTime
+  public class Appointment_UpdateStartTime
   {
     private readonly DateTime _startTime = new DateTime(2021, 01, 01, 10, 00, 00);
     private readonly DateTime _endTime = new DateTime(2021, 01, 01, 12, 00, 00);
@@ -20,16 +20,16 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
       const int appointmentTypeId = 4;
       const int doctorId = 5;
       const string title = "Title Test";
+      var dateTimeRange = new DateTimeRange(_startTime, _endTime);
 
-      var appointment =
-        Appointment.Create(scheduleId, clientId, patientId, roomId, _startTime, _endTime, appointmentTypeId, doctorId, title);
+      var appointment = new Appointment(appointmentTypeId, scheduleId, clientId, doctorId, patientId, roomId, dateTimeRange, title, null);
 
-      var newEndTime = new DateTime(2021, 01, 01, 11, 00, 00);
-      var range = new DateTimeRange(_startTime, newEndTime);
+      var newStartTime = new DateTime(2021, 01, 01, 11, 00, 00);
 
-      appointment.UpdateTime(range);
+      appointment.UpdateStartTime(newStartTime);
 
-      Assert.Equal(range.DurationInMinutes(), appointment.TimeRange.DurationInMinutes());
+      Assert.Equal(dateTimeRange.DurationInMinutes(), appointment.TimeRange.DurationInMinutes());
+      Assert.Equal(newStartTime, appointment.TimeRange.Start);
     }
   }
 }

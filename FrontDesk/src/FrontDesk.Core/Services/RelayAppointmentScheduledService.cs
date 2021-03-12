@@ -40,8 +40,8 @@ namespace FrontDesk.Core.Services
       var appt = appointmentScheduledEvent.AppointmentScheduled;
 
       // if this is slow these can be parallelized or cached. MEASURE before optimizing.
-      var doctor = await _doctorRepository.GetByIdAsync(appt.DoctorId ?? 0);
-      if (doctor == null) throw new DoctorNotFoundException(appt.DoctorId ?? 0);
+      var doctor = await _doctorRepository.GetByIdAsync(appt.DoctorId);
+      if (doctor == null) throw new DoctorNotFoundException(appt.DoctorId);
 
       var clientWithPatientsSpec = new ClientByIdIncludePatientsSpecification(appt.ClientId);
       var client = await _clientRepository.GetBySpecAsync(clientWithPatientsSpec);

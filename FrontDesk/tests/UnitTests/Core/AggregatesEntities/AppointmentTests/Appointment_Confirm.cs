@@ -1,7 +1,9 @@
 ﻿using System;
 using AutoFixture;
+using AutoFixture.Kernel;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Events;
+using PluralsightDdd.SharedKernel;
 using Xunit;
 
 namespace UnitTests.Core.AggregatesEntities.AppointmentTests
@@ -10,6 +12,16 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
   {
     private readonly Fixture _fixture = new Fixture();
     private readonly DateTime _confirmedDate = new DateTime(2021, 01, 01);
+
+    public Appointment_Confirm()
+    {
+      _fixture.Customizations.Add(
+        new FilteringSpecimenBuilder(
+          new FixedBuilder(new DateTimeRange(DateTime.Today.AddHours(12),
+            DateTime.Today.AddHours(13))),
+          new ParameterSpecification(
+            typeof(DateTimeRange), "timeRange")));
+    }
 
     [Fact]
     public void ReconfirmResultDateNotChanged()

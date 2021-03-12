@@ -14,15 +14,17 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
     private readonly int _clinicId = 1;
 
     [Fact]
-    public async Task ThrowsGivenDuplicateAppointment()
+    public async Task ThrowsGivenDuplicateAppointmentWithNonEmptyId()
     {
-
+      // TODO: Implement Test
     }
+
     [Fact]
     public async Task MarksConflictingAppointments()
     {
-
+      // TODO: Implement Test
     }
+
     [Fact]
     public void AddsAppointmentScheduledEvent()
     {
@@ -50,6 +52,5 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
       Assert.False(lisaAppointment.IsPotentiallyConflicting);
       Assert.False(mimiAppointment.IsPotentiallyConflicting);
     }
-
   }
 }

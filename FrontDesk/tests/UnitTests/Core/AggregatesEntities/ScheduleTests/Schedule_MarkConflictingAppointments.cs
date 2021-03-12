@@ -56,8 +56,8 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
       var mimiAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, mimiTitle);
       schedule.AddNewAppointment(mimiAppointment);
 
-      Assert.True(lisaAppointment.IsPotentiallyConflicting);
-      Assert.True(mimiAppointment.IsPotentiallyConflicting);
+      Assert.True(lisaAppointment.IsPotentiallyConflicting, "lisa not conflicting");
+      Assert.True(mimiAppointment.IsPotentiallyConflicting, "mimi not conflicting");
     }
 
     [Fact]
@@ -79,8 +79,8 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
       var lisaAppointment2 = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId+1, _dateRange, lisaTitle2);
       schedule.AddNewAppointment(lisaAppointment2);
 
-      Assert.True(lisaAppointment.IsPotentiallyConflicting);
-      Assert.True(lisaAppointment2.IsPotentiallyConflicting);
+      Assert.True(lisaAppointment.IsPotentiallyConflicting, "lisa1 not conflicting");
+      Assert.True(lisaAppointment2.IsPotentiallyConflicting, "lisa2 not conflicting");
     }
   }
 }

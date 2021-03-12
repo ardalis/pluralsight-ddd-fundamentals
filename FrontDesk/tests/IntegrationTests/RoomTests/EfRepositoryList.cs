@@ -26,7 +26,7 @@ namespace IntegrationTests.RoomTests
       Assert.True(rooms?.Count > 0);
     }
 
-    private async Task<FrontDesk.Core.Aggregates.Room> AddRoom()
+    private async Task<Room> AddRoom()
     {
       var room = new RoomBuilder().Id(7).Build();
 

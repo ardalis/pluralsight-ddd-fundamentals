@@ -13,7 +13,6 @@ namespace ClinicManagement.Core.Aggregates
       Name = name;
     }
 
-
     public override string ToString()
     {
       return Name;

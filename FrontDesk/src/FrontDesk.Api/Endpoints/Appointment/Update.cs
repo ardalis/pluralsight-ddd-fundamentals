@@ -49,9 +49,9 @@ namespace FrontDesk.Api.AppointmentEndpoints
       var schedule = await _scheduleRepository.GetBySpecAsync(spec);
 
       var apptToUpdate = schedule.Appointments.FirstOrDefault(a => a.Id == request.Id);
-      apptToUpdate.UpdateAppointmentType(request.AppointmentTypeId);
+      apptToUpdate.UpdateAppointmentType(apptType);
       apptToUpdate.UpdateRoom(request.RoomId);
-      apptToUpdate.UpdateTime(new DateTimeRange(request.Start.ToLocalTime(), TimeSpan.FromMinutes(apptType.Duration)));
+      apptToUpdate.UpdateStartTime(request.Start.ToLocalTime());
       apptToUpdate.UpdateTitle(request.Title);
       apptToUpdate.UpdateDoctor(request.DoctorId);
 

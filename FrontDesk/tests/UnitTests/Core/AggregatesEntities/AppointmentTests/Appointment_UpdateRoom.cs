@@ -1,6 +1,9 @@
-﻿using AutoFixture;
+﻿using System;
+using AutoFixture;
+using AutoFixture.Kernel;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Events;
+using PluralsightDdd.SharedKernel;
 using Xunit;
 
 namespace UnitTests.Core.AggregatesEntities.AppointmentTests
@@ -8,6 +11,15 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
   public class Appointment_UpdateRoom
   {
     private readonly Fixture _fixture = new Fixture();
+    public Appointment_UpdateRoom()
+    {
+      _fixture.Customizations.Add(
+        new FilteringSpecimenBuilder(
+          new FixedBuilder(new DateTimeRange(DateTime.Today.AddHours(12),
+            DateTime.Today.AddHours(13))),
+          new ParameterSpecification(
+            typeof(DateTimeRange), "timeRange")));
+    }
 
     [Fact]
     public void DoesNothingGivenSameRoomId()
