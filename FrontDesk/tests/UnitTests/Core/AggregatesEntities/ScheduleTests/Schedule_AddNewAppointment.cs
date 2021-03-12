@@ -10,7 +10,7 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
   public class Schedule_AddNewAppointment
   {
     private readonly Guid _scheduleId = Guid.Parse("4a17e702-c20e-4b87-b95b-f915c5a794f7");
-    private readonly DateTimeRange _dateRange;
+    private readonly DateTimeRange _dateRange = new DateTimeRange(DateTime.Today, DateTime.Today.AddDays(1));
     private readonly int _clinicId = 1;
 
     [Fact]

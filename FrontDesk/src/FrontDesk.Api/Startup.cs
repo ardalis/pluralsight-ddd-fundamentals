@@ -118,6 +118,7 @@ namespace FrontDesk.Api
       if (messagingSettings.Enabled)
       {
         services.AddHostedService<ClinicManagementRabbitMqService>();
+        services.AddHostedService<VetClinicPublicRabbitMqService>();
       }
     }
 

@@ -10,6 +10,7 @@ using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -51,8 +52,9 @@ namespace FrontDesk.Api.AppointmentEndpoints
 
       var appointmentType = await _appointmentTypeRepository.GetByIdAsync(request.AppointmentTypeId);
       var appointmentStart = request.DateOfAppointment.ToLocalTime();
+      var timeRange = new DateTimeRange(appointmentStart, TimeSpan.FromMinutes(appointmentType.Duration));
 
-      var newAppointment = Appointment.Create(request.ScheduleId, request.ClientId, request.PatientId, request.RoomId, appointmentStart, appointmentStart.AddMinutes(appointmentType.Duration), request.AppointmentTypeId, request.SelectedDoctor, request.Details);
+      var newAppointment = new Appointment(request.AppointmentTypeId, request.ScheduleId, request.ClientId, request.SelectedDoctor, request.PatientId, request.RoomId, timeRange, request.Details);
 
       schedule.AddNewAppointment(newAppointment);
 

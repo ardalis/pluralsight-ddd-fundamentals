@@ -35,7 +35,7 @@ namespace FrontDesk.Core.Aggregates
     // not persisted
     [NotMapped]
     public virtual DateTimeRange DateRange { get; private set; }
-    private List<Appointment> _appointments = new List<Appointment>();
+    private readonly List<Appointment> _appointments = new List<Appointment>();
     public IEnumerable<Appointment> Appointments => _appointments.AsReadOnly();
 
     public Appointment AddNewAppointment(Appointment appointment)
@@ -57,11 +57,12 @@ namespace FrontDesk.Core.Aggregates
 
     public void DeleteAppointment(Appointment appointment)
     {
-      // mark the appointment for deletion by the repository
-      var appointmentToDelete = Appointments?.Where(a => a.Id == appointment.Id).FirstOrDefault();
+      var appointmentToDelete = _appointments
+                                .Where(a => a.Id == appointment.Id)
+                                .FirstOrDefault();
+
       if (appointmentToDelete != null)
       {
-        //appointmentToDelete.State = TrackingState.Deleted;
         _appointments.Remove(appointmentToDelete);
       }
 

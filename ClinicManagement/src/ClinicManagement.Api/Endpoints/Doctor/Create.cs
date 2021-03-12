@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Doctor;
+using ClinicManagement.Api.ApplicationEvents;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -45,27 +46,13 @@ namespace ClinicManagement.Api.DoctorEndpoints
       var dto = _mapper.Map<DoctorDto>(toAdd);
       response.Doctor = dto;
 
+      // Note: These messages could be triggered from the Repository or DbContext events
+      // In the DbContext you could look for entities marked with an interface saying they needed
+      // to be synchronized via cross-domain events and publish the appropriate message.
       var appEvent = new EntityCreatedEvent(_mapper.Map<NamedEntity>(toAdd));
       _messagePublisher.Publish(appEvent);
 
       return Ok(response);
     }
-  }
-
-  public class EntityCreatedEvent : IApplicationEvent
-  {
-    public string EventType => "Doctor-Created";
-    public NamedEntity Entity { get; set; }
-
-    public EntityCreatedEvent(NamedEntity entity)
-    {
-      Entity = entity;
-    }
-  }
-
-  public class NamedEntity
-  {
-    public int Id { get; set; }
-    public string Name { get; set; }
   }
 }

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.ObjectPool;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Core.DependencyInjection;
 using VetClinicPublic.Web.Interfaces;
 using VetClinicPublic.Web.Services;
@@ -22,6 +24,9 @@ namespace VetClinicPublic
     {
       services.AddControllersWithViews();
       services.AddSingleton<ISendConfirmationEmails, SmtpConfirmationEmailSender>();
+      services.AddSingleton<IMessagePublisher, RabbitMessagePublisher>();
+      services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
+      services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
 
       // https://github.com/AntonyVorontsov/RabbitMQ.Client.Core.DependencyInjection/tree/master/examples/Examples.AdvancedConfiguration
       var rabbitMqConsumerSection = Configuration.GetSection("RabbitMqConsumer");

@@ -114,19 +114,5 @@ namespace FrontDesk.Core.Aggregates
       var appointmentConfirmedEvent = new AppointmentConfirmedEvent(this);
       Events.Add(appointmentConfirmedEvent);
     }
-
-    // Factory method for creation
-    public static Appointment Create(Guid scheduleId,
-        int clientId, int patientId,
-        int roomId, DateTime startTime, DateTime endTime,
-        int appointmentTypeId, int doctorId, string title)
-    {
-      var appt = new Appointment(appointmentTypeId, scheduleId, clientId, doctorId, patientId, roomId, new DateTimeRange(startTime, endTime), title, null);
-
-      var appointmentScheduledEvent = new AppointmentScheduledEvent(appt);
-      appt.Events.Add(appointmentScheduledEvent);
-
-      return appt;
-    }
   }
 }

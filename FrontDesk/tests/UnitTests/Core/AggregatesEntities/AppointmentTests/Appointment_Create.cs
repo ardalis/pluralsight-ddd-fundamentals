@@ -1,5 +1,6 @@
 ﻿using System;
 using FrontDesk.Core.Aggregates;
+using PluralsightDdd.SharedKernel;
 using Xunit;
 
 namespace UnitTests.Core.AggregatesEntities.AppointmentTests
@@ -8,6 +9,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
   {
     private readonly DateTime _startTime = new DateTime(2021, 01, 01, 10, 00, 00);
     private readonly DateTime _endTime;
+    private readonly DateTimeRange _range;
     private readonly Guid _scheduleId = Guid.NewGuid();
     private readonly int _testClientId = 1;
     private readonly int _testPatientId = 2;
@@ -19,12 +21,13 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     public Appointment_Create()
     {
       _endTime = _startTime.AddHours(3);
+      _range = new DateTimeRange(_startTime, _endTime);
     }
 
     [Fact]
     public void CreateSuccess()
     {
-      var appointment = Appointment.Create(_scheduleId, _testClientId, _testPatientId, _testRoomId, _startTime, _endTime, _testAppointmentTypeId, _testDoctorId, _testTitle);
+      var appointment = new Appointment(_testAppointmentTypeId, _scheduleId, _testClientId, _testDoctorId, _testPatientId, _testRoomId, _range, _testTitle);
       const int threeHours = 3 * 60;
 
       Assert.Null(appointment.DateTimeConfirmed);
@@ -38,104 +41,60 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
       Assert.Equal(_testTitle, appointment.Title);
     }
 
-    [Fact]
-    public void ThrowExceptionZeroClientId()
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void ThrowsExceptionGivenInvalidClientId(int invalidClientId)
     {
-      const int zeroClientId = 0;
-
-      void Action() => Appointment.Create(_scheduleId, zeroClientId, _testPatientId, _testRoomId, _startTime, _endTime, _testAppointmentTypeId, _testDoctorId, _testTitle);
+      void Action() => new Appointment(_testAppointmentTypeId, _scheduleId, invalidClientId, _testDoctorId, _testPatientId, _testRoomId, _range, _testTitle);
 
       Assert.Throws<ArgumentException>(Action);
     }
 
-    [Fact]
-    public void ThrowExceptionNegativeClientId()
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void ThrowsExceptionGivenInvalidPatientId(int invalidPatientId)
     {
-      const int negativeClientId = -1;
-
-      void Action() => Appointment.Create(_scheduleId, negativeClientId, _testPatientId, _testRoomId, _startTime, _endTime, _testAppointmentTypeId, _testDoctorId, _testTitle);
+      void Action() => new Appointment(_testAppointmentTypeId, _scheduleId, _testClientId, _testDoctorId, invalidPatientId, _testRoomId, _range, _testTitle);
 
       Assert.Throws<ArgumentException>(Action);
     }
 
-    [Fact]
-    public void ThrowExceptionZeroPatientId()
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void ThrowsExceptionGivenInvalidRoomId(int invalidRoomId)
     {
-      const int zeroPatientId = 0;
-
-      void Action() => Appointment.Create(_scheduleId, _testClientId, zeroPatientId, _testRoomId, _startTime, _endTime, _testAppointmentTypeId, _testDoctorId, _testTitle);
+      void Action() => new Appointment(_testAppointmentTypeId, _scheduleId, _testClientId, _testDoctorId, _testPatientId, invalidRoomId, _range, _testTitle);
 
       Assert.Throws<ArgumentException>(Action);
     }
 
-    [Fact]
-    public void ThrowExceptionNegativePatientId()
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void ThrowsExceptionInvalidAppointmentTypeId(int invalidAppointmentTypeId)
     {
-      const int negativePatientId = -1;
-
-      void Action() => Appointment.Create(_scheduleId, _testClientId, negativePatientId, _testRoomId, _startTime, _endTime, _testAppointmentTypeId, _testDoctorId, _testTitle);
+      void Action() => new Appointment(invalidAppointmentTypeId, _scheduleId, _testClientId, _testDoctorId, _testPatientId, _testRoomId, _range, _testTitle);
 
       Assert.Throws<ArgumentException>(Action);
     }
 
-    [Fact]
-    public void ThrowExceptionZeroRoomId()
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    public void ThrowsExceptionGivenInvalidTitle(string invalidTitle)
     {
-      const int zeroRoomId = 0;
+      void Action() => new Appointment(_testAppointmentTypeId, _scheduleId, _testClientId, _testDoctorId, _testPatientId, _testRoomId, _range, invalidTitle);
 
-      void Action() => Appointment.Create(_scheduleId, _testClientId, _testPatientId, zeroRoomId, _startTime, _endTime, _testAppointmentTypeId, _testDoctorId, _testTitle);
-
-      Assert.Throws<ArgumentException>(Action);
-    }
-
-    [Fact]
-    public void ThrowExceptionNegativeRoomId()
-    {
-      const int negativeRoomId = -1;
-
-      void Action() => Appointment.Create(_scheduleId, _testClientId, _testPatientId, negativeRoomId, _startTime, _endTime, _testAppointmentTypeId, _testDoctorId, _testTitle);
-
-      Assert.Throws<ArgumentException>(Action);
-    }
-
-    [Fact]
-    public void ThrowExceptionZeroAppointmentTypeId()
-    {
-      const int zeroAppointmentTypeId = 0;
-
-      void Action() => Appointment.Create(_scheduleId, _testClientId, _testPatientId, _testRoomId, _startTime, _endTime, zeroAppointmentTypeId, _testDoctorId, _testTitle);
-
-      Assert.Throws<ArgumentException>(Action);
-    }
-
-    [Fact]
-    public void ThrowExceptionNegativeAppointmentTypeId()
-    {
-      const int negativeAppointmentTypeId = -1;
-
-      void Action() => Appointment.Create(_scheduleId, _testClientId, _testPatientId, _testRoomId, _startTime, _endTime, negativeAppointmentTypeId, _testDoctorId, _testTitle);
-
-      Assert.Throws<ArgumentException>(Action);
-    }
-
-    [Fact]
-    public void ThrowExceptionNullTitle()
-    {
-      const string nullTitle = null;
-
-      void Action() => Appointment.Create(_scheduleId, _testClientId, _testPatientId, _testRoomId, _startTime, _endTime, _testAppointmentTypeId, _testDoctorId, nullTitle);
-
-      Assert.Throws<ArgumentNullException>(Action);
-    }
-
-    [Fact]
-    public void ThrowExceptionEmptyTitle()
-    {
-      const string emptyTitle = "";
-
-      void Action() => Appointment.Create(_scheduleId, _testClientId, _testPatientId, _testRoomId, _startTime, _endTime, _testAppointmentTypeId, _testDoctorId, emptyTitle);
-
-      Assert.Throws<ArgumentException>(Action);
+      if (invalidTitle == null)
+      {
+        Assert.Throws<ArgumentNullException>(Action);
+      } else
+      {
+        Assert.Throws<ArgumentException>(Action);
+      }
     }
   }
 }
