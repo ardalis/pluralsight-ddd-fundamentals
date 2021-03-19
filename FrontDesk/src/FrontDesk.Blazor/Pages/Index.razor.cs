@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using BlazorShared;
@@ -58,8 +59,7 @@ namespace FrontDesk.Blazor.Pages
     private List<AppointmentTypeDto> AppointmentTypes = new List<AppointmentTypeDto>();
     private List<ClientDto> Clients = new List<ClientDto>();
     private List<RoomDto> Rooms = new List<RoomDto>();
-    private List<PatientDto> Patients = new List<PatientDto>();
-    private List<PatientDto> ClientPatients => Patients.Where(p => p.ClientId == ClientId).ToList();
+    private ObservableCollection<PatientDto> Patients = new ObservableCollection<PatientDto>();
 
     private DateTime StartDate { get; set; } = new DateTime(2014, 6, 9, 7, 0, 0);
     private SchedulerView CurrView { get; set; } = SchedulerView.Week;
@@ -114,8 +114,9 @@ namespace FrontDesk.Blazor.Pages
       Rooms = await RoomService.ListAsync();
 
       // Patients belong to Clients - This should be driven by the selected client
-      Patients = await PatientService.ListAsync(ClientId);
-      Patient = Patients.FirstOrDefault(p => p.PatientId == PatientId);
+      await GetClientPatientsAsync();
+      //Patients = await PatientService.ListAsync(ClientId);
+      //Patient = Patients.FirstOrDefault(p => p.PatientId == PatientId);
 
       Today = await ConfigurationService.ReadAsync();
       StartDate = UpdateDateToToday(StartDate);
@@ -129,6 +130,18 @@ namespace FrontDesk.Blazor.Pages
       await AddPatientImages();
 
       await InitSignalR();
+    }
+
+    protected void ClientChanged(object userInput)
+    {
+      ClientId = (int)userInput;
+      GetClientPatientsAsync().GetAwaiter().GetResult();
+    }
+
+    private async Task GetClientPatientsAsync()
+    {
+      Patients = new ObservableCollection<PatientDto>(await PatientService.ListAsync(ClientId));
+      Patient = Patients.FirstOrDefault(p => p.PatientId == PatientId);
     }
 
     private Task InitSignalR()
@@ -202,13 +215,13 @@ namespace FrontDesk.Blazor.Pages
           continue;
         }
 
-        var imgeData = await FileService.ReadPicture($"{patient.Name}.jpg");
-        if (string.IsNullOrEmpty(imgeData))
+        var imgData = await FileService.ReadPicture($"{patient.Name.ToLower()}.jpg");
+        if (string.IsNullOrEmpty(imgData))
         {
           continue;
         }
 
-        patient.ImageData = $"data:image/png;base64, {imgeData}";
+        patient.ImageData = $"data:image/png;base64, {imgData}";
       }
     }
 

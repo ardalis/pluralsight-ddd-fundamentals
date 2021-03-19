@@ -8,10 +8,11 @@
         Client:<br />
         <TelerikComboBox Filterable="true"
                          ClearButton="false"
-                         @bind-Value=@ClientId
+                         @*@bind-Value=@ClientId*@
                          Data="@Clients"
                          ValueField="@nameof(ClientDto.ClientId)"
-                         TextField="@nameof(ClientDto.FullName)">
+                         TextField="@nameof(ClientDto.FullName)"
+                         ValueChanged="@( (int v) => ClientChanged(v) )">
         </TelerikComboBox>
     </label>
 </div>
@@ -22,7 +23,7 @@
                          ClearButton="false"
                          Value="@PatientId"
                          ValueChanged="@( (int v) => PatientChanged(v) )"
-                         Data="@ClientPatients"
+                         Data="@Patients"
                          ValueField="@nameof(PatientDto.PatientId)"
                          TextField="@nameof(PatientDto.Name)">
             <ItemTemplate>

@@ -211,65 +211,14 @@ namespace FrontDesk.Infrastructure.Data
 
       var clientSmith = (CreateClientWithPatient("Steve Smith", "Steve", "Mr.", drSmith.Id, MALE_SEX, "Darwin", "Dog",
         "Poodle"));
-      clientSmith.Patients.Add(new Patient(1, "Rumor", FEMALE_SEX, new AnimalType("Cat", "Alley"), drWho.Id));
+      clientSmith.Patients.Add(new Patient(1, "Arya", FEMALE_SEX, new AnimalType("Cat", "Feral"), drWho.Id));
+      clientSmith.Patients.Add(new Patient(1, "Rosie", FEMALE_SEX, new AnimalType("Dog", "Golden Retriever"), drWho.Id));
 
       clientGraphs.Add(clientSmith);
 
       clientGraphs.Add(CreateClientWithPatient("Julia Lerman", "Julie", "Mrs.", drMcDreamy.Id, MALE_SEX, "Sampson", "Dog", "Newfoundland"));
 
- //     clientGraphs.Add(CreateClientWithPatient("Wes McClure", "Wes", "Mr", drMcDreamy.Id, FEMALE_SEX, "Pax", "Dog", "Jack Russell"));
- //     clientGraphs.Add(CreateClientWithPatient("Andrew Mallett", "Andrew", "Mr.", drSmith.Id, MALE_SEX, "Barney",
- //       "Dog", "Corgi"));
- //     clientGraphs.Add(CreateClientWithPatient("Brian Lagunas", "Brian", "Mr.", drWho.Id, MALE_SEX, "Rocky", "Dog",
- //       "Italian Greyhound"));
- //     clientGraphs.Add(CreateClientWithPatient("Corey Haines", "Corey", "Mr.", drMcDreamy.Id, FEMALE_SEX, "Zak",
- //       "Cat", "Mixed"));
- //     clientGraphs.Add(CreateClientWithPatient("Reindert-Jan Ekker", "Reindert", "Mr.", drSmith.Id, FEMALE_SEX,
- //       "Tinkelbel", "Cat", "Mixed"));
- //     clientGraphs.Add(CreateClientWithPatient("Patrick Hynds", "Patrick", "Mr.", drMcDreamy.Id, MALE_SEX, "Anubis", "Dog",
- //         "Doberman"));
- //     clientGraphs.Add(CreateClientWithPatient("Lars Klint", "Lars", "Mr.", drMcDreamy.Id, MALE_SEX, "Boots", "Cat",
- //       "Tabby"));
- //     clientGraphs.Add(CreateClientWithPatient("Joe Eames", "Joe", "Mr.", drMcDreamy.Id, MALE_SEX, "Corde", "Dog",
- //       "Mastiff"));
- //     clientGraphs.Add(CreateClientWithPatient("Joe Kunk", "Joe", "Mr.", drSmith.Id, MALE_SEX, "Wedgie", "Reptile",
- //       "Python"));
- //     clientGraphs.Add(CreateClientWithPatient("Ross Bagurdes", "Ross", "Mr.", drWho.Id, MALE_SEX, "Indiana Jones",
- //       "Cat", "Tabby"));
- //     clientGraphs.Add(CreateClientWithPatient("Patrick Neborg", "Patrick", "Mr.", drWho.Id, FEMALE_SEX, "Sugar",
- //       "Dog", "Maltese"));
- //     clientGraphs.Add(CreateClientWithPatient("David Mann", "David", "Mr.", drWho.Id, FEMALE_SEX, "Piper",
- //    "Dog", "Mix"));
- //     clientGraphs.Add(CreateClientWithPatient("Peter Mourfield", "Peter", "Mr.", drWho.Id, FEMALE_SEX, "Finley",
- //  "Dog", "Dachshund"));
- //     clientGraphs.Add(CreateClientWithPatient("Keith Harvey", "Keith", "Mr.", drSmith.Id, FEMALE_SEX, "Bella",
- //"Dog", "Terrier"));
- //     var clientMcConnell = CreateClientWithPatient("Andrew Connell", "Andrew", "Mr.", drWho.Id, FEMALE_SEX, "Luabelle", "Dog", "Labrador");
- //     clientMcConnell.Patients.Add(new Patient(1, "Sadie", FEMALE_SEX, new AnimalType("Dog", "Mix"), drWho.Id));
- //     clientGraphs.Add(clientMcConnell);
- //     var clientYack = (CreateClientWithPatient("Julie Yack", "Julie", "Ms.", drSmith.Id, MALE_SEX, "Ruske", "Dog",
- //      "Siberian Husky"));
- //     clientYack.Patients.Add(new Patient(1, "Ginger", FEMALE_SEX, new AnimalType("Dog", "Shih Tzu"), drSmith.Id));
- //     clientYack.Patients.Add(new Patient(1, "Lizzie", MALE_SEX, new AnimalType("Lizzie", "Green"), drSmith.Id));
- //     clientGraphs.Add(clientYack);
 
- //     var clientLibery =
- //       CreateClientWithPatient("Jesse Liberty", "Jesse", "Mr.", drMcDreamy.Id, MALE_SEX, "Charlie", "Dog", "Mixed");
- //     clientLibery.Patients.Add(new Patient(1, "Allegra", FEMALE_SEX, new AnimalType("Cat", "Calico"), drSmith.Id));
- //     clientLibery.Patients.Add(new Patient(1, "Misty", FEMALE_SEX, new AnimalType("Cat", "Tortoiseshell"), drSmith.Id));
- //     clientGraphs.Add(clientLibery);
- //     var clientYoung = CreateClientWithPatient("Tyler Young", "Tyler", "Mr.", drMcDreamy.Id, MALE_SEX, "Willie", "Dog", "Daschaund");
- //     clientLibery.Patients.Add(new Patient(1, "JoeFish", MALE_SEX, new AnimalType("Fish", "Beta"), drSmith.Id));
- //     clientLibery.Patients.Add(new Patient(1, "Fabian", MALE_SEX, new AnimalType("Cat", "Mixed"), drMcDreamy.Id));
- //     clientGraphs.Add(clientYoung);
- //     var clientPerry =
- //       (CreateClientWithPatient("Michael Perry", "Michael", "Mr.", drMcDreamy.Id, FEMALE_SEX, "Callie", "Cat",
- //         "Calico"));
-
- //     clientLibery.Patients.Add(new Patient(1, "Radar", MALE_SEX, new AnimalType("Dog", "Pug"), drMcDreamy.Id));
- //     clientLibery.Patients.Add(new Patient(1, "Tinkerbell", FEMALE_SEX, new AnimalType("Dog", "Chihuahua"), drMcDreamy.Id));
-
- //     clientGraphs.Add(clientPerry);
 
       return clientGraphs;
     }
@@ -295,26 +244,45 @@ namespace FrontDesk.Infrastructure.Data
       int diagnosticVisit = 2;
       int room1 = 1;
       int room2 = 2;
+      int room3 = 3;
       var appointmentList = new List<Appointment>
               {
                 new Appointment(
-                    diagnosticVisit,
+                    wellnessVisit,
                     scheduleId,
                     _steve.Id,
                     DrSmith.Id,
                     _darwin.Id,
                     room1,
-                    new DateTimeRange(_testDate.AddHours(10), TimeSpan.FromHours(1)),
+                    new DateTimeRange(_testDate.AddHours(10), TimeSpan.FromMinutes(30)),
                     "(WE) Darwin - Steve Smith"),
-                //new Appointment(
-                //    wellnessVisit,
-                //    scheduleId,
-                //    _julie.Id,
-                //    DrWho.Id,
-                //    _sampson.Id,
-                //    room2,
-                //    new DateTimeRange(_testDate.AddHours(11), TimeSpan.FromMinutes(30)),
-                //    "(DE) Sampson - Julie Lerman")
+                new Appointment(
+                    wellnessVisit,
+                    scheduleId,
+                    _steve.Id,
+                    DrSmith.Id,
+                    _steve.Patients[1].Id,
+                    room1,
+                    new DateTimeRange(_testDate.AddHours(10).AddMinutes(30), TimeSpan.FromMinutes(30)),
+                    "(WE) Arya - Steve Smith"),
+                new Appointment(
+                    wellnessVisit,
+                    scheduleId,
+                    _steve.Id,
+                    DrSmith.Id,
+                    _steve.Patients[2].Id,
+                    room1,
+                    new DateTimeRange(_testDate.AddHours(11), TimeSpan.FromMinutes(30)),
+                    "(WE) Rosie - Steve Smith"),
+                new Appointment(
+                    diagnosticVisit,
+                    scheduleId,
+                    _julie.Id,
+                    DrWho.Id,
+                    _sampson.Id,
+                    room2,
+                    new DateTimeRange(_testDate.AddHours(11), TimeSpan.FromMinutes(60)),
+                    "(DE) Sampson - Julie Lerman")
               };
 
       return appointmentList;
