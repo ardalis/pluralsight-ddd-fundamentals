@@ -16,3 +16,7 @@
 .appointment-inline {
     display: inline-block;
 }
+
+.patients-hidden {
+    visibility: hidden;
+}

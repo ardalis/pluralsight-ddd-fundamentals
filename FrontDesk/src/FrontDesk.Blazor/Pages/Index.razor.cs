@@ -14,13 +14,16 @@ using FrontDesk.Blazor.Shared.SchedulerComponent;
 using FrontDesk.Blazor.Shared.ToastComponent;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.SignalR.Client;
-using Telerik.Blazor;
+using Microsoft.Extensions.Logging;
 using Telerik.Blazor.Components;
 
 namespace FrontDesk.Blazor.Pages
 {
   public partial class Index
   {
+    [Inject]
+    ILogger<Index> Logger { get; set; }
+
     [Inject]
     AppointmentService AppointmentService { get; set; }
 
@@ -51,32 +54,26 @@ namespace FrontDesk.Blazor.Pages
     [Inject]
     SchedulerService SchedulerService { get; set; }
 
-
-
     private bool IsShowEdit = false;
     private bool IsLoaded = false;
     private List<string> Groups = new List<string>();
     private List<AppointmentTypeDto> AppointmentTypes = new List<AppointmentTypeDto>();
     private List<ClientDto> Clients = new List<ClientDto>();
     private List<RoomDto> Rooms = new List<RoomDto>();
-    private ObservableCollection<PatientDto> Patients = new ObservableCollection<PatientDto>();
-
-    private DateTime StartDate { get; set; } = new DateTime(2014, 6, 9, 7, 0, 0);
-    private SchedulerView CurrView { get; set; } = SchedulerView.Week;
-
-    private DateTime DayStart { get; set; } = new DateTime(2014, 6, 9, 7, 0, 0);
-    private DateTime DayEnd { get; set; } = new DateTime(2014, 6, 9, 18, 00, 0);
-    private DateTime WorkDayStart { get; set; } = new DateTime(2000, 1, 1, 7, 0, 0);
-    private DateTime WorkDayEnd { get; set; } = new DateTime(2000, 1, 1, 18, 0, 0);
+    private List<PatientDto> Patients = new List<PatientDto>();
 
     private bool CustomEditFormShown { get; set; }
     AppointmentDto CurrentAppointment { get; set; } // we will put here a copy of the appointment for editing
 
     private DateTime Today { get; set; } = new DateTime();
-    private int PatientId { get; set; } = 1;
-    private int ClientId { get; set; } = 1;
+    private DateTime StartDate { get; set; } = new DateTime(2014, 6, 9, 7, 0, 0);
+    private DateTime DayStart { get; set; } = new DateTime(2014, 6, 9, 7, 0, 0);
+    private DateTime DayEnd { get; set; } = new DateTime(2014, 6, 9, 18, 00, 0);
+
+    private int PatientId { get; set; } = 0;
+    private int ClientId { get; set; } = 0;
     private int RoomId { get; set; } = 1;
-    private PatientDto Patient { get; set; } = new PatientDto();
+    private PatientDto SelectedPatient { get; set; } = new PatientDto();
     private Guid ScheduleId
     {
       get
@@ -93,7 +90,7 @@ namespace FrontDesk.Blazor.Pages
     private bool CanMakeAppointment => IsRoomSelected && IsClientSelected && IsPatientSelected;
     private bool IsRoomSelected => RoomId > 0;
     private bool IsClientSelected => ClientId > 0;
-    private bool IsPatientSelected => RoomId > 0 && ClientId > 0 && PatientId > 0;
+    private bool IsPatientSelected => PatientId > 0;
 
     private HubConnection hubConnection;
     private string SignalRUrl => BaseUrlConfiguration.ApiBase.Replace("api/", string.Empty);
@@ -101,20 +98,16 @@ namespace FrontDesk.Blazor.Pages
     public bool IsConnected =>
         hubConnection.State == HubConnectionState.Connected;
 
-    public void Dispose()
-    {
-      _ = hubConnection.DisposeAsync();
-    }
-
     protected override async Task OnInitializedAsync()
     {
+      Logger.LogInformation("OnInitializedAsync()");
       SchedulerService.Appointments = await AppointmentService.ListAsync();
       AppointmentTypes = await AppointmentTypeService.ListAsync();
       Clients = await ClientService.ListAsync();
       Rooms = await RoomService.ListAsync();
 
       // Patients belong to Clients - This should be driven by the selected client
-      await GetClientPatientsAsync();
+      //await GetClientPatientsAsync();
       //Patients = await PatientService.ListAsync(ClientId);
       //Patient = Patients.FirstOrDefault(p => p.PatientId == PatientId);
 
@@ -127,22 +120,63 @@ namespace FrontDesk.Blazor.Pages
 
       IsLoaded = true;
 
-      await AddPatientImages();
-
       await InitSignalR();
     }
 
-    protected void ClientChanged(object userInput)
+    protected void ClientChanged(int? clientId)
     {
-      ClientId = (int)userInput;
+      if(clientId == null)
+      {
+        // reset UI
+        return;
+      }
+      ClientId = clientId.Value;
+      Logger.LogInformation($"Client changed: {ClientId}");
+
       GetClientPatientsAsync().GetAwaiter().GetResult();
     }
 
     private async Task GetClientPatientsAsync()
     {
-      Patients = new ObservableCollection<PatientDto>(await PatientService.ListAsync(ClientId));
-      Patient = Patients.FirstOrDefault(p => p.PatientId == PatientId);
+      Logger.LogInformation($"Getting patients for client id {ClientId}");
+
+      Patients.Clear();
+      Patients.AddRange(await PatientService.ListAsync(ClientId));
+      await AddPatientImages();
+      SelectedPatient = Patients.FirstOrDefault();
+      Logger.LogInformation($"Current patient: {SelectedPatient.Name} ({SelectedPatient.PatientId})");
     }
+
+    private async Task AddPatientImages()
+    {
+      foreach (var patient in Patients)
+      {
+        if (string.IsNullOrEmpty(patient.Name))
+        {
+          continue;
+        }
+
+        var imgData = await FileService.ReadPicture($"{patient.Name.ToLower()}.jpg");
+        if (string.IsNullOrEmpty(imgData))
+        {
+          continue;
+        }
+
+        patient.ImageData = $"data:image/png;base64, {imgData}";
+        Logger.LogInformation($"Loaded image data for {patient.Name}");
+      }
+    }
+
+    private void PatientChanged(int id)
+    {
+      PatientId = id;
+      if (PatientId > 0)
+      {
+        SelectedPatient = Patients.FirstOrDefault(p => p.PatientId == PatientId);
+      }
+    }
+
+
 
     private Task InitSignalR()
     {
@@ -206,31 +240,6 @@ namespace FrontDesk.Blazor.Pages
       SchedulerService.Appointments.Remove(item);
     }
 
-    private async Task AddPatientImages()
-    {
-      foreach (var patient in Patients)
-      {
-        if (string.IsNullOrEmpty(patient.Name))
-        {
-          continue;
-        }
-
-        var imgData = await FileService.ReadPicture($"{patient.Name.ToLower()}.jpg");
-        if (string.IsNullOrEmpty(imgData))
-        {
-          continue;
-        }
-
-        patient.ImageData = $"data:image/png;base64, {imgData}";
-      }
-    }
-
-    private void PatientChanged(int id)
-    {
-      PatientId = id;
-      Patient = Patients.FirstOrDefault(p => p.PatientId == PatientId);
-    }
-
     private DateTime UpdateDateToToday(DateTime date)
     {
       return new DateTime(Today.Year, Today.Month, Today.Day, date.Hour, date.Minute, date.Second);
@@ -241,5 +250,12 @@ namespace FrontDesk.Blazor.Pages
       CurrentAppointment = appointment;
       CustomEditFormShown = true;
     }
+
+    public void Dispose()
+    {
+      _ = hubConnection.DisposeAsync();
+    }
+
+
   }
 }
