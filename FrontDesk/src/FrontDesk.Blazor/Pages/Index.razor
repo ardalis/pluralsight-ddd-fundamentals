@@ -12,7 +12,7 @@
                          Value="@ClientId"
                          ValueField="@nameof(ClientDto.ClientId)"
                          TextField="@nameof(ClientDto.FullName)"
-                         ValueChanged="@( (int? v) => ClientChanged(v) )"
+                         OnChange="@(e => ClientChanged(e))"
                          Placeholder="Select a Client...">
         </TelerikComboBox>
     </label>
@@ -23,7 +23,7 @@
         <TelerikComboBox Filterable="true"
                          ClearButton="false"
                          Value="@PatientId"
-                         ValueChanged="@( (int v) => PatientChanged(v) )"
+                         OnChange="@PatientChanged"
                          Data="@Patients"
                          ValueField="@nameof(PatientDto.PatientId)"
                          TextField="@nameof(PatientDto.Name)"

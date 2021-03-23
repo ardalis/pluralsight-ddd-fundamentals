@@ -106,11 +106,6 @@ namespace FrontDesk.Blazor.Pages
       Clients = await ClientService.ListAsync();
       Rooms = await RoomService.ListAsync();
 
-      // Patients belong to Clients - This should be driven by the selected client
-      //await GetClientPatientsAsync();
-      //Patients = await PatientService.ListAsync(ClientId);
-      //Patient = Patients.FirstOrDefault(p => p.PatientId == PatientId);
-
       Today = await ConfigurationService.ReadAsync();
       StartDate = UpdateDateToToday(StartDate);
       DayStart = UpdateDateToToday(DayStart);
@@ -123,17 +118,18 @@ namespace FrontDesk.Blazor.Pages
       await InitSignalR();
     }
 
-    protected void ClientChanged(int? clientId)
+    protected async Task ClientChanged(object selectedClientId)
     {
-      if(clientId == null)
+      if(selectedClientId == null)
       {
         // reset UI
+        Patients = new List<PatientDto>();
         return;
       }
-      ClientId = clientId.Value;
+      ClientId = (int)selectedClientId;
       Logger.LogInformation($"Client changed: {ClientId}");
 
-      GetClientPatientsAsync().GetAwaiter().GetResult();
+      await GetClientPatientsAsync();
     }
 
     private async Task GetClientPatientsAsync()
@@ -141,8 +137,6 @@ namespace FrontDesk.Blazor.Pages
       Logger.LogInformation($"Getting patients for client id {ClientId}");
 
       Patients = await PatientService.ListAsync(ClientId);
-      //Patients.Clear();
-      //Patients.AddRange(await PatientService.ListAsync(ClientId));
       await AddPatientImages();
       SelectedPatient = Patients.FirstOrDefault();
       Logger.LogInformation($"Current patient: {SelectedPatient.Name} ({SelectedPatient.PatientId})");
@@ -168,16 +162,19 @@ namespace FrontDesk.Blazor.Pages
       }
     }
 
-    private void PatientChanged(int id)
+    private void PatientChanged(object id)
     {
-      PatientId = id;
+      if (id == null)
+      {
+        SelectedPatient = null;
+        return;
+      }
+      PatientId = (int)id;
       if (PatientId > 0)
       {
         SelectedPatient = Patients.FirstOrDefault(p => p.PatientId == PatientId);
       }
     }
-
-
 
     private Task InitSignalR()
     {
