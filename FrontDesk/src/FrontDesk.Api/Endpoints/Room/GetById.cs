@@ -14,10 +14,10 @@ namespace FrontDesk.Api.RoomEndpoints
     .WithRequest<GetByIdRoomRequest>
     .WithResponse<GetByIdRoomResponse>
   {
-    private readonly IRepository<Room> _repository;
+    private readonly IReadRepository<Room> _repository;
     private readonly IMapper _mapper;
 
-    public GetById(IRepository<Room> repository,
+    public GetById(IReadRepository<Room> repository,
       IMapper mapper)
     {
       _repository = repository;
