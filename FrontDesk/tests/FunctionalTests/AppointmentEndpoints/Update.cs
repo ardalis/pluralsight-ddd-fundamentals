@@ -35,7 +35,7 @@ namespace FunctionalTests.AppointmentEndpoints
     {
       var result = await _client.GetAndDeserialize<ListAppointmentResponse>(ListAppointmentRequest.Route, _outputHelper);
 
-      var firstAppt = result.Appointments.Single();
+      var firstAppt = result.Appointments.First();
 
       var jsonContent = GetUpdatedAppointmentJson(firstAppt);
 

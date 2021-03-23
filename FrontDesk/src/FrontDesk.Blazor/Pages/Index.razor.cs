@@ -140,8 +140,9 @@ namespace FrontDesk.Blazor.Pages
     {
       Logger.LogInformation($"Getting patients for client id {ClientId}");
 
-      Patients.Clear();
-      Patients.AddRange(await PatientService.ListAsync(ClientId));
+      Patients = await PatientService.ListAsync(ClientId);
+      //Patients.Clear();
+      //Patients.AddRange(await PatientService.ListAsync(ClientId));
       await AddPatientImages();
       SelectedPatient = Patients.FirstOrDefault();
       Logger.LogInformation($"Current patient: {SelectedPatient.Name} ({SelectedPatient.PatientId})");

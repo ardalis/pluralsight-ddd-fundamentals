@@ -26,7 +26,7 @@ namespace FunctionalTests.AppointmentEndpoints
     {
       var listResponse = await _client.GetAndDeserialize<ListAppointmentResponse>(ListAppointmentRequest.Route, _outputHelper);
 
-      var firstAppt = listResponse.Appointments.Single();
+      var firstAppt = listResponse.Appointments.First();
       _outputHelper.WriteLine(firstAppt.ToString());
 
       string route = GetByIdAppointmentRequest.Route.Replace("{appointmentId}", firstAppt.AppointmentId.ToString());

@@ -9,6 +9,7 @@
         <TelerikComboBox Filterable="true"
                          ClearButton="false"
                          Data="@Clients"
+                         Value="@ClientId"
                          ValueField="@nameof(ClientDto.ClientId)"
                          TextField="@nameof(ClientDto.FullName)"
                          ValueChanged="@( (int? v) => ClientChanged(v) )"

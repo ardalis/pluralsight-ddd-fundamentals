@@ -28,7 +28,7 @@ namespace FunctionalTests.AppointmentEndpoints
       // get existing appointment
       var result = await _client.GetAndDeserialize<ListAppointmentResponse>(ListAppointmentRequest.Route, _outputHelper);
 
-      var firstAppt = result.Appointments.Single();
+      var firstAppt = result.Appointments.First();
       _outputHelper.WriteLine(firstAppt.ToString());
 
       // delete it
