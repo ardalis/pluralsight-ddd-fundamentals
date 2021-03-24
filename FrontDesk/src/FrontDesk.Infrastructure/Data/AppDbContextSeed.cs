@@ -95,10 +95,7 @@ namespace FrontDesk.Infrastructure.Data
           _julie = _context.Clients.FirstOrDefault(c => c.FullName == "Julia Lerman");
           _darwin = _context.Patients.FirstOrDefault(p => p.Name == "Darwin");
           _sampson = _context.Patients.FirstOrDefault(p => p.Name == "Sampson");
-          var rooms = _context.Rooms.ToList();
-          var apptTypes = _context.AppointmentTypes.ToList();
-          await _context.Appointments.AddRangeAsync(
-              CreateAppointments(_scheduleId));
+          await _context.Appointments.AddRangeAsync(CreateAppointments(_scheduleId));
 
           await _context.SaveChangesAsync();
         }
@@ -218,7 +215,27 @@ namespace FrontDesk.Infrastructure.Data
 
       clientGraphs.Add(CreateClientWithPatient("Julia Lerman", "Julie", "Mrs.", drMcDreamy.Id, MALE_SEX, "Sampson", "Dog", "Newfoundland"));
 
+      clientGraphs.Add(CreateClientWithPatient("David Batten", "David", "Mr.", drWho.Id, MALE_SEX, "Max", "Dog", ""));
 
+      clientGraphs.Add(CreateClientWithPatient("Gill Cleeren", "Gill", "Mr.", drWho.Id, MALE_SEX, "Violet", "Dog", "Lhasa apso"));
+
+      clientGraphs.Add(CreateClientWithPatient("James Millar", "James", "Mr.", drSmith.Id, MALE_SEX, "Gusto", "Dog", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("John Elliott", "John", "Mr.", drSmith.Id, MALE_SEX, "Hugo", "Dog", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Katie Tabor", "Katie", "", drSmith.Id, FEMALE_SEX, "Athena", "Dog", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Kim Karnatz", "Kim", "", drSmith.Id, FEMALE_SEX, "Roxy", "Dog", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Leigh Bogardis", "Leigh", "", drSmith.Id, MALE_SEX, "Bokeh", "Cat", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Michael Jenkins", "", "", drSmith.Id, MALE_SEX, "BenFranklin", "Dog", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Patrick Neborg", "", "", drSmith.Id, MALE_SEX, "Sugar", "Dog", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Shelley Benhoff", "", "", drSmith.Id, MALE_SEX, "Mim", "Cat", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Steve Gordon", "", "", drSmith.Id, MALE_SEX, "Jasper", "Cat", ""));
 
       return clientGraphs;
     }
@@ -245,6 +262,7 @@ namespace FrontDesk.Infrastructure.Data
       int room1 = 1;
       int room2 = 2;
       int room3 = 3;
+      int room4 = 4;
       var appointmentList = new List<Appointment>
               {
                 new Appointment(
@@ -285,7 +303,35 @@ namespace FrontDesk.Infrastructure.Data
                     "(DE) Sampson - Julie Lerman")
               };
 
+      appointmentList.Add(CreateAppointment(scheduleId, "David Batten", "Max", room3, 10));
+      appointmentList.Add(CreateAppointment(scheduleId, "James Millar", "Gusto", room3, 11));
+      appointmentList.Add(CreateAppointment(scheduleId, "John Elliott", "Hugo", room3, 13));
+      appointmentList.Add(CreateAppointment(scheduleId, "Katie Tabor", "Athena", room3, 14));
+      appointmentList.Add(CreateAppointment(scheduleId, "Kim Karnatz", "Roxy", room3, 15));
+      appointmentList.Add(CreateAppointment(scheduleId, "Leigh Bogardis", "Bokeh", room3, 16));
+      appointmentList.Add(CreateAppointment(scheduleId, "Michael Jenkins", "BenFranklin", room4, 8));
+      appointmentList.Add(CreateAppointment(scheduleId, "Patrick Neborg", "Sugar", room4, 9));
+      appointmentList.Add(CreateAppointment(scheduleId, "Shelley Benhoff", "Mim", room4, 10));
+      appointmentList.Add(CreateAppointment(scheduleId, "Steve Gordon", "Jasper", room4, 11));
+      appointmentList.Add(CreateAppointment(scheduleId, "Gill Cleeren", "Violet", room4, 13));
+
       return appointmentList;
+    }
+
+    private Appointment CreateAppointment(Guid scheduleId, string clientName, string patientName, int roomId, int hour)
+    {
+      int diagnosticVisit = 2;
+      try
+      {
+        var client = _context.Clients.First(c => c.FullName == clientName);
+        var patient = _context.Patients.First(p => p.Name == patientName);
+        var appt = new Appointment(diagnosticVisit, scheduleId, client.Id, patient.PreferredDoctorId.Value, patient.Id, roomId, new DateTimeRange(_testDate.AddHours(hour), TimeSpan.FromMinutes(60)), $"(DE) {patientName} - {clientName}");
+        return appt;
+      }
+      catch (Exception ex)
+      {
+        throw new Exception($"Error creating appointment for {clientName}, {patientName}", ex);
+      }
     }
   }
 }
