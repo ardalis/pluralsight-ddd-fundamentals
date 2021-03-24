@@ -43,6 +43,11 @@ namespace FrontDesk.Api.PatientEndpoints
       if (client == null) return NotFound();
 
       response.Patients = _mapper.Map<List<PatientDto>>(client.Patients);
+      response.Patients.ForEach(p =>
+      {
+        p.ClientName = client.FullName;
+        p.ClientId = client.Id;
+      });
       response.Count = response.Patients.Count;
 
       return Ok(response);

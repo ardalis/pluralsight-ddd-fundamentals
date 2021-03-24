@@ -8,11 +8,15 @@ using BlazorShared.Models.Doctor;
 using BlazorShared.Models.Patient;
 using FrontDesk.Blazor.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
 
 namespace FrontDesk.Blazor.Pages
 {
   public partial class AppointmentEditor
   {
+    [Inject]
+    ILogger<AppointmentEditor> Logger { get; set; }
+
     [Inject]
     AppointmentTypeService AppointmentTypeService { get; set; }
 
@@ -84,18 +88,24 @@ namespace FrontDesk.Blazor.Pages
         Appointment.AppointmentTypeId = AppointmentTypes[0].AppointmentTypeId;
       }
 
+      // set appointment to current patient if not specified
+      if(string.IsNullOrEmpty(Appointment.PatientName))
+      {
+        Appointment.PatientName = Patient.Name;
+        Appointment.PatientId = Patient.PatientId;
+        Appointment.ClientId = Patient.ClientId;
+        Appointment.ClientName = Patient.ClientName;
+        Appointment.Title = $"(WE) {Appointment.PatientName} - {Appointment.ClientName}";
+        Logger.LogInformation("Setting new appointment up for " + Appointment.Title);
+      }
+
       await LoadPicture();
     }
 
     private async Task LoadPicture()
     {
-      if (string.IsNullOrEmpty(Appointment.PatientName))
-      {
-        return;
-      }
-
-      var imgeData = await FileService.ReadPicture($"{Appointment.PatientName}.jpg");
-      Picture = string.IsNullOrEmpty(imgeData) ? string.Empty : $"data:image/png;base64, {imgeData}";
+      var imageData = await FileService.ReadPicture($"{Appointment.PatientName}.jpg");
+      Picture = string.IsNullOrEmpty(imageData) ? string.Empty : $"data:image/png;base64, {imageData}";
     }
 
     private bool IsValid()
@@ -152,32 +162,6 @@ namespace FrontDesk.Blazor.Pages
       return OnAppointmentChanged.InvokeAsync(Appointment.Title);
     }
 
-    private void StartChanged(DateTime userChoice)
-    {
-      if (userChoice > GetHigherDate())
-      {
-        ShowErrorMessage = true;
-      }
-      else
-      {
-        Appointment.Start = userChoice;
-        ShowErrorMessage = false;
-      }
-    }
-
-    private void EndChanged(DateTime userChoice)
-    {
-      if (userChoice < GetLowerDate())
-      {
-        ShowErrorMessage = true;
-      }
-      else
-      {
-        Appointment.End = userChoice;
-        ShowErrorMessage = false;
-      }
-    }
-
     private DateTime GetLowerDate()
     {
       return Appointment.Start <= Appointment.End ? Appointment.Start.DateTime : Appointment.End.DateTime;
@@ -191,6 +175,7 @@ namespace FrontDesk.Blazor.Pages
     private void AppointmentTypeUpdated(ChangeEventArgs e)
     {
       Appointment.AppointmentTypeId = (int?)e.Value ?? 0;
+      Appointment.Title = "updated";
     }
   }
 }

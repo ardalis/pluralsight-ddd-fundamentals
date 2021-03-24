@@ -227,6 +227,8 @@ namespace FrontDesk.Blazor.Pages
       }
       else
       {
+        Logger.LogInformation($"Creating a new appointment for {SelectedPatient.Name}");
+
         CurrentAppointment = new AppointmentDto() { Start = args.Start, End = args.End, IsAllDay = args.IsAllDay };
       }
     }
@@ -253,7 +255,5 @@ namespace FrontDesk.Blazor.Pages
     {
       _ = hubConnection.DisposeAsync();
     }
-
-
   }
 }
