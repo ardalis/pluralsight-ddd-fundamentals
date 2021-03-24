@@ -89,6 +89,13 @@
             }
         }
 
+        function getPictureBase64(data, callback) {
+            var url = "https://localhost:5101/api/files/";
+            url = url + data['patientName'] + '.jpg';
+            var result = '';
+            $.getJSON(url, '', callback);
+        }
+
         function createColor(data, valueField) {
 
             if (data[lowerCasefirst(valueField)] == 1) {
@@ -346,7 +353,12 @@
     </script>
 
     <script id="event-template" type="text/x-kendo-template">
-        <div data-is-conflicted="#: isConflict #" data-is-confirmed="#: isConfirmed #" class="appointment-template" style="height: 100%; width: 110%; background-color: #:createColorForAppointment(data)#">#: title #</div>
+        <div data-is-conflicted="#: isConflict #" data-is-confirmed="#: isConfirmed #" class="appointment-template" style="height: 100%; width: 110%; background-color: #:createColorForAppointment(data)#">#: title #
+            <img src="#:getPictureBase64(data, function (callbackData) {
+                result = callbackData['dataBase64'];
+                return `data:image/png;base64,` + result;
+            })#" />
+        </div>
     </script>
 
 </body>
