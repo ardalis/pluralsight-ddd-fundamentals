@@ -162,20 +162,9 @@ namespace FrontDesk.Blazor.Pages
       return OnAppointmentChanged.InvokeAsync(Appointment.Title);
     }
 
-    private DateTime GetLowerDate()
-    {
-      return Appointment.Start <= Appointment.End ? Appointment.Start.DateTime : Appointment.End.DateTime;
-    }
-
-    private DateTime GetHigherDate()
-    {
-      return Appointment.Start >= Appointment.End ? Appointment.Start.DateTime : Appointment.End.DateTime;
-    }
-
     private void AppointmentTypeUpdated(ChangeEventArgs e)
     {
       Appointment.AppointmentTypeId = (int?)e.Value ?? 0;
-      Appointment.Title = "updated";
     }
   }
 }

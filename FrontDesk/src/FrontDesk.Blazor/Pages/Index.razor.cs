@@ -247,7 +247,17 @@ namespace FrontDesk.Blazor.Pages
 
     private void OpenEdit(AppointmentDto appointment)
     {
+      Logger.LogInformation($"OpenEdit called for {appointment}");
+
       CurrentAppointment = appointment;
+      if(CurrentAppointment.AppointmentId == Guid.Empty)
+      {
+        if(CanMakeAppointment)
+        {
+          CustomEditFormShown = true;
+        }
+        return;
+      }
       CustomEditFormShown = true;
     }
 
