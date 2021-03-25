@@ -47,7 +47,7 @@ namespace FrontDesk.Blazor.Services
     {
       _logger.LogInformation("Fetching patients from API.");
 
-      string route = ListPatientRequest.Route.Replace("{clientId}", clientId.ToString());
+      string route = ListPatientRequest.Route.Replace("{ClientId}", clientId.ToString());
       return (await _httpService.HttpGetAsync<ListPatientResponse>(route)).Patients;
     }
   }

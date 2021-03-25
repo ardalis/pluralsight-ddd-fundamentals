@@ -11,6 +11,9 @@ using PluralsightDdd.SharedKernel.Interfaces;
 
 namespace FrontDesk.Core.Handlers
 {
+  /// <summary>
+  /// This handler responds to incoming messages saying a user has confirmed an appointment
+  /// </summary>
   public class EmailConfirmationHandler : INotificationHandler<AppointmentConfirmedAppEvent>
   {
     private readonly IRepository<Schedule> _scheduleRepository;
@@ -36,7 +39,7 @@ namespace FrontDesk.Core.Handlers
 
       var appointmentToConfirm = schedule.Appointments.FirstOrDefault(a => a.Id == appointmentConfirmedEvent.AppointmentId);
 
-      appointmentToConfirm.Confirm(appointmentConfirmedEvent.DateTimeEventOccurred);
+      appointmentToConfirm.Confirm(appointmentConfirmedEvent.DateOccurred);
 
       await _scheduleRepository.UpdateAsync(schedule);
     }

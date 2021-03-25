@@ -8,6 +8,7 @@ using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Infrastructure;
 using FrontDesk.Infrastructure.Data;
+using FrontDesk.Infrastructure.Messaging;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,6 +17,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.ObjectPool;
+using RabbitMQ.Client;
 
 namespace FrontDesk.Api
 {
@@ -120,6 +123,8 @@ namespace FrontDesk.Api
         services.AddHostedService<ClinicManagementRabbitMqService>();
         services.AddHostedService<VetClinicPublicRabbitMqService>();
       }
+      services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
+      services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
     }
 
     public void ConfigureContainer(ContainerBuilder builder)

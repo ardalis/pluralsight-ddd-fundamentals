@@ -1,4 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.Extensions.ObjectPool;
+using Microsoft.Extensions.Options;
+using PluralsightDdd.SharedKernel;
+using RabbitMQ.Client;
 
 namespace FrontDesk.Infrastructure.Messaging
 {
@@ -7,20 +10,21 @@ namespace FrontDesk.Infrastructure.Messaging
   {
     private readonly IConnection _connection;
 
-    public RabbitModelPooledObjectPolicy()
+    public RabbitModelPooledObjectPolicy(
+      IOptions<RabbitMqConfiguration> rabbitMqOptions)
     {
-      _connection = GetConnection();
+      _connection = GetConnection(rabbitMqOptions.Value);
     }
 
-    private IConnection GetConnection()
+    private IConnection GetConnection(RabbitMqConfiguration settings)
     {
       var factory = new ConnectionFactory()
       {
-        HostName = "localhost", // TODO: Read from config
-        UserName = MessagingConstants.Credentials.DEFAULT_USERNAME,
-        Password = MessagingConstants.Credentials.DEFAULT_PASSWORD,
-        Port = 5672,
-        VirtualHost = "/",
+        HostName = settings.Hostname,
+        UserName = settings.UserName,
+        Password = settings.Password,
+        Port = settings.Port,
+        VirtualHost = settings.VirtualHost,
       };
 
       return factory.CreateConnection();

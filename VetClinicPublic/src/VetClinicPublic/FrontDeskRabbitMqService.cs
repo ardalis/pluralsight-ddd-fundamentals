@@ -81,7 +81,7 @@ namespace VetClinicPublic
     {
       var body = args.Body.ToArray();
       var message = Encoding.UTF8.GetString(body);
-      _logger.LogInformation(" [x] Received {0}", message);
+      //_logger.LogInformation(" [x] Received {0}", message);
 
       await HandleMessage(message);
     }
@@ -92,24 +92,23 @@ namespace VetClinicPublic
       using var doc = JsonDocument.Parse(message);
       var root = doc.RootElement;
       var eventType = root.GetProperty("EventType");
-      var entity = root.GetProperty("Entity");
+      //var entity = root.GetProperty("Entity");
 
       using var scope = _serviceScopeFactory.CreateScope();
       var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-      if(eventType.GetString() == "AppointmentScheduledEvent")
+      if(eventType.GetString() == "CreateConfirmationEmailMessage")
       {
         // TODO: deserialize with System.Text.Json
         var command = new AppointmentDTO()
         {
-          AppointmentId = entity.GetProperty("AppointmentId").GetGuid(),
-          AppointmentType = entity.GetProperty("AppointmentType").GetString(),
-          ClientEmailAddress = entity.GetProperty("ClientEmailAddress").GetString(),
-          ClientName = entity.GetProperty("ClientName").GetString(),
-          DoctorName = entity.GetProperty("DoctorName").GetString(),
-          End = entity.GetProperty("End").GetDateTime(),
-          PatientName = entity.GetProperty("PatientName").GetString(),
-          Start = entity.GetProperty("Start").GetDateTime()
+          AppointmentId = root.GetProperty("AppointmentId").GetGuid(),
+          AppointmentType = root.GetProperty("AppointmentType").GetString(),
+          ClientEmailAddress = root.GetProperty("ClientEmailAddress").GetString(),
+          ClientName = root.GetProperty("ClientName").GetString(),
+          DoctorName = root.GetProperty("DoctorName").GetString(),
+          PatientName = root.GetProperty("PatientName").GetString(),
+          AppointmentStartDateTime = root.GetProperty("AppointmentStartDateTime").GetDateTime()
         };
       await mediator.Send(command);
 

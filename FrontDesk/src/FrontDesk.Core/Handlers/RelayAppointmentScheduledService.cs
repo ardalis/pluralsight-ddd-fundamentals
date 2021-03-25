@@ -3,37 +3,44 @@ using System.Threading;
 using System.Threading.Tasks;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Events;
+using FrontDesk.Core.Events.ApplicationEvents;
 using FrontDesk.Core.Exceptions;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.Specifications;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel.Interfaces;
 
-namespace FrontDesk.Core.Services
+namespace FrontDesk.Core.Handlers
 {
   /// <summary>
   /// Post CreateConfirmationEmailMessage to message bus/queue to allow confirmation emails to be sent
   /// </summary>
-  public class RelayAppointmentScheduledService : INotificationHandler<AppointmentScheduledEvent>
+  public class RelayAppointmentScheduledHandler : INotificationHandler<AppointmentScheduledEvent>
   {
     private readonly IReadRepository<Doctor> _doctorRepository;
     private readonly IReadRepository<Client> _clientRepository;
     private readonly IReadRepository<AppointmentType> _appointmentTypeRepository;
     private readonly IMessagePublisher _messagePublisher;
+    private readonly ILogger<RelayAppointmentScheduledHandler> _logger;
 
-    public RelayAppointmentScheduledService(IReadRepository<Doctor> doctorRepository,
+    public RelayAppointmentScheduledHandler(
+      IReadRepository<Doctor> doctorRepository,
       IReadRepository<Client> clientRepository,
       IReadRepository<AppointmentType> appointmentTypeRepository,
-      IMessagePublisher messagePublisher)
+      IMessagePublisher messagePublisher,
+      ILogger<RelayAppointmentScheduledHandler> logger)
     {
       _doctorRepository = doctorRepository;
       _clientRepository = clientRepository;
       _appointmentTypeRepository = appointmentTypeRepository;
       _messagePublisher = messagePublisher;
+      _logger = logger;
     }
 
     public async Task Handle(AppointmentScheduledEvent appointmentScheduledEvent, CancellationToken cancellationToken)
     {
+      _logger.LogInformation("Handling appointmentScheduledEvent");
       // we are translating from a domain event to an application event here
       var newMessage = new CreateConfirmationEmailMessage();
 
@@ -53,15 +60,16 @@ namespace FrontDesk.Core.Services
       var apptType = await _appointmentTypeRepository.GetByIdAsync(appt.AppointmentTypeId);
       if (apptType == null) throw new AppointmentTypeNotFoundException(appt.AppointmentTypeId);
 
-      newMessage.AppointmentDateTime = appointmentScheduledEvent.AppointmentScheduled.TimeRange.Start;
+      newMessage.AppointmentId = appt.Id;
+      newMessage.AppointmentStartDateTime = appointmentScheduledEvent.AppointmentScheduled.TimeRange.Start;
       newMessage.ClientName = client.FullName;
       newMessage.ClientEmailAddress = client.EmailAddress;
       newMessage.DoctorName = doctor.Name;
       newMessage.PatientName = patient.Name;
-      newMessage.ProcedureName = apptType.Name;
+      newMessage.AppointmentType = apptType.Name;
 
-      // TODO: uncomment this after finish ServiceBrokerMessagePublisher 
-      // messagePublisher.Publish(newMessage);
+      _messagePublisher.Publish(newMessage);
+      _logger.LogInformation($"Message published. {newMessage.PatientName}");
     }
   }
 }

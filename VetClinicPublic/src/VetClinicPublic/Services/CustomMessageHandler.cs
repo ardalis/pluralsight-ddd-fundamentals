@@ -19,7 +19,8 @@ namespace VetClinicPublic.Web.Services
       _emailSender = emailSender;
     }
 
-    public Task<Unit> Handle(AppointmentDTO request, CancellationToken cancellationToken)
+    public Task<Unit> Handle(AppointmentDTO request, 
+      CancellationToken cancellationToken)
     {
       _logger.LogInformation("Message Received - Sending Email!");
 

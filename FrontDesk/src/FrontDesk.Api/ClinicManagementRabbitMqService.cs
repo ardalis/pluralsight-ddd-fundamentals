@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FrontDesk.Api.Hubs;
 using FrontDesk.Infrastructure.Data.Sync;
+using FrontDesk.Infrastructure.Messaging;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;

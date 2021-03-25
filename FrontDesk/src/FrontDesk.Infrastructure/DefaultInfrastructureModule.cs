@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Autofac;
-using FrontDesk.Core;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Interfaces;
-using FrontDesk.Core.Services;
 using FrontDesk.Infrastructure.Data;
+using FrontDesk.Infrastructure.Messaging;
 using MediatR;
 using MediatR.Pipeline;
 using PluralsightDdd.SharedKernel.Interfaces;
@@ -61,36 +60,37 @@ namespace FrontDesk.Infrastructure
         .As(typeof(IReadRepository<>))
           .InstancePerLifetimeScope();
 
-      builder.RegisterType(typeof(ServiceBrokerMessagePublisher))
+      builder.RegisterType(typeof(RabbitMessagePublisher))
         .As(typeof(IMessagePublisher))
         .InstancePerLifetimeScope();
 
-      builder
-          .RegisterType<Mediator>()
-          .As<IMediator>()
-          .InstancePerLifetimeScope();
+// MediatR is registered in FrontDesk.Api
+//      builder
+//          .RegisterType<Mediator>()
+//          .As<IMediator>()
+//          .InstancePerLifetimeScope();
+
+//      var mediatrOpenTypes = new[]
+//{
+//        typeof(IRequestHandler<,>),
+//        typeof(IRequestExceptionHandler<,,>),
+//        typeof(IRequestExceptionAction<,>),
+//        typeof(INotificationHandler<>),
+//      };
+
+//      foreach (var mediatrOpenType in mediatrOpenTypes)
+//      {
+//        builder
+//        .RegisterAssemblyTypes(_assemblies.ToArray())
+//        .AsClosedTypesOf(mediatrOpenType)
+//        .AsImplementedInterfaces();
+//      }
 
       builder.Register<ServiceFactory>(context =>
       {
         var c = context.Resolve<IComponentContext>();
         return t => c.Resolve(t);
       });
-
-      var mediatrOpenTypes = new[]
-      {
-        typeof(IRequestHandler<,>),
-        typeof(IRequestExceptionHandler<,,>),
-        typeof(IRequestExceptionAction<,>),
-        typeof(INotificationHandler<>),
-      };
-
-      foreach (var mediatrOpenType in mediatrOpenTypes)
-      {
-        builder
-        .RegisterAssemblyTypes(_assemblies.ToArray())
-        .AsClosedTypesOf(mediatrOpenType)
-        .AsImplementedInterfaces();
-      }
 
       builder.RegisterType<EmailSender>().As<IEmailSender>()
           .InstancePerLifetimeScope();

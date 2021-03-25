@@ -11,7 +11,6 @@ namespace VetClinicPublic.Web.Models
         public string PatientName { get; set; }
         public string DoctorName { get; set; }
         public string AppointmentType { get; set; }
-        public DateTime Start { get; set; }
-        public DateTime End { get; set; }
+        public DateTime AppointmentStartDateTime { get; set; }
     }
 }

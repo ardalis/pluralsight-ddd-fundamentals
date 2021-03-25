@@ -43,19 +43,19 @@ namespace VetClinicPublic
       }
 
 
-      // https://github.com/AntonyVorontsov/RabbitMQ.Client.Core.DependencyInjection/tree/master/examples/Examples.AdvancedConfiguration
-      var rabbitMqConsumerSection = Configuration.GetSection("RabbitMqConsumer");
-      var rabbitMqProducerSection = Configuration.GetSection("RabbitMqProducer");
+      //// https://github.com/AntonyVorontsov/RabbitMQ.Client.Core.DependencyInjection/tree/master/examples/Examples.AdvancedConfiguration
+      //var rabbitMqConsumerSection = Configuration.GetSection("RabbitMqConsumer");
+      //var rabbitMqProducerSection = Configuration.GetSection("RabbitMqProducer");
 
-      var producingExchangeSection = Configuration.GetSection("ProducingExchange");
-      var consumingExchangeSection = Configuration.GetSection("ConsumingExchange");
+      //var producingExchangeSection = Configuration.GetSection("ProducingExchange");
+      //var consumingExchangeSection = Configuration.GetSection("ConsumingExchange");
 
-      services
-          .AddRabbitMqConsumingClientSingleton(rabbitMqConsumerSection)
-          .AddRabbitMqProducingClientSingleton(rabbitMqProducerSection)
-          .AddProductionExchange("exchange.to.send.messages.only", producingExchangeSection)
-          .AddConsumptionExchange("consumption.exchange", consumingExchangeSection);
-          //.AddMessageHandlerSingleton<CustomMessageHandler>("routing.key");
+      //services
+      //    .AddRabbitMqConsumingClientSingleton(rabbitMqConsumerSection)
+      //    .AddRabbitMqProducingClientSingleton(rabbitMqProducerSection)
+      //    .AddProductionExchange("exchange.to.send.messages.only", producingExchangeSection)
+      //    .AddConsumptionExchange("consumption.exchange", consumingExchangeSection);
+      //    //.AddMessageHandlerSingleton<CustomMessageHandler>("routing.key");
 
       //services.AddHostedService<ConsumingHostedService>();
     }

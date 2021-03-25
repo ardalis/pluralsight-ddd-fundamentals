@@ -1,4 +1,4 @@
-﻿namespace FrontDesk.Api
+﻿namespace FrontDesk.Infrastructure.Messaging
 {
   public class RabbitMqConfiguration
   {

@@ -4,23 +4,26 @@ using System.Text.Json;
 using Ardalis.GuardClauses;
 using FrontDesk.Core.Events.ApplicationEvents;
 using FrontDesk.Core.Interfaces;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
 using PluralsightDdd.SharedKernel;
 using RabbitMQ.Client;
 
 namespace FrontDesk.Infrastructure.Messaging
 {
-
   public class RabbitMessagePublisher : IMessagePublisher
   {
     private readonly DefaultObjectPool<IModel> _objectPool;
+    private readonly ILogger<RabbitMessagePublisher> _logger;
 
-    public RabbitMessagePublisher(IPooledObjectPolicy<IModel> objectPolicy)
+    public RabbitMessagePublisher(IPooledObjectPolicy<IModel> objectPolicy,
+      ILogger<RabbitMessagePublisher> logger)
     {
       _objectPool = new DefaultObjectPool<IModel>(objectPolicy, Environment.ProcessorCount * 2);
+      _logger = logger;
     }
 
-    public void Publish(AppointmentScheduledAppEvent eventToPublish)
+    public void Publish(CreateConfirmationEmailMessage eventToPublish)
     {
       Guard.Against.Null(eventToPublish, nameof(eventToPublish));
 
@@ -32,7 +35,8 @@ namespace FrontDesk.Infrastructure.Messaging
         string exchangeName = MessagingConstants.Exchanges.FRONTDESK_VETCLINICPUBLIC_EXCHANGE;
         channel.ExchangeDeclare(exchangeName, "direct", true, false, null);
 
-        var sendBytes = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
+        var messageString = JsonSerializer.Serialize(message);
+        var sendBytes = Encoding.UTF8.GetBytes(messageString);
 
         var properties = channel.CreateBasicProperties();
         properties.Persistent = true;
@@ -42,6 +46,7 @@ namespace FrontDesk.Infrastructure.Messaging
           routingKey: "appointment-scheduled",
           basicProperties: properties,
           body: sendBytes);
+        _logger.LogInformation($"Sending appt scheduled event: {messageString}");
       }
       finally
       {
