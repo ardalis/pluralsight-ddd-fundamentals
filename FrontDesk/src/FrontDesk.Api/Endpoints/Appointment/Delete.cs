@@ -17,12 +17,14 @@ namespace FrontDesk.Api.AppointmentEndpoints
     .WithRequest<DeleteAppointmentRequest>
     .WithResponse<DeleteAppointmentResponse>
   {
+    private readonly IReadRepository<Schedule> _scheduleReadRepository;
     private readonly IRepository<Schedule> _scheduleRepository;
     private readonly IMapper _mapper;
 
-    public Delete(IRepository<Schedule> scheduleRepository, IMapper mapper)
+    public Delete(IRepository<Schedule> scheduleRepository, IReadRepository<Schedule> scheduleReadRepository, IMapper mapper)
     {
       _scheduleRepository = scheduleRepository;
+      _scheduleReadRepository = scheduleReadRepository;
       _mapper = mapper;
     }
 
@@ -38,7 +40,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       var response = new DeleteAppointmentResponse(request.CorrelationId());
 
       var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId); // TODO: Just get that day's appointments
-      var schedule = await _scheduleRepository.GetBySpecAsync(spec);
+      var schedule = await _scheduleReadRepository.GetBySpecAsync(spec);
 
       var apptToDelete = schedule.Appointments.FirstOrDefault(a => a.Id == request.AppointmentId);
       if (apptToDelete == null) return NotFound();
@@ -48,7 +50,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       await _scheduleRepository.UpdateAsync(schedule);
 
       // verify we can still get the schedule
-      response.Schedule = _mapper.Map<ScheduleDto>(await _scheduleRepository.GetBySpecAsync(spec));
+      response.Schedule = _mapper.Map<ScheduleDto>(await _scheduleReadRepository.GetBySpecAsync(spec));
  
       return Ok(response);
     }

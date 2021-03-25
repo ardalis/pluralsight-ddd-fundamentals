@@ -16,14 +16,14 @@ namespace FrontDesk.Core.Services
   /// </summary>
   public class RelayAppointmentScheduledService : INotificationHandler<AppointmentScheduledEvent>
   {
-    private readonly IRepository<Doctor> _doctorRepository;
-    private readonly IRepository<Client> _clientRepository;
-    private readonly IRepository<AppointmentType> _appointmentTypeRepository;
+    private readonly IReadRepository<Doctor> _doctorRepository;
+    private readonly IReadRepository<Client> _clientRepository;
+    private readonly IReadRepository<AppointmentType> _appointmentTypeRepository;
     private readonly IMessagePublisher _messagePublisher;
 
-    public RelayAppointmentScheduledService(IRepository<Doctor> doctorRepository,
-      IRepository<Client> clientRepository,
-      IRepository<AppointmentType> appointmentTypeRepository,
+    public RelayAppointmentScheduledService(IReadRepository<Doctor> doctorRepository,
+      IReadRepository<Client> clientRepository,
+      IReadRepository<AppointmentType> appointmentTypeRepository,
       IMessagePublisher messagePublisher)
     {
       _doctorRepository = doctorRepository;

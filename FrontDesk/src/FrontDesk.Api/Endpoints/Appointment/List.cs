@@ -20,13 +20,13 @@ namespace FrontDesk.Api.AppointmentEndpoints
     .WithRequest<ListAppointmentRequest>
     .WithResponse<ListAppointmentResponse>
   {
-    private readonly IRepository<Schedule> _scheduleRepository;
-    private readonly IRepository<Client> _clientRepository;
+    private readonly IReadRepository<Schedule> _scheduleRepository;
+    private readonly IReadRepository<Client> _clientRepository;
     private readonly IMapper _mapper;
     private readonly IApplicationSettings _settings;
 
-    public List(IRepository<Schedule> scheduleRepository,
-      IRepository<Client> clientRepository,
+    public List(IReadRepository<Schedule> scheduleRepository,
+      IReadRepository<Client> clientRepository,
       IMapper mapper,
       IApplicationSettings settings)
     {

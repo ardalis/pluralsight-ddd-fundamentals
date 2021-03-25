@@ -21,16 +21,19 @@ namespace FrontDesk.Api.AppointmentEndpoints
     .WithResponse<CreateAppointmentResponse>
   {
     private readonly IRepository<Schedule> _scheduleRepository;
-    private readonly IRepository<AppointmentType> _appointmentTypeRepository;
+    private readonly IReadRepository<Schedule> _scheduleReadRepository;
+    private readonly IReadRepository<AppointmentType> _appointmentTypeRepository;
     private readonly IMapper _mapper;
     private readonly ILogger<Create> _logger;
 
     public Create(IRepository<Schedule> scheduleRepository,
-      IRepository<AppointmentType> appointmentTypeRepository,
+      IReadRepository<Schedule> scheduleReadRepository,
+      IReadRepository<AppointmentType> appointmentTypeRepository,
       IMapper mapper,
       ILogger<Create> logger)
     {
       _scheduleRepository = scheduleRepository;
+      _scheduleReadRepository = scheduleReadRepository;
       _appointmentTypeRepository = appointmentTypeRepository;
       _mapper = mapper;
       _logger = logger;
@@ -48,7 +51,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       var response = new CreateAppointmentResponse(request.CorrelationId());
 
       var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId); // TODO: Just get that day's appointments
-      var schedule = await _scheduleRepository.GetBySpecAsync(spec);
+      var schedule = await _scheduleReadRepository.GetBySpecAsync(spec);
 
       var appointmentType = await _appointmentTypeRepository.GetByIdAsync(request.AppointmentTypeId);
       var appointmentStart = request.DateOfAppointment.ToLocalTime();

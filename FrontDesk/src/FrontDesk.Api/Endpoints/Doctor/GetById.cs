@@ -14,10 +14,10 @@ namespace FrontDesk.Api.DoctorEndpoints
     .WithRequest<GetByIdDoctorRequest>
     .WithResponse<GetByIdDoctorResponse>
   {
-    private readonly IRepository<Doctor> _repository;
+    private readonly IReadRepository<Doctor> _repository;
     private readonly IMapper _mapper;
 
-    public GetById(IRepository<Doctor> repository,
+    public GetById(IReadRepository<Doctor> repository,
       IMapper mapper)
     {
       _repository = repository;

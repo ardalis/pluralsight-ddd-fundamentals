@@ -15,10 +15,10 @@ namespace FrontDesk.Api.AppointmentTypeEndpoints
     .WithRequest<ListAppointmentTypeRequest>
     .WithResponse<ListAppointmentTypeResponse>
   {
-    private readonly IRepository<AppointmentType> _appointmentTypeRepository;
+    private readonly IReadRepository<AppointmentType> _appointmentTypeRepository;
     private readonly IMapper _mapper;
 
-    public List(IRepository<AppointmentType> appointmentTypeRepository, IMapper mapper)
+    public List(IReadRepository<AppointmentType> appointmentTypeRepository, IMapper mapper)
     {
       _appointmentTypeRepository = appointmentTypeRepository;
       _mapper = mapper;
