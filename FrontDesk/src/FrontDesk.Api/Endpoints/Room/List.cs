@@ -16,10 +16,10 @@ namespace FrontDesk.Api.RoomEndpoints
     .WithRequest<ListRoomRequest>
     .WithResponse<ListRoomResponse>
   {
-    private readonly IRepository<Room> _repository;
+    private readonly IReadRepository<Room> _repository;
     private readonly IMapper _mapper;
 
-    public List(IRepository<Room> repository,
+    public List(IReadRepository<Room> repository,
       IMapper mapper)
     {
       _repository = repository;

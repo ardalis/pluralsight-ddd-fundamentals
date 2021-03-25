@@ -17,12 +17,12 @@ namespace FrontDesk.Api.AppointmentEndpoints
     .WithRequest<GetByIdAppointmentRequest>
     .WithResponse<GetByIdAppointmentResponse>
   {
-    private readonly IRepository<Schedule> _scheduleRepository;
-    private readonly IRepository<Client> _clientRepository;
+    private readonly IReadRepository<Schedule> _scheduleRepository;
+    private readonly IReadRepository<Client> _clientRepository;
     private readonly IMapper _mapper;
 
-    public GetById(IRepository<Schedule> scheduleRepository,
-      IRepository<Client> clientRepository,
+    public GetById(IReadRepository<Schedule> scheduleRepository,
+      IReadRepository<Client> clientRepository,
       IMapper mapper)
     {
       _scheduleRepository = scheduleRepository;

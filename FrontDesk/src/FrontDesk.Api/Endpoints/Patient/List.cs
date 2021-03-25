@@ -16,10 +16,10 @@ namespace FrontDesk.Api.PatientEndpoints
     .WithRequest<ListPatientRequest>
     .WithResponse<ListPatientResponse>
   {
-    private readonly IRepository<Client> _repository;
+    private readonly IReadRepository<Client> _repository;
     private readonly IMapper _mapper;
 
-    public List(IRepository<Client> repository,
+    public List(IReadRepository<Client> repository,
       IMapper mapper)
     {
       _repository = repository;

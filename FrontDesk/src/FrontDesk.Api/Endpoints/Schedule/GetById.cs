@@ -15,10 +15,10 @@ namespace FrontDesk.Api.ScheduleEndpoints
     .WithRequest<GetByIdScheduleRequest>
     .WithResponse<GetByIdScheduleResponse>
   {
-    private readonly IRepository<Schedule> _repository;
+    private readonly IReadRepository<Schedule> _repository;
     private readonly IMapper _mapper;
 
-    public GetById(IRepository<Schedule> repository, IMapper mapper)
+    public GetById(IReadRepository<Schedule> repository, IMapper mapper)
     {
       _repository = repository;
       _mapper = mapper;

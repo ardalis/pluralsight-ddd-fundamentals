@@ -14,10 +14,10 @@ namespace FrontDesk.Api.ClientEndpoints
     .WithRequest<GetByIdClientRequest>
     .WithResponse<GetByIdClientResponse>
   {
-    private readonly IRepository<Client> _repository;
+    private readonly IReadRepository<Client> _repository;
     private readonly IMapper _mapper;
 
-    public GetById(IRepository<Client> repository,
+    public GetById(IReadRepository<Client> repository,
       IMapper mapper)
     {
       _repository = repository;
