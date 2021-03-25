@@ -1,0 +1,32 @@
+services:
+# https://zgadzaj.com/development/docker/docker-compose/containers/rabbitmq
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  frontdesk-db:
+    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+    environment:
+        SA_PASSWORD: "P@ssW0rd!"
+        ACCEPT_EULA: "Y"
+
+  frontdesk-api:
+    build:
+      context: .
+      dockerfile: ./FrontDesk/src/FrontDesk.Api/Dockerfile
+    image: ddd.frontdesk.api
+    container_name: ddd.frontdesk.api
+    ports:
+      - 5100:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - "ASPNETCORE_URLS=http://+"
+    restart: on-failure
+    depends_on:
+      - rabbitmq

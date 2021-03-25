@@ -8,11 +8,20 @@ If you like or are using this project to learn, please give it a star. Thanks!
 
 ## Running the Sample
 
-The easiest way to run the sample is using docker. Download the source and run this command:
+The easiest way to run the sample is using docker. Download the source and run this command from the root folder:
 
 ```powershell
-TBD
+docker-compose build
+docker-compose up
 ```
+
+This will start RabbitMQ (for messaging between apps) and build and run each of the applications involved in the sample:
+
+- FrontDesk.Api
+- FrontDesk.Blazor
+- ClinicManagement.Api
+- ClinicManagement.Blazor
+- VetClinicPublic
 
 ### Visual Studio
 

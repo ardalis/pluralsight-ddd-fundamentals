@@ -30,8 +30,8 @@ namespace FrontDesk.Api.AppointmentEndpoints
 
     [HttpDelete(DeleteAppointmentRequest.Route)]
     [SwaggerOperation(
-        Summary = "Deletes a Appointment",
-        Description = "Deletes a Appointment",
+        Summary = "Deletes an Appointment",
+        Description = "Deletes an Appointment",
         OperationId = "appointments.delete",
         Tags = new[] { "AppointmentEndpoints" })
     ]

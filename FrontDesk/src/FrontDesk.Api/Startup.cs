@@ -138,7 +138,9 @@ namespace FrontDesk.Api
         app.UseDeveloperExceptionPage();
       }
 
-      app.UseHttpsRedirection();
+      //  if enabled configure docker with
+      // https://docs.microsoft.com/en-us/aspnet/core/security/docker-compose-https?view=aspnetcore-5.0
+      //app.UseHttpsRedirection();
 
       app.UseRouting();
 
@@ -152,6 +154,7 @@ namespace FrontDesk.Api
       app.UseSwaggerUI(c =>
       {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = string.Empty; // Set Swagger UI to app root
       });
 
       app.UseEndpoints(endpoints =>

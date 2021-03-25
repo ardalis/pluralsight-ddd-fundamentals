@@ -26,7 +26,7 @@ namespace FrontDesk.Api.PatientEndpoints
       _mapper = mapper;
     }
 
-    [HttpGet("api/patients/{PatientId}")]
+    [HttpGet(GetByIdPatientRequest.Route)]
     [SwaggerOperation(
         Summary = "Get a Patient by Id with ClientId (via querystring)",
         Description = "Gets a Patient by Id",

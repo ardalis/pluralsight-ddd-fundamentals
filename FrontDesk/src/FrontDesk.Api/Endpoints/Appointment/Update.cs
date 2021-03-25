@@ -36,8 +36,8 @@ namespace FrontDesk.Api.AppointmentEndpoints
 
     [HttpPut(UpdateAppointmentRequest.Route)]
     [SwaggerOperation(
-        Summary = "Updates a Appointment",
-        Description = "Updates a Appointment",
+        Summary = "Updates an Appointment",
+        Description = "Updates an Appointment",
         OperationId = "appointments.update",
         Tags = new[] { "AppointmentEndpoints" })
     ]

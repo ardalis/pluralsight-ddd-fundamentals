@@ -32,8 +32,8 @@ namespace FrontDesk.Api.AppointmentEndpoints
 
     [HttpGet(GetByIdAppointmentRequest.Route)]
     [SwaggerOperation(
-        Summary = "Get a Appointment by Id",
-        Description = "Gets a Appointment by Id",
+        Summary = "Get an Appointment by Id",
+        Description = "Gets an Appointment by Id",
         OperationId = "appointments.GetById",
         Tags = new[] { "AppointmentEndpoints" })
     ]

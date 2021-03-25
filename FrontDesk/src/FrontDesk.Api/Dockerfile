@@ -1,15 +1,21 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-FROM mcr.microsoft.com/dotnet/aspnet:5.0.0-rc.1-buster-slim AS base
+# From solution root:
+# docker build -t front-desk --progress=plain --no-cache -f .\FrontDesk\src\FrontDesk.Api\Dockerfile .
+FROM mcr.microsoft.com/dotnet/aspnet:5.0-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0.100-rc.1-buster-slim AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0.102-ca-patch-buster-slim AS build
 WORKDIR /app
-COPY . .
+# run this from repository root
+COPY ./ ./ 
+#RUN ls -lha .
+
+RUN echo 'Building FrontDesk container'
 
 WORKDIR /app/FrontDesk/src/FrontDesk.Api
+#RUN ls -lha .
 RUN dotnet restore
 
 RUN dotnet build "FrontDesk.Api.csproj" -c Release -o /app/build
@@ -20,4 +26,4 @@ RUN dotnet publish "FrontDesk.Api.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "FrontDesk.Api.dll"]
+ENTRYPOINT ["dotnet", "FrontDesk.Api.dll"]ls

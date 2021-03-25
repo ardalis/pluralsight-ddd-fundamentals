@@ -41,32 +41,42 @@ namespace FrontDesk.Api
 
     private void InitializeConnection(RabbitMqConfiguration settings)
     {
-      var factory = new ConnectionFactory
+      try
       {
-        HostName = settings.Hostname,
-        UserName = settings.UserName,
-        Password = settings.Password,
-        VirtualHost = settings.VirtualHost,
-        Port = settings.Port
-      };
-      _connection = factory.CreateConnection();
-      _channel = _connection.CreateModel();
 
-      _channel.ExchangeDeclare(_exchangeName, "direct",
-                              durable: true,
-                              autoDelete: false,
-                              arguments: null);
+        var factory = new ConnectionFactory
+        {
+          HostName = settings.Hostname,
+          UserName = settings.UserName,
+          Password = settings.Password,
+          VirtualHost = settings.VirtualHost,
+          Port = settings.Port
+        };
+        _connection = factory.CreateConnection();
+        _channel = _connection.CreateModel();
 
-      _channel.QueueDeclare(queue: _queuein,
-                          durable: true,
-                          exclusive: false,
-                          autoDelete: false,
-                          arguments: null);
+        _channel.ExchangeDeclare(_exchangeName, "direct",
+                                durable: true,
+                                autoDelete: false,
+                                arguments: null);
 
-      string routingKey = "entity-changes";
-      _channel.QueueBind(_queuein, _exchangeName, routingKey: "entity-changes");
+        _channel.QueueDeclare(queue: _queuein,
+                            durable: true,
+                            exclusive: false,
+                            autoDelete: false,
+                            arguments: null);
 
-      _logger.LogInformation($"*** Listening for messages on {_exchangeName}-{routingKey}...");
+        string routingKey = "entity-changes";
+        _channel.QueueBind(_queuein, _exchangeName, routingKey: "entity-changes");
+
+        _logger.LogInformation($"*** Listening for messages on {_exchangeName}-{routingKey}...");
+
+      }
+      catch (System.Exception ex)
+      {
+        _logger.LogError(ex, settings.ToString());
+        throw;
+      }
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
