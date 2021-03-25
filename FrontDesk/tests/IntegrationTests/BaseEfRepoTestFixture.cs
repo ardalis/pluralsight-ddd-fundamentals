@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Xunit;
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 
 namespace IntegrationTests
 {

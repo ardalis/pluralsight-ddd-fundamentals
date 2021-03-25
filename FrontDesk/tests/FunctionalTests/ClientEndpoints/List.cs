@@ -23,11 +23,11 @@ namespace FunctionalTests.ClientEndpoints
     }
 
     [Fact]
-    public async Task Returns2Clients()
+    public async Task ReturnsManyClients()
     {
       var result = await _client.GetAndDeserialize<ListClientResponse>(ListClientRequest.Route, _outputHelper);
 
-      Assert.Equal(2, result.Clients.Count);
+      Assert.True(result.Clients.Count > 10);
       Assert.Contains(result.Clients, x => x.FullName == "Steve Smith");
     }
 

@@ -18,8 +18,6 @@ namespace FunctionalTests.AppointmentEndpoints
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _outputHelper;
     private int _testAppointmentTypeId = 1;
-    private int _testClientId = 1;
-    private int _testPatientId = 1;
     private int _testRoomId = 2;
     private int _testDoctorId = 3;
     private string _testTitle = "updated title";

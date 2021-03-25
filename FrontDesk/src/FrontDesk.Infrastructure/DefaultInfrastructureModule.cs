@@ -53,6 +53,9 @@ namespace FrontDesk.Infrastructure
           .As(typeof(IRepository<>))
           .InstancePerLifetimeScope();
 
+      builder.RegisterGeneric(typeof(EfRepository<>))
+          .InstancePerLifetimeScope();
+
       // add a cache
       builder.RegisterGeneric(typeof(CachedRepository<>))
         .As(typeof(IReadRepository<>))

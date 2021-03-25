@@ -26,9 +26,9 @@ namespace IntegrationTests.ClientTests
       Assert.True(clients?.Count > 0);
     }
 
-    private async Task<FrontDesk.Core.Aggregates.Client> AddClient()
+    private async Task<Client> AddClient()
     {
-      var client = new ClientBuilder().Id(7).Build();
+      var client = new ClientBuilder().Id(200).Build();
 
       await _repository.AddAsync(client);
 

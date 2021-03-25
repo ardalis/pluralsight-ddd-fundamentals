@@ -18,7 +18,7 @@ namespace IntegrationTests.ClientTests
     [Fact]
     public async Task GetsByIdClientAfterAddingIt()
     {
-      var id = 9;
+      var id = 100;
       var client = await AddClient(id);
 
       var newClient = await _repository.GetByIdAsync(id);
@@ -27,7 +27,7 @@ namespace IntegrationTests.ClientTests
       Assert.True(newClient?.Id == id);
     }
 
-    private async Task<FrontDesk.Core.Aggregates.Client> AddClient(int id)
+    private async Task<Client> AddClient(int id)
     {
       var client = new ClientBuilder().Id(id).Build();
 

@@ -22,15 +22,15 @@ namespace FunctionalTests.AppointmentEndpoints
     }
 
     [Fact]
-    public async Task Returns1AppointmentForDarwin()
+    public async Task ReturnsAppointmentsIncludingOneForDarwin()
     {
       var result = await _client.GetAndDeserialize<ListAppointmentResponse>(ListAppointmentRequest.Route, _outputHelper);
 
-      var firstAppt = result.Appointments.First();
-      _outputHelper.WriteLine(firstAppt.ToString());
+      var darwinAppt = result.Appointments.First(a => a.Title.Contains("Darwin"));
+      _outputHelper.WriteLine(darwinAppt.ToString());
 
-      Assert.Contains("Darwin", firstAppt.Title);
-      Assert.Equal(1, firstAppt.RoomId);
+      Assert.Contains("Darwin", darwinAppt.Title);
+      Assert.Equal(1, darwinAppt.RoomId);
     }
   }
 }
