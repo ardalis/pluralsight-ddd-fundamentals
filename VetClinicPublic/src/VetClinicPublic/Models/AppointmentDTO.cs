@@ -1,8 +1,9 @@
-using System;
+﻿using System;
+using MediatR;
 
 namespace VetClinicPublic.Web.Models
 {
-    public class AppointmentDTO
+    public class AppointmentDTO : IRequest
     {
         public Guid AppointmentId { get; set; }
         public string ClientName { get; set; }

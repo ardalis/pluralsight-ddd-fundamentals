@@ -2,10 +2,7 @@
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using FrontDesk.Api.Hubs;
-using FrontDesk.Infrastructure.Data.Sync;
 using MediatR;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -13,29 +10,27 @@ using Microsoft.Extensions.Options;
 using PluralsightDdd.SharedKernel;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using VetClinicPublic.Web.Models;
 
-namespace FrontDesk.Api
+namespace VetClinicPublic
 {
-  public class VetClinicPublicRabbitMqService : BackgroundService
+  public class FrontDeskRabbitMqService : BackgroundService
   {
     private IModel _channel;
     private IConnection _connection;
-    private readonly string _queuein = MessagingConstants.Queues.FDVCP_FRONTDESK_IN;
+    private readonly string _queuein = MessagingConstants.Queues.FDVCP_VETCLINICPUBLIC_IN;
     private readonly string _exchangeName = MessagingConstants.Exchanges.FRONTDESK_VETCLINICPUBLIC_EXCHANGE;
-    private readonly ILogger<VetClinicPublicRabbitMqService> _logger;
+    private readonly ILogger<FrontDeskRabbitMqService> _logger;
     private readonly IServiceScopeFactory _serviceScopeFactory;
-    private readonly IHubContext<ScheduleHub> _scheduleHub;
 
-    public VetClinicPublicRabbitMqService(
+    public FrontDeskRabbitMqService(
       IOptions<RabbitMqConfiguration> rabbitMqOptions,
-      ILogger<VetClinicPublicRabbitMqService> logger,
-      IServiceScopeFactory serviceScopeFactory,
-      IHubContext<ScheduleHub> scheduleHub)
+      ILogger<FrontDeskRabbitMqService> logger,
+      IServiceScopeFactory serviceScopeFactory)
     {
       var settings = rabbitMqOptions.Value;
       _logger = logger;
       _serviceScopeFactory = serviceScopeFactory;
-      _scheduleHub = scheduleHub;
       InitializeConnection(settings);
     }
 
@@ -63,7 +58,7 @@ namespace FrontDesk.Api
                           autoDelete: false,
                           arguments: null);
 
-      string routingKey = "appointment-confirmation";
+      string routingKey = "appointment-scheduled";
       _channel.QueueBind(_queuein, _exchangeName, routingKey: routingKey);
 
       _logger.LogInformation($"*** Listening for messages on {_exchangeName}-{routingKey}...");
@@ -97,26 +92,28 @@ namespace FrontDesk.Api
       using var doc = JsonDocument.Parse(message);
       var root = doc.RootElement;
       var eventType = root.GetProperty("EventType");
-      //var entity = root.GetProperty("Entity");
+      var entity = root.GetProperty("Entity");
 
       using var scope = _serviceScopeFactory.CreateScope();
       var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-      //if (eventType.GetString() == "Doctor-Created")
-      //{
-      //  int id = entity.GetProperty("Id").GetInt32();
-      //  string name = entity.GetProperty("Name").GetString();
-      //  var command = new CreateDoctorCommand
-      //  {
-      //    Id = id,
-      //    Name = name
-      //  };
-      //  await mediator.Send(command);
+      if(eventType.GetString() == "AppointmentScheduledEvent")
+      {
+        // TODO: deserialize with System.Text.Json
+        var command = new AppointmentDTO()
+        {
+          AppointmentId = entity.GetProperty("AppointmentId").GetGuid(),
+          AppointmentType = entity.GetProperty("AppointmentType").GetString(),
+          ClientEmailAddress = entity.GetProperty("ClientEmailAddress").GetString(),
+          ClientName = entity.GetProperty("ClientName").GetString(),
+          DoctorName = entity.GetProperty("DoctorName").GetString(),
+          End = entity.GetProperty("End").GetDateTime(),
+          PatientName = entity.GetProperty("PatientName").GetString(),
+          Start = entity.GetProperty("Start").GetDateTime()
+        };
+      await mediator.Send(command);
 
-        string notification = $"AppointmentConfirmed!";
-        await _scheduleHub.Clients.All.SendAsync("ReceiveMessage", notification);
-      //}
-      // TODO: Implement other kinds of updates
+      }
     }
 
     public override void Dispose()

@@ -1,29 +1,31 @@
 ﻿using Microsoft.Extensions.Logging;
-using RabbitMQ.Client.Core.DependencyInjection.MessageHandlers;
-using RabbitMQ.Client.Events;
 using VetClinicPublic.Web.Interfaces;
+using VetClinicPublic.Web.Models;
+using MediatR;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace VetClinicPublic.Web.Services
 {
-  public class CustomMessageHandler : IMessageHandler
+  public class ConfirmationEmailHandler : IRequestHandler<AppointmentDTO>
   {
-    readonly ILogger<CustomMessageHandler> _logger;
+    readonly ILogger<ConfirmationEmailHandler> _logger;
     private readonly ISendConfirmationEmails _emailSender;
 
-    public CustomMessageHandler(ILogger<CustomMessageHandler> logger,
+    public ConfirmationEmailHandler(ILogger<ConfirmationEmailHandler> logger,
       ISendConfirmationEmails emailSender)
     {
       _logger = logger;
       _emailSender = emailSender;
     }
 
-    public void Handle(BasicDeliverEventArgs eventArgs, string matchingRoute)
+    public Task<Unit> Handle(AppointmentDTO request, CancellationToken cancellationToken)
     {
-      // Do whatever you want with the message.
       _logger.LogInformation("Message Received - Sending Email!");
 
-      System.Threading.Thread.Sleep(500);
-      // send email
+      _emailSender.SendConfirmationEmail(request);
+
+      return Task.FromResult(Unit.Value);
     }
   }
 

@@ -3,22 +3,21 @@ using PluralsightDdd.SharedKernel;
 
 namespace FrontDesk.Core.Events.ApplicationEvents
 {
-  public class AppointmentConfirmedEvent : BaseDomainEvent
+  public class AppointmentConfirmedAppEvent : BaseDomainEvent
   {
-    public AppointmentConfirmedEvent()
+    public AppointmentConfirmedAppEvent()
     {
       this.Id = Guid.NewGuid();
-      DateTimeEventOccurred = DateTime.Now;
+      DateOccurred = DateTime.Now;
     }
 
     public Guid Id { get; private set; }
-    public DateTime DateTimeEventOccurred { get; set; }
     public Guid AppointmentId { get; set; }
     public string EventType
     {
       get
       {
-        return nameof(AppointmentConfirmedEvent);
+        return nameof(AppointmentConfirmedAppEvent);
       }
     }
   }

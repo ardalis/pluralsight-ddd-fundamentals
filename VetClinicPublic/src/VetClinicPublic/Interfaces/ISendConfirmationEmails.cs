@@ -6,5 +6,4 @@ namespace VetClinicPublic.Web.Interfaces
     {
         void SendConfirmationEmail(AppointmentDTO appointment);
     }
-
 }

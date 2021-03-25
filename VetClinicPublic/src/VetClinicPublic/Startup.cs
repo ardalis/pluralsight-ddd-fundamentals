@@ -8,6 +8,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Core.DependencyInjection;
 using VetClinicPublic.Web.Interfaces;
 using VetClinicPublic.Web.Services;
+using MediatR;
 
 namespace VetClinicPublic
 {
@@ -28,6 +29,20 @@ namespace VetClinicPublic
       services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
       services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
 
+      // configure MediatR
+      services.AddMediatR(typeof(Startup).Assembly);
+
+      // configure messaging
+      var messagingConfig = Configuration.GetSection("RabbitMq");
+      var messagingSettings = messagingConfig.Get<RabbitMqConfiguration>();
+      services.Configure<RabbitMqConfiguration>(messagingConfig);
+      if (messagingSettings.Enabled)
+      {
+        services.AddHostedService<FrontDeskRabbitMqService>();
+        //services.AddHostedService<VetClinicPublicRabbitMqService>();
+      }
+
+
       // https://github.com/AntonyVorontsov/RabbitMQ.Client.Core.DependencyInjection/tree/master/examples/Examples.AdvancedConfiguration
       var rabbitMqConsumerSection = Configuration.GetSection("RabbitMqConsumer");
       var rabbitMqProducerSection = Configuration.GetSection("RabbitMqProducer");
@@ -39,10 +54,10 @@ namespace VetClinicPublic
           .AddRabbitMqConsumingClientSingleton(rabbitMqConsumerSection)
           .AddRabbitMqProducingClientSingleton(rabbitMqProducerSection)
           .AddProductionExchange("exchange.to.send.messages.only", producingExchangeSection)
-          .AddConsumptionExchange("consumption.exchange", consumingExchangeSection)
-          .AddMessageHandlerSingleton<CustomMessageHandler>("routing.key");
+          .AddConsumptionExchange("consumption.exchange", consumingExchangeSection);
+          //.AddMessageHandlerSingleton<CustomMessageHandler>("routing.key");
 
-      services.AddHostedService<ConsumingHostedService>();
+      //services.AddHostedService<ConsumingHostedService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,7 +85,4 @@ namespace VetClinicPublic
       });
     }
   }
-
-  // configure docker compose
-  // http://codereform.com/blog/post/net-core-and-rabbitmq/
 }

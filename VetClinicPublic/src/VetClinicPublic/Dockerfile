@@ -9,6 +9,8 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0.102-ca-patch-buster-slim AS build
 WORKDIR /app
 COPY ./ ./
 
+RUN echo 'Building VetClinicPublic container'
+
 WORKDIR /app/VetClinicPublic/src/VetClinicPublic
 RUN ls -lha .
 RUN dotnet restore

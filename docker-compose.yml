@@ -30,3 +30,16 @@ services:
     restart: on-failure
     depends_on:
       - rabbitmq
+
+  vet-clinic-public:
+    build:
+      context: .
+      dockerfile: ./VetClinicPublic/src/VetClinicPublic/Dockerfile
+    image: ddd.vet-clinic-public
+    container_name: ddd.vet-clinic.public
+    ports:
+      - 5200:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - "ASPNETCORE_URLS=http://+"
+    restart: on-failure
