@@ -11,6 +11,7 @@ services:
 
   frontdesk-db:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+    container_name: ddd.frontdesk-db
     environment:
         SA_PASSWORD: "P@ssW0rd!"
         ACCEPT_EULA: "Y"
@@ -33,6 +34,7 @@ services:
 
   clinicmanagement-db:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+    container_name: ddd.clinicmanagement-db
     environment:
         SA_PASSWORD: "P@ssW0rd!"
         ACCEPT_EULA: "Y"
