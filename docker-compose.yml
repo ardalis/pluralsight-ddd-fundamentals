@@ -23,13 +23,20 @@ services:
     image: ddd.frontdesk.api
     container_name: ddd.frontdesk.api
     ports:
-      - 5100:80
+      - 5200:80
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - "ASPNETCORE_URLS=http://+"
     restart: on-failure
     depends_on:
       - rabbitmq
+
+  mailserver:
+    image: jijiechen/papercut:latest
+    container_name: papercut
+    ports:
+    - 25:25
+    - 37408:37408
 
   vet-clinic-public:
     build:
@@ -38,8 +45,10 @@ services:
     image: ddd.vet-clinic-public
     container_name: ddd.vet-clinic.public
     ports:
-      - 5200:80
+      - 7100:80
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - "ASPNETCORE_URLS=http://+"
     restart: on-failure
+    depends_on:
+      - mailserver

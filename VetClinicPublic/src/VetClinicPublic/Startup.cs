@@ -24,7 +24,12 @@ namespace VetClinicPublic
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddControllersWithViews();
+
+      // configure email sending
+      var mailserverConfig = Configuration.GetSection("Mailserver");
+      services.Configure<MailserverConfiguration>(mailserverConfig);
       services.AddSingleton<ISendConfirmationEmails, SmtpConfirmationEmailSender>();
+
       services.AddSingleton<IMessagePublisher, RabbitMessagePublisher>();
       services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
       services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
