@@ -143,7 +143,7 @@ namespace ClinicManagement.Api
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
-        endpoints.MapHub<ClinicManagementHub>($"/{SignalRConstants.HUB_NAME}");
+        //endpoints.MapHub<ClinicManagementHub>($"/{SignalRConstants.HUB_NAME}");
       });
     }
   }

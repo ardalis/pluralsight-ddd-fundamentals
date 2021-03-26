@@ -19,6 +19,7 @@ namespace FrontDesk.Blazor.Services
 
     public async Task<AppointmentDto> CreateAsync(CreateAppointmentRequest appointment)
     {
+      _logger.LogInformation($"Creating new appointment for {appointment.Details}");
       return (await _httpService.HttpPostAsync<CreateAppointmentResponse>(CreateAppointmentRequest.Route, appointment)).Appointment;
     }
 
@@ -29,31 +30,25 @@ namespace FrontDesk.Blazor.Services
 
     public Task DeleteAsync(Guid scheduleId, Guid appointmentId)
     {
-      string route = GetByIdAppointmentRequest.Route.Replace("{scheduleId}", scheduleId.ToString());
-      route = route.Replace("{appointmentId}", appointmentId.ToString());
+      string route = GetByIdAppointmentRequest.Route.Replace("{ScheduleId}", scheduleId.ToString());
+      route = route.Replace("{AppointmentId}", appointmentId.ToString());
 
       return _httpService.HttpDeleteAsync<DeleteAppointmentResponse>(route);
     }
 
     public async Task<AppointmentDto> GetByIdAsync(Guid scheduleId, Guid appointmentId)
     {
-      string route = GetByIdAppointmentRequest.Route.Replace("{scheduleId}", scheduleId.ToString());
-      route = route.Replace("{appointmentId}", appointmentId.ToString());
+      string route = GetByIdAppointmentRequest.Route.Replace($"{{{nameof(GetByIdAppointmentRequest.ScheduleId)}}}", scheduleId.ToString());
+      route = route.Replace("{AppointmentId}", appointmentId.ToString());
       return (await _httpService.HttpGetAsync<GetByIdAppointmentResponse>(route)).Appointment;
     }
 
-    public async Task<List<AppointmentDto>> ListPagedAsync(int pageSize)
+    public async Task<List<AppointmentDto>> ListAsync(Guid scheduleId)
     {
       _logger.LogInformation("Fetching appointments from API.");
 
-      return (await _httpService.HttpGetAsync<ListAppointmentResponse>(ListAppointmentRequest.Route)).Appointments;
-    }
-
-    public async Task<List<AppointmentDto>> ListAsync()
-    {
-      _logger.LogInformation("Fetching appointments from API.");
-
-      return (await _httpService.HttpGetAsync<ListAppointmentResponse>(ListAppointmentRequest.Route)).Appointments;
+      string route = ListAppointmentRequest.Route.Replace($"{{{nameof(ListAppointmentRequest.ScheduleId)}}}", scheduleId.ToString());
+      return (await _httpService.HttpGetAsync<ListAppointmentResponse>(route)).Appointments;
     }
   }
 }

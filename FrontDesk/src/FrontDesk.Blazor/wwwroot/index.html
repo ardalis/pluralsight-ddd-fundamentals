@@ -45,6 +45,7 @@
     </script>
 
     <script>
+        // Demo is using Kendo Scheduler until Blazor version supports Grouped Schedule View
         var currentAppointment = {};
         var instanceKendoCall = {};
         const colorFieldName = 'key';
@@ -70,7 +71,6 @@
             if (name.toLowerCase() == 'rooms') {
                 result[colorFieldName] = createColor(data, valueField);
             }
-
 
             return result;
         }
@@ -294,6 +294,7 @@
             currentAppointment['start'] = e['start'];
             currentAppointment['end'] = e['end'];
             instanceKendoCall.invokeMethodAsync('KendoCall', 'move', JSON.stringify(currentAppointment));
+            hardRefresh();
         }
 
         function onEdit(e) {
@@ -354,10 +355,6 @@
 
     <script id="event-template" type="text/x-kendo-template">
         <div data-is-conflicted="#: isConflict #" data-is-confirmed="#: isConfirmed #" class="appointment-template" style="height: 100%; width: 110%; background-color: #:createColorForAppointment(data)#">#: title #
-            <img src="#:getPictureBase64(data, function (callbackData) {
-                result = callbackData['dataBase64'];
-                return `data:image/png;base64,` + result;
-            })#" />
         </div>
     </script>
 

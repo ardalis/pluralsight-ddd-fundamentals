@@ -25,7 +25,6 @@ namespace ClinicManagement.Api
         try
         {
           var seedService = services.GetRequiredService<AppDbContextSeed>();
-          //var catalogContext = services.GetRequiredService<AppDbContext>();
           await seedService.SeedAsync(new OfficeSettings().TestDate);
         }
         catch (Exception ex)

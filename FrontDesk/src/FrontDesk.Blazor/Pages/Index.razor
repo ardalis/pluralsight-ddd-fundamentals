@@ -42,7 +42,11 @@
 
 @if (IsLoaded)
 {
-    <Scheduler Height="750" Rooms="@Rooms" AppointmentTypes="@AppointmentTypes" StartDate="@StartDate" StartTime="@DayStart" EndTime="@DayEnd" Groups="Groups" OnEditCallback="@((e) => OpenEdit(e))">
+    <Scheduler Height="750" Rooms="@Rooms" AppointmentTypes="@AppointmentTypes"
+               StartDate="@StartDate" StartTime="@DayStart"
+               EndTime="@DayEnd" Groups="Groups"
+               OnEditCallback="@((e) => OpenEdit(e))"
+        OnScheduleChangedCallback="@(() => RefreshDataAsync())">
         <Resource Name="AppointmentTypes" TextField="Name" ValueField="AppointmentTypeId" Field="AppointmentTypeId" Title="Appointment Type" Data="@AppointmentTypes" />
         <Resource Name="Rooms" TextField="Name" ValueField="RoomId" Field="RoomId" Title="Room" Data="@Rooms" />
     </Scheduler>

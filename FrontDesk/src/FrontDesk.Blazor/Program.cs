@@ -13,7 +13,7 @@ namespace FrontDesk.Blazor
 {
   public class Program
   {
-    public static async Task Main(string[] args)
+    public static Task Main(string[] args)
     {
       var builder = WebAssemblyHostBuilder.CreateDefault(args);
       builder.RootComponents.Add<App>("#app");
@@ -32,6 +32,7 @@ namespace FrontDesk.Blazor
       builder.Services.AddScoped<PatientService>();
       builder.Services.AddScoped<RoomService>();
       builder.Services.AddScoped<AppointmentService>();
+      builder.Services.AddScoped<ScheduleService>();
       builder.Services.AddScoped<AppointmentTypeService>();
       builder.Services.AddScoped<FileService>();
       builder.Services.AddScoped<ConfigurationService>();
@@ -41,7 +42,7 @@ namespace FrontDesk.Blazor
       // register the Telerik services
       builder.Services.AddTelerikBlazor();
 
-      await builder.Build().RunAsync();
+      return builder.Build().RunAsync();
     }
   }
 }

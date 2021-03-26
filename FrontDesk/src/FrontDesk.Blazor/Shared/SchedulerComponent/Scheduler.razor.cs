@@ -43,6 +43,9 @@ namespace FrontDesk.Blazor.Shared.SchedulerComponent
     [Parameter]
     public EventCallback<AppointmentDto> OnEditCallback { get; set; }
 
+    [Parameter]
+    public EventCallback OnScheduleChangedCallback { get; set; }
+
     private List<SchedulerResourceModel> Resources { get; set; } = new List<SchedulerResourceModel>();
 
     private static readonly JsonSerializerOptions JsonOptions = new JsonSerializerOptions
@@ -91,6 +94,7 @@ namespace FrontDesk.Blazor.Shared.SchedulerComponent
       {
         var result = JsonSerializer.Deserialize<AppointmentDto>(jsonData, JsonOptions);
         await AppointmentService.EditAsync(UpdateAppointmentRequest.FromDto(result));
+        await OnScheduleChangedCallback.InvokeAsync();
       }
       else if (action == "delete")
       {
@@ -98,6 +102,7 @@ namespace FrontDesk.Blazor.Shared.SchedulerComponent
         await AppointmentService.DeleteAsync(result.ScheduleId, result.AppointmentId);
         SchedulerService.Appointments.Remove(SchedulerService.Appointments.First(x => x.AppointmentId == result.AppointmentId));
         CallJSMethod();
+        await OnScheduleChangedCallback.InvokeAsync();
       }
     }
   }

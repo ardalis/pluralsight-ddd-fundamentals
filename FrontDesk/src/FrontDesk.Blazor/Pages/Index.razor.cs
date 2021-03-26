@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using BlazorShared;
@@ -26,6 +25,9 @@ namespace FrontDesk.Blazor.Pages
 
     [Inject]
     AppointmentService AppointmentService { get; set; }
+
+    [Inject]
+    ScheduleService ScheduleService { get; set; }
 
     [Inject]
     AppointmentTypeService AppointmentTypeService { get; set; }
@@ -74,18 +76,7 @@ namespace FrontDesk.Blazor.Pages
     private int ClientId { get; set; } = 0;
     private int RoomId { get; set; } = 1;
     private PatientDto SelectedPatient { get; set; } = new PatientDto();
-    private Guid ScheduleId
-    {
-      get
-      {
-        if (SchedulerService.Appointments.Count > 0)
-        {
-          return SchedulerService.Appointments[0].ScheduleId;
-        }
-
-        return Guid.Empty;
-      }
-    }
+    private Guid ScheduleId { get; set; } = Guid.Empty;
 
     private bool CanMakeAppointment => IsRoomSelected && IsClientSelected && IsPatientSelected;
     private bool IsRoomSelected => RoomId > 0;
@@ -101,7 +92,12 @@ namespace FrontDesk.Blazor.Pages
     protected override async Task OnInitializedAsync()
     {
       Logger.LogInformation("OnInitializedAsync()");
-      SchedulerService.Appointments = await AppointmentService.ListAsync();
+
+      var schedule = (await ScheduleService.ListAsync()).Single();
+      Logger.LogInformation($"Loaded schedule: {schedule.Id}");
+      ScheduleId = schedule.Id;
+
+      SchedulerService.Appointments = await AppointmentService.ListAsync(ScheduleId);
       AppointmentTypes = await AppointmentTypeService.ListAsync();
       Clients = await ClientService.ListAsync();
       Rooms = await RoomService.ListAsync();
@@ -120,7 +116,7 @@ namespace FrontDesk.Blazor.Pages
 
     protected async Task ClientChanged(object selectedClientId)
     {
-      if(selectedClientId == null)
+      if (selectedClientId == null)
       {
         // reset UI
         Patients = new List<PatientDto>();
@@ -198,13 +194,11 @@ namespace FrontDesk.Blazor.Pages
 
     private async Task RefreshDataAsync()
     {
+      Logger.LogInformation("RefreshDataAsync()...");
       //an event callback needs to be raised in this component context to re-render the contents and to hide the dialog
       CustomEditFormShown = false;
       CurrentAppointment = null;
-      //we also use it to fetch the fresh data from the service - in a real case other updates may have occurred
-      //which is why I chose to use a separate event and not two-way binding. It is also used for refreshing on Cancel
-      var appointments = await AppointmentService.ListAsync();
-
+      var appointments = await AppointmentService.ListAsync(ScheduleId);
       SchedulerService.RefreshAppointments(appointments);
     }
 
@@ -250,9 +244,9 @@ namespace FrontDesk.Blazor.Pages
       Logger.LogInformation($"OpenEdit called for {appointment}");
 
       CurrentAppointment = appointment;
-      if(CurrentAppointment.AppointmentId == Guid.Empty)
+      if (CurrentAppointment.AppointmentId == Guid.Empty)
       {
-        if(CanMakeAppointment)
+        if (CanMakeAppointment)
         {
           CustomEditFormShown = true;
         }

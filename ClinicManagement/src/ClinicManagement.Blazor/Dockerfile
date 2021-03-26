@@ -1,11 +1,15 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0.100-rc.1-buster-slim AS build
+# From solution root:
+# docker build -t cm --progress=plain --no-cache -f .\ClinicManagement\src\ClinicManagement.Blazor.Host\Dockerfile .
+FROM mcr.microsoft.com/dotnet/sdk:5.0.201-buster-slim AS build
 WORKDIR /app
 
 COPY ClinicManagement/src/ClinicManagement.Blazor ./ClinicManagement.Blazor
-COPY ClinicManagement/src/ClinicManagement.Blazor ./ClinicManagement.Blazor
 COPY ClinicManagement/src/BlazorShared ./BlazorShared
+
+RUN ls -lha
+
 RUN dotnet restore /app/ClinicManagement.Blazor/ClinicManagement.Blazor.csproj
 
 WORKDIR /app/ClinicManagement.Blazor

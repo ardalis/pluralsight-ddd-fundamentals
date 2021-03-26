@@ -26,4 +26,4 @@ RUN dotnet publish "FrontDesk.Api.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "FrontDesk.Api.dll"]ls
+ENTRYPOINT ["dotnet", "FrontDesk.Api.dll"]

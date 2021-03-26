@@ -12,7 +12,7 @@ namespace ClinicManagement.Blazor
 {
   public class Program
   {
-    public static async Task Main(string[] args)
+    public static Task Main(string[] args)
     {
       var builder = WebAssemblyHostBuilder.CreateDefault(args);
       builder.RootComponents.Add<App>("#app");
@@ -35,7 +35,7 @@ namespace ClinicManagement.Blazor
       builder.Services.AddScoped<ConfigurationService>();
       builder.Services.AddScoped<ToastService>();
 
-      await builder.Build().RunAsync();
+      return builder.Build().RunAsync();
     }
   }
 }

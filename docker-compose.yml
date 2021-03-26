@@ -55,6 +55,21 @@ services:
       - rabbitmq
       - frontdesk-db
 
+  clinicmanagement-blazor:
+    build:
+      context: .
+      dockerfile: ./ClinicManagement/src/ClinicManagement.Blazor.Host/Dockerfile
+    image: ddd.clinicmanagement.blazor
+    container_name: ddd.clinicmanagement.blazor
+    ports:
+      - 6100:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - "ASPNETCORE_URLS=http://+"
+    restart: on-failure
+    depends_on:
+      - clinicmanagement-api
+
   mailserver:
     image: jijiechen/papercut:latest
     container_name: ddd.papercut

@@ -8,8 +8,8 @@
     public string WebBase { get; set; }
   }
 
-  public class SignalRConstants
-  {
-    public const string HUB_NAME = "clinicmanagementhub";
-  }
+  //public class SignalRConstants
+  //{
+  //  public const string HUB_NAME = "clinicmanagementhub";
+  //}
 }

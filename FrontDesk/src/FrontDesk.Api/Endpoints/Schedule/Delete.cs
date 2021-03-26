@@ -27,7 +27,7 @@ namespace FrontDesk.Api.ScheduleEndpoints
       _mapper = mapper;
     }
 
-    [HttpDelete("api/schedules/{id}")]
+    [HttpDelete(DeleteScheduleRequest.Route)]
     [SwaggerOperation(
         Summary = "Deletes a Schedule",
         Description = "Deletes a Schedule",

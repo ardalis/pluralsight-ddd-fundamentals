@@ -27,7 +27,6 @@ namespace FrontDesk.Core.Aggregates
     {
       Id = id;
       ClinicId = clinicId;
-      MarkConflictingAppointments();
     }
 
     public int ClinicId { get; private set; }
@@ -89,7 +88,7 @@ namespace FrontDesk.Core.Aggregates
       }
     }
 
-    public void Handle(AppointmentUpdatedEvent args)
+    public void Handle(AppointmentUpdatedEvent args = null)
     {
       MarkConflictingAppointments();
     }

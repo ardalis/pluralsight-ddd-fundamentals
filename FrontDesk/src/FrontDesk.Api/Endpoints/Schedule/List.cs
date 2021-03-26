@@ -26,7 +26,7 @@ namespace FrontDesk.Api.ScheduleEndpoints
       _mapper = mapper;
     }
 
-    [HttpGet("api/schedules")]
+    [HttpGet(ListScheduleRequest.Route)]
     [SwaggerOperation(
         Summary = "List Schedules",
         Description = "List Schedules",

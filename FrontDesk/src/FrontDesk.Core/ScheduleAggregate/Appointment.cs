@@ -18,8 +18,6 @@ namespace FrontDesk.Core.Aggregates
     public DateTimeRange TimeRange { get; private set; }
     public string Title { get; private set; }
     public DateTime? DateTimeConfirmed { get; set; }
-
-    [NotMapped]
     public bool IsPotentiallyConflicting { get; set; }
 
     // EF https://github.com/dotnet/efcore/issues/12078#issuecomment-498379223

@@ -60,6 +60,9 @@ namespace FrontDesk.Api.AppointmentEndpoints
 
       // TODO: Implement updating other properties
 
+      // TODO: Have schedule update in response to appointmetn update calls
+      schedule.Handle();
+
       await _scheduleRepository.UpdateAsync(schedule);
 
       var dto = _mapper.Map<AppointmentDto>(apptToUpdate);

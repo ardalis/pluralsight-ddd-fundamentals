@@ -31,23 +31,24 @@ namespace ClinicManagement.Blazor.Pages
     {
       IsLoaded = true;
 
-      return InitSignalR();
+      return Task.CompletedTask;
+      //return InitSignalR();
     }
 
-    private Task InitSignalR()
-    {
-      hubConnection = new HubConnectionBuilder()
-          .WithUrl(new Uri($"{SignalRUrl}{SignalRConstants.HUB_NAME}"))
-          .Build();
+    //private Task InitSignalR()
+    //{
+    //  hubConnection = new HubConnectionBuilder()
+    //      .WithUrl(new Uri($"{SignalRUrl}{SignalRConstants.HUB_NAME}"))
+    //      .Build();
 
-      hubConnection.On<string>("ReceiveMessage", async (message) =>
-      {
-        await RefreshDataAsync();
-        ToastService.SendMessage(message);
-      });
+    //  hubConnection.On<string>("ReceiveMessage", async (message) =>
+    //  {
+    //    await RefreshDataAsync();
+    //    ToastService.SendMessage(message);
+    //  });
 
-      return hubConnection.StartAsync();
-    }
+    //  return hubConnection.StartAsync();
+    //}
 
     private async Task RefreshDataAsync()
     {

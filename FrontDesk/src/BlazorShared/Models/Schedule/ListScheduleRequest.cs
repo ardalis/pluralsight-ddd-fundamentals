@@ -2,5 +2,6 @@
 {
   public class ListScheduleRequest : BaseRequest
   {
+    public const string Route = "api/schedules";
   }
 }

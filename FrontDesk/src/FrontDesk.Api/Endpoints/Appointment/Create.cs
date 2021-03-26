@@ -61,6 +61,10 @@ namespace FrontDesk.Api.AppointmentEndpoints
 
       schedule.AddNewAppointment(newAppointment);
 
+      int conflictedAppointmentsCount = schedule.Appointments
+        .Count(a => a.IsPotentiallyConflicting);
+      _logger.LogInformation($"There are now {conflictedAppointmentsCount} conflicted appointments.");
+
       _logger.LogDebug($"Adding appointment to schedule. Total appointments: {schedule.Appointments.Count()}");
 
       await _scheduleRepository.UpdateAsync(schedule);
