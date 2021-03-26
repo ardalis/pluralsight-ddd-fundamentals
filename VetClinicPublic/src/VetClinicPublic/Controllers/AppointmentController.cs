@@ -5,6 +5,10 @@ using VetClinicPublic.Web.Models;
 
 namespace VetClinicPublic.Web.Controllers
 {
+  /// <summary>
+  /// This controller is only used to confirm appointments. Its URL
+  /// is provided in the email sent to the Client.
+  /// </summary>
   public class AppointmentController : Controller
   {
     private readonly IMessagePublisher _messagePublisher;
@@ -19,7 +23,6 @@ namespace VetClinicPublic.Web.Controllers
     {
       var appEvent = new AppointmentConfirmedEvent(id);
       _messagePublisher.Publish(appEvent);
-      // 4A071770-35A3-42D7-A1AE-4244870BA158
       return View();
     }
   }

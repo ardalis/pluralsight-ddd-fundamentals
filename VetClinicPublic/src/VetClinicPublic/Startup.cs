@@ -25,10 +25,15 @@ namespace VetClinicPublic
     {
       services.AddControllersWithViews();
 
+      // configure site settings
+      var siteSettings = Configuration.GetSection("SiteSettings");
+      services.Configure<SiteConfiguration>(siteSettings);
+
       // configure email sending
       var mailserverConfig = Configuration.GetSection("Mailserver");
       services.Configure<MailserverConfiguration>(mailserverConfig);
-      services.AddSingleton<ISendConfirmationEmails, SmtpConfirmationEmailSender>();
+      services.AddSingleton<ISendEmail, SmtpEmailSender>();
+      services.AddSingleton<ISendConfirmationEmails, ConfirmationEmailSender>();
 
       services.AddSingleton<IMessagePublisher, RabbitMessagePublisher>();
       services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
@@ -44,25 +49,7 @@ namespace VetClinicPublic
       if (messagingSettings.Enabled)
       {
         services.AddHostedService<FrontDeskRabbitMqService>();
-        //services.AddHostedService<VetClinicPublicRabbitMqService>();
       }
-
-
-      //// https://github.com/AntonyVorontsov/RabbitMQ.Client.Core.DependencyInjection/tree/master/examples/Examples.AdvancedConfiguration
-      //var rabbitMqConsumerSection = Configuration.GetSection("RabbitMqConsumer");
-      //var rabbitMqProducerSection = Configuration.GetSection("RabbitMqProducer");
-
-      //var producingExchangeSection = Configuration.GetSection("ProducingExchange");
-      //var consumingExchangeSection = Configuration.GetSection("ConsumingExchange");
-
-      //services
-      //    .AddRabbitMqConsumingClientSingleton(rabbitMqConsumerSection)
-      //    .AddRabbitMqProducingClientSingleton(rabbitMqProducerSection)
-      //    .AddProductionExchange("exchange.to.send.messages.only", producingExchangeSection)
-      //    .AddConsumptionExchange("consumption.exchange", consumingExchangeSection);
-      //    //.AddMessageHandlerSingleton<CustomMessageHandler>("routing.key");
-
-      //services.AddHostedService<ConsumingHostedService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,7 +64,8 @@ namespace VetClinicPublic
         app.UseExceptionHandler("/Home/Error");
         app.UseHsts();
       }
-      app.UseHttpsRedirection();
+      // disabled because of docker setup required
+      //app.UseHttpsRedirection();
       app.UseStaticFiles();
 
       app.UseRouting();

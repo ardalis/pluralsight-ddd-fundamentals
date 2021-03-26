@@ -35,8 +35,8 @@ services:
     image: jijiechen/papercut:latest
     container_name: papercut
     ports:
-    - 25:25
-    - 37408:37408
+    - 2525:25
+    - 37409:37408
 
   vet-clinic-public:
     build:
