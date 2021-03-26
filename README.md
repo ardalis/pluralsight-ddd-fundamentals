@@ -40,9 +40,9 @@ Once running, you should be able to access the various apps using localhost (HTT
 | FrontDesk API / Swagger        |           5200 |               5250 |
 | ClinicManagement API / Swagger |           6200 |               6250 |
 | RabbitMQ Management            |          15673 |              15672 |
-| RabbitMQ Service               |           5673 |               5672 |
+| RabbitMQ Service               |         (5673) |               5673 |
 | Papercut Management            |          37409 |              37408 |
-| Papercut SMTP                  |           2525 |                 25 |
+| Papercut SMTP                  |           (25) |                 25 |
 
 ### Visual Studio
 
