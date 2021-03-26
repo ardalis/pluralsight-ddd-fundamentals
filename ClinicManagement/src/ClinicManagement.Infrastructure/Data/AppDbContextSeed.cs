@@ -9,10 +9,7 @@ using BlazorShared.Models.Room;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.ValueObjects;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
-using PluralsightDdd.SharedKernel;
 
 namespace ClinicManagement.Infrastructure.Data
 {
@@ -21,16 +18,11 @@ namespace ClinicManagement.Infrastructure.Data
     private Doctor DrSmith => new Doctor(1, "Dr. Smith");
     private Doctor DrWho => new Doctor(2, "Dr. Who");
     private Doctor DrMcDreamy => new Doctor(3, "Dr. McDreamy");
-    private Guid _scheduleId = Guid.NewGuid();
     private DateTime _testDate = DateTime.Now;
     public const string MALE_SEX = "Male";
     public const string FEMALE_SEX = "Female";
     private readonly AppDbContext _context;
     private readonly ILogger<AppDbContextSeed> _logger;
-    private Client _steve;
-    private Client _julie;
-    private Patient _darwin;
-    private Patient _sampson;
 
     public AppDbContextSeed(AppDbContext context,
       ILogger<AppDbContextSeed> logger)

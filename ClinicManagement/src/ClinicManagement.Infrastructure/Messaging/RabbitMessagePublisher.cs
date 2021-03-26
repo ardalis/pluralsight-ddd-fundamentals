@@ -42,9 +42,9 @@ namespace ClinicManagement.Infrastructure.Messaging
           basicProperties: properties,
           body: sendBytes);
       }
-      catch (Exception ex)
+      catch (Exception)
       {
-        throw ex;
+        throw;
       }
       finally
       {

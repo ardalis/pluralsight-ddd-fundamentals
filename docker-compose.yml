@@ -2,13 +2,12 @@ services:
 # https://zgadzaj.com/development/docker/docker-compose/containers/rabbitmq
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    container_name: rabbitmq
+    container_name: ddd.rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
-    ports:
-      - 5672:5672
-      - 15672:15672
+    ports: # uses 5672 internally
+      - 15673:15672
 
   frontdesk-db:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
@@ -30,12 +29,34 @@ services:
     restart: on-failure
     depends_on:
       - rabbitmq
+      - frontdesk-db
+
+  clinicmanagement-db:
+    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+    environment:
+        SA_PASSWORD: "P@ssW0rd!"
+        ACCEPT_EULA: "Y"
+
+  clinicmanagement-api:
+    build:
+      context: .
+      dockerfile: ./ClinicManagement/src/ClinicManagement.Api/Dockerfile
+    image: ddd.clinicmanagement.api
+    container_name: ddd.clinicmanagement.api
+    ports:
+      - 6200:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - "ASPNETCORE_URLS=http://+"
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+      - frontdesk-db
 
   mailserver:
     image: jijiechen/papercut:latest
-    container_name: papercut
-    ports:
-    - 2525:25
+    container_name: ddd.papercut
+    ports: # exposes port 25 internally
     - 37409:37408
 
   vet-clinic-public:

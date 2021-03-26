@@ -1,7 +1,7 @@
 {
   "iisSettings": {
     "windowsAuthentication": false,
-    "anonymousAuthentication": true,
+    "anonymousAuthentication": true
   },
   "profiles": {
     "ClinicManagement.Api": {
@@ -9,7 +9,7 @@
       "dotnetRunMessages": "true",
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:6101;http://localhost:6100",
+      "applicationUrl": "https://localhost:6151;http://localhost:6150",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

@@ -1,12 +1,10 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
+﻿using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace ClinicManagement.Api.ConfigurationEndpoints
 {
-  public class Read : BaseAsyncEndpoint
+  public class Read : BaseEndpoint
     .WithoutRequest
     .WithResponse<string>
   {
@@ -21,7 +19,7 @@ namespace ClinicManagement.Api.ConfigurationEndpoints
         OperationId = "Configurations.Read",
         Tags = new[] { "ConfigurationEndpoints" })
     ]
-    public override async Task<ActionResult<string>> HandleAsync(CancellationToken cancellationToken)
+    public override ActionResult<string> Handle()
     {
       return Ok(new OfficeSettings().TestDate.ToString());
     }

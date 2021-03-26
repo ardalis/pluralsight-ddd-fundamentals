@@ -105,7 +105,7 @@ namespace ClinicManagement.Api
 
       // RabbitMQ service must be running on port 5673
       // 
-      services.AddHostedService<RabbitMQService>();
+      //services.AddHostedService<RabbitMQService>();
     }
 
     public void ConfigureContainer(ContainerBuilder builder)

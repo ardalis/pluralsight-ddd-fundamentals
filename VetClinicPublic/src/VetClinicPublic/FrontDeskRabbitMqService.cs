@@ -36,6 +36,7 @@ namespace VetClinicPublic
 
     private void InitializeConnection(RabbitMqConfiguration settings)
     {
+      _logger.LogInformation($"Connecting to RabbitMQ with {settings}");
       var factory = new ConnectionFactory
       {
         HostName = settings.Hostname,
