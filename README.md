@@ -32,7 +32,7 @@ It also adds the following supporting containers:
 
 Once running, you should be able to access the various apps using localhost (HTTP not HTTPS because of [Kestrel configuration restrictions](https://docs.microsoft.com/en-us/aspnet/core/security/docker-compose-https)) and the following ports (you can also find these bindings in the docker-compose.yml file):
 
-| Service (in docker)            | Localhost Port | Visual Studio Port |
+| Service (in docker)            | Docker Port    | Visual Studio Port |
 |--------------------------------|---------------:|-------------------:|
 | FrontDesk (main app)           |           5100 |               5150 |
 | ClinicManagement               |           6100 |               6150 |
@@ -43,6 +43,14 @@ Once running, you should be able to access the various apps using localhost (HTT
 | RabbitMQ Service               |         (5673) |               5673 |
 | Papercut Management            |          37409 |              37408 |
 | Papercut SMTP                  |           (25) |                 25 |
+
+The ports in () are only open inside of docker, not exposed otherwise.
+
+If you want to quickly clean up all of your docker containers (**All** of them not just the ones you created for this sample!) you can run this command:
+
+```powershell
+docker kill $(docker ps -q)
+```
 
 ### Visual Studio
 
