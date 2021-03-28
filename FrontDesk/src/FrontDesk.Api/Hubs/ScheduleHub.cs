@@ -7,7 +7,8 @@ namespace FrontDesk.Api.Hubs
   {
     public Task UpdateScheduleAsync(string message)
     {
-      return Clients.All.SendAsync("ReceiveMessage", message);
+      // TODO: Avoid having messages appear to the user initiating them
+      return Clients.Others.SendAsync("ReceiveMessage", message);
     }
   }
 }
