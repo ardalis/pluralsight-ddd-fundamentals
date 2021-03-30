@@ -14,12 +14,9 @@ namespace FrontDesk.Core.Events
     public AppointmentScheduledEvent()
     {
       this.Id = Guid.NewGuid();
-      DateTimeEventOccurred = DateTime.Now;
     }
 
     public Guid Id { get; private set; }
-
-    public DateTime DateTimeEventOccurred { get; private set; }
 
     public Appointment AppointmentScheduled { get; private set; }
   }

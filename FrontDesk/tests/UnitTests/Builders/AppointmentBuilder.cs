@@ -36,7 +36,7 @@ namespace UnitTests.Builders
 
       var startTime = new DateTime(2021, 01, 01, 10, 00, 00);
       var endTime = new DateTime(2021, 01, 01, 12, 00, 00);
-      var timeRange = new DateTimeRange(startTime, endTime);
+      var timeRange = new DateTimeOffsetRange(startTime, endTime);
 
       var title = "Test Title";
 

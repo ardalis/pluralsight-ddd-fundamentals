@@ -20,7 +20,7 @@ namespace FrontDesk.Infrastructure.Data
     private Doctor DrWho => new Doctor(2, "Dr. Who");
     private Doctor DrMcDreamy => new Doctor(3, "Dr. McDreamy");
     private readonly Guid _scheduleId = Guid.Parse("f9369039-9d11-4442-9738-ed65d8a8ad52");
-    private DateTime _testDate = DateTime.Now;
+    private DateTimeOffset _testDate = DateTime.UtcNow.Date;
     public const string MALE_SEX = "Male";
     public const string FEMALE_SEX = "Female";
     private readonly AppDbContext _context;
@@ -37,9 +37,9 @@ namespace FrontDesk.Infrastructure.Data
       _logger = logger;
     }
 
-    public async Task SeedAsync(DateTime testDate, int? retry = 0)
+    public async Task SeedAsync(DateTimeOffset testDate, int? retry = 0)
     {
-      _logger.LogInformation($"Seeding data.");
+      _logger.LogInformation($"Seeding data - testDate: {testDate}");
       _logger.LogInformation($"DbContext Type: {_context.Database.ProviderName}");
 
       _testDate = testDate;
@@ -143,7 +143,7 @@ namespace FrontDesk.Infrastructure.Data
 
     private Schedule CreateSchedule()
     {
-      return new Schedule(_scheduleId, new DateTimeRange(_testDate, _testDate), 1, null);
+      return new Schedule(_scheduleId, new DateTimeOffsetRange(_testDate, _testDate), 1, null);
     }
 
     private async Task<List<AppointmentType>> CreateAppointmentTypes()
@@ -272,7 +272,7 @@ namespace FrontDesk.Infrastructure.Data
                     DrSmith.Id,
                     _darwin.Id,
                     room1,
-                    new DateTimeRange(_testDate.AddHours(10), TimeSpan.FromMinutes(30)),
+                    new DateTimeOffsetRange(_testDate.AddHours(10), TimeSpan.FromMinutes(30)),
                     "(WE) Darwin - Steve Smith"),
                 new Appointment(
                     wellnessVisit,
@@ -281,7 +281,7 @@ namespace FrontDesk.Infrastructure.Data
                     DrSmith.Id,
                     _steve.Patients[1].Id,
                     room1,
-                    new DateTimeRange(_testDate.AddHours(10).AddMinutes(30), TimeSpan.FromMinutes(30)),
+                    new DateTimeOffsetRange(_testDate.AddHours(10).AddMinutes(30), TimeSpan.FromMinutes(30)),
                     "(WE) Arya - Steve Smith"),
                 new Appointment(
                     wellnessVisit,
@@ -290,7 +290,7 @@ namespace FrontDesk.Infrastructure.Data
                     DrSmith.Id,
                     _steve.Patients[2].Id,
                     room1,
-                    new DateTimeRange(_testDate.AddHours(11), TimeSpan.FromMinutes(30)),
+                    new DateTimeOffsetRange(_testDate.AddHours(11), TimeSpan.FromMinutes(30)),
                     "(WE) Rosie - Steve Smith"),
                 new Appointment(
                     diagnosticVisit,
@@ -299,7 +299,7 @@ namespace FrontDesk.Infrastructure.Data
                     DrWho.Id,
                     _sampson.Id,
                     room2,
-                    new DateTimeRange(_testDate.AddHours(11), TimeSpan.FromMinutes(60)),
+                    new DateTimeOffsetRange(_testDate.AddHours(11), TimeSpan.FromMinutes(60)),
                     "(DE) Sampson - Julie Lerman")
               };
 
@@ -325,7 +325,7 @@ namespace FrontDesk.Infrastructure.Data
       {
         var client = _context.Clients.First(c => c.FullName == clientName);
         var patient = _context.Patients.First(p => p.Name == patientName);
-        var appt = new Appointment(diagnosticVisit, scheduleId, client.Id, patient.PreferredDoctorId.Value, patient.Id, roomId, new DateTimeRange(_testDate.AddHours(hour), TimeSpan.FromMinutes(60)), $"(DE) {patientName} - {clientName}");
+        var appt = new Appointment(diagnosticVisit, scheduleId, client.Id, patient.PreferredDoctorId.Value, patient.Id, roomId, new DateTimeOffsetRange(_testDate.AddHours(hour), TimeSpan.FromMinutes(60)), $"(DE) {patientName} - {clientName}");
         return appt;
       }
       catch (Exception ex)

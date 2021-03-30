@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FrontDesk.Core.Aggregates;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PluralsightDdd.SharedKernel;
 
 namespace FrontDesk.Infrastructure.Data
@@ -32,6 +33,38 @@ namespace FrontDesk.Infrastructure.Data
     {
       base.OnModelCreating(modelBuilder);
       modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+      //StoreDatesInUtc(modelBuilder);
+    }
+
+    private void StoreDatesInUtc(ModelBuilder builder)
+    {
+      var dateTimeConverter = new ValueConverter<DateTime, DateTime>(
+    v => v.ToUniversalTime(),
+    v => DateTime.SpecifyKind(v, DateTimeKind.Utc));
+
+      var nullableDateTimeConverter = new ValueConverter<DateTime?, DateTime?>(
+          v => v.HasValue ? v.Value.ToUniversalTime() : v,
+          v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
+
+      foreach (var entityType in builder.Model.GetEntityTypes())
+      {
+        if (entityType.IsKeyless)
+        {
+          continue;
+        }
+
+        foreach (var property in entityType.GetProperties())
+        {
+          if (property.ClrType == typeof(DateTime))
+          {
+            property.SetValueConverter(dateTimeConverter);
+          }
+          else if (property.ClrType == typeof(DateTime?))
+          {
+            property.SetValueConverter(nullableDateTimeConverter);
+          }
+        }
+      }
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

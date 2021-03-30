@@ -7,9 +7,9 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
 {
   public class Appointment_Create
   {
-    private readonly DateTime _startTime = new DateTime(2021, 01, 01, 10, 00, 00);
-    private readonly DateTime _endTime;
-    private readonly DateTimeRange _range;
+    private readonly DateTimeOffset _startTime = new DateTime(2021, 01, 01, 10, 00, 00);
+    private readonly DateTimeOffset _endTime;
+    private readonly DateTimeOffsetRange _range;
     private readonly Guid _scheduleId = Guid.NewGuid();
     private readonly int _testClientId = 1;
     private readonly int _testPatientId = 2;
@@ -21,7 +21,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     public Appointment_Create()
     {
       _endTime = _startTime.AddHours(3);
-      _range = new DateTimeRange(_startTime, _endTime);
+      _range = new DateTimeOffsetRange(_startTime, _endTime);
     }
 
     [Fact]

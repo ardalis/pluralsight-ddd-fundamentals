@@ -9,7 +9,7 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
   public class Schedule_DeleteAppointment
   {
     private readonly Guid _scheduleId = Guid.Parse("4a17e702-c20e-4b87-b95b-f915c5a794f7");
-    private readonly DateTimeRange _dateRange = new DateTimeRange(DateTime.Today, DateTime.Today.AddDays(1));
+    private readonly DateTimeOffsetRange _dateRange = new DateTimeOffsetRange(DateTime.Today, DateTime.Today.AddDays(1));
     private readonly int _clinicId = 1;
 
     [Fact]
@@ -32,7 +32,7 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
 
       DateTime lisaStartTime = new DateTime(2021, 01, 01, 10, 00, 00);
       DateTime lisaEndTime = new DateTime(2021, 01, 01, 11, 00, 00);
-      var lisaDateRange = new DateTimeRange(lisaStartTime, lisaEndTime);
+      var lisaDateRange = new DateTimeOffsetRange(lisaStartTime, lisaEndTime);
       var lisaTitle = "Lisa Appointment";
       var lisaAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId,
         lisaDateRange, lisaTitle);

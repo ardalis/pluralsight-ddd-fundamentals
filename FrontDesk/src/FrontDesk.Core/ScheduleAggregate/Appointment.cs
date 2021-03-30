@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using Ardalis.GuardClauses;
 using FrontDesk.Core.Events;
 using PluralsightDdd.SharedKernel;
@@ -15,9 +14,9 @@ namespace FrontDesk.Core.Aggregates
     public int DoctorId { get; private set; }
     public int AppointmentTypeId { get; private set; }
 
-    public DateTimeRange TimeRange { get; private set; }
+    public DateTimeOffsetRange TimeRange { get; private set; }
     public string Title { get; private set; }
-    public DateTime? DateTimeConfirmed { get; set; }
+    public DateTimeOffset? DateTimeConfirmed { get; set; }
     public bool IsPotentiallyConflicting { get; set; }
 
     // EF https://github.com/dotnet/efcore/issues/12078#issuecomment-498379223
@@ -27,7 +26,7 @@ namespace FrontDesk.Core.Aggregates
       int doctorId,
       int patientId,
       int roomId,
-      DateTimeRange timeRange, // EF Core 5 cannot provide this type
+      DateTimeOffsetRange timeRange, // EF Core 5 cannot provide this type
       string title,
       DateTime? dateTimeConfirmed = null)
     {
@@ -71,11 +70,11 @@ namespace FrontDesk.Core.Aggregates
       Events.Add(appointmentUpdatedEvent);
     }
 
-    public void UpdateStartTime(DateTime newStartTime)
+    public void UpdateStartTime(DateTimeOffset newStartTime)
     {
       if (newStartTime == TimeRange.Start) return;
 
-      TimeRange = new DateTimeRange(newStartTime, TimeSpan.FromMinutes(TimeRange.DurationInMinutes()));
+      TimeRange = new DateTimeOffsetRange(newStartTime, TimeSpan.FromMinutes(TimeRange.DurationInMinutes()));
 
       var appointmentUpdatedEvent = new AppointmentUpdatedEvent(this);
       Events.Add(appointmentUpdatedEvent);
@@ -103,7 +102,7 @@ namespace FrontDesk.Core.Aggregates
       Events.Add(appointmentUpdatedEvent);
     }
 
-    public void Confirm(DateTime dateConfirmed)
+    public void Confirm(DateTimeOffset dateConfirmed)
     {
       if (DateTimeConfirmed.HasValue) return; // no need to reconfirm
 

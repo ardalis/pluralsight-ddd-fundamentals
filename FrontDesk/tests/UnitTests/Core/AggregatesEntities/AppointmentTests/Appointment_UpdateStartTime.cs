@@ -20,7 +20,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
       const int appointmentTypeId = 4;
       const int doctorId = 5;
       const string title = "Title Test";
-      var dateTimeRange = new DateTimeRange(_startTime, _endTime);
+      var dateTimeRange = new DateTimeOffsetRange(_startTime, _endTime);
 
       var appointment = new Appointment(appointmentTypeId, scheduleId, clientId, doctorId, patientId, roomId, dateTimeRange, title, null);
 

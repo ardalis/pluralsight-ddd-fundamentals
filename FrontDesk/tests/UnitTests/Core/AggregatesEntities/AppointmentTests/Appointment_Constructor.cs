@@ -19,7 +19,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
       const string title = "Title Test";
       var startTime = new DateTime(2021, 01, 01, 10, 00, 00);
       var endTime = startTime.AddHours(3);
-      var range = new DateTimeRange(startTime, endTime);
+      var range = new DateTimeOffsetRange(startTime, endTime);
       const int threeHours = 3 * 60;
 
       var appointment = new Appointment(appointmentTypeId, scheduleId, clientId, doctorId, patientId, roomId, range, title);

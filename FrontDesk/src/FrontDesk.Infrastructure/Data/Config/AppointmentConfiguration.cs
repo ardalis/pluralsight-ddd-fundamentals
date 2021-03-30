@@ -11,8 +11,12 @@ namespace FrontDesk.Infrastructure.Data.Config
       builder.ToTable("Appointments").HasKey(x => x.Id);
       builder.OwnsOne(p => p.TimeRange, p =>
       {
-        p.Property(pp => pp.Start).HasColumnName("TimeRange_Start");
-        p.Property(pp => pp.End).HasColumnName("TimeRange_End");
+        p.Property(pp => pp.Start)
+        //.HasColumnType("datetimeoffset")
+        .HasColumnName("TimeRange_Start");
+        p.Property(pp => pp.End)
+        //.HasColumnType("datetimeoffset")
+        .HasColumnName("TimeRange_End");
       });
       builder.Property(p => p.Title)
         .HasMaxLength(ColumnConstants.DEFAULT_NAME_LENGTH);

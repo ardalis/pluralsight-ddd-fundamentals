@@ -11,7 +11,7 @@ namespace BlazorShared.Models.Appointment
     public int AppointmentTypeId { get; set; }
     public int ClientId { get; set; }
     public int RoomId { get; set; }
-    public DateTime DateOfAppointment { get; set; }
+    public DateTimeOffset DateOfAppointment { get; set; }
     public int SelectedDoctor { get; set; }
     public string Details { get; set; }
   }

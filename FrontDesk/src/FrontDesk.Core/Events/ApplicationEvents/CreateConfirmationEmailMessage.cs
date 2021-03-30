@@ -11,7 +11,7 @@ namespace FrontDesk.Core.Events.ApplicationEvents
     public string PatientName { get; set; }
     public string DoctorName { get; set; }
     public string AppointmentType { get; set; }
-    public DateTime AppointmentStartDateTime { get; set; }
+    public DateTimeOffset AppointmentStartDateTime { get; set; }
 
     public string EventType => nameof(CreateConfirmationEmailMessage);
   }

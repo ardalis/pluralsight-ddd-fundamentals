@@ -12,12 +12,12 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
     private readonly Guid _scheduleId = Guid.Parse("4a17e702-c20e-4b87-b95b-f915c5a794f7");
     private readonly DateTime _startTime = new DateTime(2021, 01, 01, 10, 00, 00);
     private readonly DateTime _endTime = new DateTime(2021, 01, 01, 11, 00, 00);
-    private readonly DateTimeRange _dateRange;
+    private readonly DateTimeOffsetRange _dateRange;
     private readonly int _clinicId = 1;
 
     public Schedule_MarkConflictingAppointments()
     {
-      _dateRange = new DateTimeRange(_startTime, _endTime);
+      _dateRange = new DateTimeOffsetRange(_startTime, _endTime);
     }
 
     [Fact]

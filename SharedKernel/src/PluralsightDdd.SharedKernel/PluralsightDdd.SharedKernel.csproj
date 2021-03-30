@@ -12,7 +12,7 @@
     <Summary>Includes common abstractions and base types.</Summary>
     <RepositoryUrl>https://github.com/ardalis/pluralsight-ddd-fundamentals</RepositoryUrl>
     <PackageTags>aspnet asp.net aspnetcore asp.net core ddd dddesign value object entity aggregate domain event pluralsight</PackageTags>
-    <PackageReleaseNotes>Finish convertin DateTimeOffsetRange to use DateTimeOffset everywhere.</PackageReleaseNotes>
+    <PackageReleaseNotes>Finish converting DateTimeOffsetRange to use DateTimeOffset everywhere.</PackageReleaseNotes>
     <Version>1.2.2</Version>
     <AssemblyName>PluralsightDdd.SharedKernel</AssemblyName>
     <PackageIconUrl>https://user-images.githubusercontent.com/782127/33497760-facf6550-d69c-11e7-94e4-b3856da259a9.png</PackageIconUrl>
