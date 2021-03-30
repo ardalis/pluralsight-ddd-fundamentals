@@ -76,6 +76,7 @@ namespace FrontDesk.Api
       catch (System.Exception ex)
       {
         _logger.LogError(ex, settings.ToString());
+        Thread.Sleep(5000); // let RabbitMQ service start in Docker Compose
         throw;
       }
     }

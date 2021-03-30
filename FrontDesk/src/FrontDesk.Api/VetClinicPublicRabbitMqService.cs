@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,32 +42,41 @@ namespace FrontDesk.Api
 
     private void InitializeConnection(RabbitMqConfiguration settings)
     {
-      var factory = new ConnectionFactory
+      try
       {
-        HostName = settings.Hostname,
-        UserName = settings.UserName,
-        Password = settings.Password,
-        VirtualHost = settings.VirtualHost,
-        Port = settings.Port
-      };
-      _connection = factory.CreateConnection();
-      _channel = _connection.CreateModel();
+        var factory = new ConnectionFactory
+        {
+          HostName = settings.Hostname,
+          UserName = settings.UserName,
+          Password = settings.Password,
+          VirtualHost = settings.VirtualHost,
+          Port = settings.Port
+        };
+        _connection = factory.CreateConnection();
+        _channel = _connection.CreateModel();
 
-      _channel.ExchangeDeclare(_exchangeName, "direct",
-                              durable: true,
-                              autoDelete: false,
-                              arguments: null);
+        _channel.ExchangeDeclare(_exchangeName, "direct",
+                                durable: true,
+                                autoDelete: false,
+                                arguments: null);
 
-      _channel.QueueDeclare(queue: _queuein,
-                          durable: true,
-                          exclusive: false,
-                          autoDelete: false,
-                          arguments: null);
+        _channel.QueueDeclare(queue: _queuein,
+                            durable: true,
+                            exclusive: false,
+                            autoDelete: false,
+                            arguments: null);
 
-      string routingKey = "appointment-confirmation";
-      _channel.QueueBind(_queuein, _exchangeName, routingKey: routingKey);
+        string routingKey = "appointment-confirmation";
+        _channel.QueueBind(_queuein, _exchangeName, routingKey: routingKey);
 
-      _logger.LogInformation($"*** Listening for messages on {_exchangeName}-{routingKey}...");
+        _logger.LogInformation($"*** Listening for messages on {_exchangeName}-{routingKey}...");
+      }
+      catch (Exception ex)
+      {
+        _logger.LogError(ex, settings.ToString());
+        Thread.Sleep(5000); // let RabbitMQ service start in Docker Compose
+        throw;
+      }
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)

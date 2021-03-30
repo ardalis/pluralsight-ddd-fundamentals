@@ -32,6 +32,21 @@ services:
       - rabbitmq
       - frontdesk-db
 
+  frontdesk-blazor:
+    build:
+      context: .
+      dockerfile: ./FrontDesk/src/FrontDesk.Blazor.Host/Dockerfile
+    image: ddd.frontdesk.blazor
+    container_name: ddd.frontdesk.blazor
+    ports:
+      - 5100:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - "ASPNETCORE_URLS=http://+"
+    restart: on-failure
+    depends_on:
+      - frontdesk-api
+
   clinicmanagement-db:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
     container_name: ddd.clinicmanagement-db
@@ -89,4 +104,5 @@ services:
       - "ASPNETCORE_URLS=http://+"
     restart: on-failure
     depends_on:
+      - rabbitmq
       - mailserver

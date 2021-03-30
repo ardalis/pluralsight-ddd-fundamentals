@@ -88,11 +88,12 @@ namespace FrontDesk.Api
         options.AddPolicy(name: CORS_POLICY,
                                 builder =>
                                 {
-                              builder.WithOrigins(baseUrlConfig.WebBase.Replace("host.docker.internal", "localhost").TrimEnd('/'));
-                              builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
-                              builder.AllowAnyMethod();
-                              builder.AllowAnyHeader();
-                            });
+                                  builder.WithOrigins(baseUrlConfig.WebBase.Replace("host.docker.internal", "localhost").TrimEnd('/'));
+                                  builder.SetIsOriginAllowed(origin => true);
+                                  //builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+                                  builder.AllowAnyMethod();
+                                  builder.AllowAnyHeader();
+                                });
       });
 
       services.AddControllers();

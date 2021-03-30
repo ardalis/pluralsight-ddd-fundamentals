@@ -5,12 +5,18 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/sdk:5.0.102-ca-patch-buster-slim AS build
-WORKDIR /src
-COPY ["src/FrontDesk.Blazor.Host/FrontDesk.Blazor.Host.csproj", "src/FrontDesk.Blazor.Host/"]
-RUN dotnet restore "src/FrontDesk.Blazor.Host/FrontDesk.Blazor.Host.csproj"
-COPY . .
-WORKDIR "/src/src/FrontDesk.Blazor.Host"
+FROM mcr.microsoft.com/dotnet/sdk:5.0.201-buster-slim AS build
+WORKDIR /app
+# run this from repository root
+COPY ./ ./ 
+#RUN ls -lha .
+
+RUN echo 'Building FrontDesk Blazor container'
+
+WORKDIR /app/FrontDesk/src/FrontDesk.Blazor.Host
+RUN ls -lha .
+RUN dotnet restore -s "../FrontDesk.Blazor/deps" -s "https://api.nuget.org/v3/index.json"
+
 RUN dotnet build "FrontDesk.Blazor.Host.csproj" -c Release -o /app/build
 
 FROM build AS publish
