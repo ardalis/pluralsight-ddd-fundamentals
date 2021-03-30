@@ -50,7 +50,7 @@ The ports in () are only open inside of docker, not exposed otherwise.
 
 Here are the (localhost) links you should use once the apps are running in docker:
 
-- [FrontDesk](http://localhost:5100/http://localhost:5100/blazor-frontdesk-demo)
+- [FrontDesk](http://localhost:5100/blazor-frontdesk-demo)
 - [Clinic Management](http://localhost:6100/blazor-clinicmanagement-demo/clients)
 - [VetClinicPublic](http://localhost:7100/) (there are links here to send test emails and view them, too)
 
