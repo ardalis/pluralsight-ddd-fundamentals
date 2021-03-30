@@ -15,6 +15,8 @@ docker-compose build
 docker-compose up
 ```
 
+The `build` step will take a while; the `up` command is much faster but will also take a moment and you may see some errors as apps try to connect to docker or databases before they're responsive. Give it a minute or two and it should succeed.
+
 This will start RabbitMQ (for messaging between apps) and build and run each of the applications involved in the sample:
 
 - FrontDesk.Api
@@ -45,6 +47,12 @@ Once running, you should be able to access the various apps using localhost (HTT
 | Papercut SMTP                  |           (25) |                 25 |
 
 The ports in () are only open inside of docker, not exposed otherwise.
+
+Here are the links you should use once the apps are running in docker:
+
+- [FrontDesk](http://localhost:5100/http://localhost:5100/blazor-frontdesk-demo)
+- [Clinic Management](http://localhost:6100/blazor-clinicmanagement-demo/clients)
+- [VetClinicPublic](http://localhost:7100/) (there are links here to send test emails and view them, too)
 
 If you want to quickly clean up all of your docker containers (**All** of them not just the ones you created for this sample!) you can run this command:
 

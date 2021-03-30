@@ -1,5 +1,5 @@
 ﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">Front Desk</a>
+    <a class="navbar-brand" href="">Clinic Management</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon">NAV</span>
     </button>
@@ -7,6 +7,11 @@
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <a class="nav-link" href="https://localhost:5001/blazor-frontdesk-demo/">
+                <span class="oi oi-plus" aria-hidden="true"></span> Schedule
+            </a>
+        </li>
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="clients">
                 <span class="oi oi-plus" aria-hidden="true"></span> Clients

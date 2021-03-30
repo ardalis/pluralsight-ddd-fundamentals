@@ -85,7 +85,7 @@ namespace ClinicManagement.Api
                                 builder =>
                                 {
                               builder.WithOrigins(baseUrlConfig.WebBase.Replace("host.docker.internal", "localhost").TrimEnd('/'));
-                              builder.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
+                              builder.SetIsOriginAllowed(origin => true);
                               builder.AllowAnyMethod();
                               builder.AllowAnyHeader();
                             });
@@ -124,7 +124,9 @@ namespace ClinicManagement.Api
         app.UseDeveloperExceptionPage();
       }
 
-      app.UseHttpsRedirection();
+      //  if enabled configure docker with
+      // https://docs.microsoft.com/en-us/aspnet/core/security/docker-compose-https?view=aspnetcore-5.0
+      //app.UseHttpsRedirection();
 
       app.UseRouting();
 
@@ -138,6 +140,7 @@ namespace ClinicManagement.Api
       app.UseSwaggerUI(c =>
       {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = string.Empty; // Set Swagger UI to app root
       });
 
       app.UseEndpoints(endpoints =>

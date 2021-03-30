@@ -44,7 +44,6 @@ namespace FrontDesk.Api
     {
       try
       {
-
         var factory = new ConnectionFactory
         {
           HostName = settings.Hostname,

@@ -18,6 +18,7 @@ namespace ClinicManagement.Blazor.Services
 
     public async Task<RoomDto> CreateAsync(CreateRoomRequest room)
     {
+      _logger.LogInformation($"Creating room: {room}");
       return (await _httpService.HttpPostAsync<CreateRoomResponse>("rooms", room)).Room;
     }
 
