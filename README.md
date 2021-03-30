@@ -48,7 +48,7 @@ Once running, you should be able to access the various apps using localhost (HTT
 
 The ports in () are only open inside of docker, not exposed otherwise.
 
-Here are the links you should use once the apps are running in docker:
+Here are the (localhost) links you should use once the apps are running in docker:
 
 - [FrontDesk](http://localhost:5100/http://localhost:5100/blazor-frontdesk-demo)
 - [Clinic Management](http://localhost:6100/blazor-clinicmanagement-demo/clients)
