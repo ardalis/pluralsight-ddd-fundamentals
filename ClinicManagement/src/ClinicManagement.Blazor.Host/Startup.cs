@@ -33,7 +33,7 @@ namespace ClinicManagement.Blazor.Host
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-      app.UsePathBase("/blazor-clinicmanagement-demo/");
+      app.UsePathBase("/");
 
       if (env.IsDevelopment())
       {
@@ -56,7 +56,7 @@ namespace ClinicManagement.Blazor.Host
       {
         endpoints.MapRazorPages();
         endpoints.MapControllers();
-        endpoints.MapBlazorHub("/blazor-clinicmanagement-demo");
+        endpoints.MapBlazorHub();
         endpoints.MapFallbackToFile("index.html");
       });
     }

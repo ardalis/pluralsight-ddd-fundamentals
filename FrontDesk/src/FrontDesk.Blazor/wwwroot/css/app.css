@@ -49,7 +49,9 @@ a, .btn-link {
         top: 0.5rem;
     }
 
-
+p {
+    display: none;
+}
 
 .main-action {
     margin-bottom: 10px;

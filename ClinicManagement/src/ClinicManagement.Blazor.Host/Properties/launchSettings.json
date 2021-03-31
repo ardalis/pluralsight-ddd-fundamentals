@@ -7,12 +7,12 @@
     "ClinicManagement.Blazor.Host": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "blazor-clinicmanagement-demo",
+      "launchUrl": "",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": "true",
-      "applicationUrl": "https://localhost:6001;http://localhost:6000"
+      "applicationUrl": "https://localhost:6151;http://localhost:6150"
     }
   }
 }

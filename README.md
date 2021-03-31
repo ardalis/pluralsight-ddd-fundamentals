@@ -50,8 +50,8 @@ The ports in () are only open inside of docker, not exposed otherwise.
 
 Here are the (localhost) links you should use once the apps are running in docker:
 
-- [FrontDesk](http://localhost:5100/blazor-frontdesk-demo)
-- [Clinic Management](http://localhost:6100/blazor-clinicmanagement-demo/clients)
+- [FrontDesk](http://localhost:5100)
+- [Clinic Management](http://localhost:6100/clients)
 - [VetClinicPublic](http://localhost:7100/) (there are links here to send test emails and view them, too)
 
 If you want to quickly clean up all of your docker containers (**All** of them not just the ones you created for this sample!) you can run this command:
@@ -90,4 +90,4 @@ You should be able to open [localhost:37408](http://localhost:37408) to view Pap
 
 This sample is from [Julie Lerman](https://www.pluralsight.com/authors/julie-lerman) and [Steve Smith](https://www.pluralsight.com/authors/steve-smith)'s Pluralsight course. The original sample was written for .NET Framework by Steve. The current .NET 5 version was initially ported with the help of [Shady Nagy](https://twitter.com/ShadyNagy_). Progress Software provided the [Blazor Scheduler control](https://www.telerik.com/blazor-ui/scheduler) used to display the clinic's schedule. Additional credits include:
 
-- TBD
+- Your name could be here...
