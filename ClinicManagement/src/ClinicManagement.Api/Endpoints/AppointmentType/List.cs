@@ -33,7 +33,7 @@ namespace ClinicManagement.Api.AppointmentTypeEndpoints
     ]
     public override async Task<ActionResult<ListAppointmentTypeResponse>> HandleAsync([FromQuery] ListAppointmentTypeRequest request, CancellationToken cancellationToken)
     {
-      var response = new ListAppointmentTypeResponse(request.CorrelationId());
+      var response = new ListAppointmentTypeResponse(request.CorrelationId);
 
       var appointmentTypes = await _repository.ListAsync();
       response.AppointmentTypes = _mapper.Map<List<AppointmentTypeDto>>(appointmentTypes);

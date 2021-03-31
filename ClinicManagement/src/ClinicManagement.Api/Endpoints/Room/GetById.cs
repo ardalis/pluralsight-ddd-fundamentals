@@ -32,7 +32,7 @@ namespace ClinicManagement.Api.RoomEndpoints
     ]
     public override async Task<ActionResult<GetByIdRoomResponse>> HandleAsync([FromRoute] GetByIdRoomRequest request, CancellationToken cancellationToken)
     {
-      var response = new GetByIdRoomResponse(request.CorrelationId());
+      var response = new GetByIdRoomResponse(request.CorrelationId);
 
       var room = await _repository.GetByIdAsync(request.RoomId);
       if (room is null) return NotFound();

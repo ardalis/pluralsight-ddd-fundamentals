@@ -29,7 +29,7 @@ namespace FrontDesk.Blazor.Pages
     [Inject]
     FileService FileService { get; set; }
 
-    //communcation with the parent component where the scheduler is
+    //communication with the parent component where the scheduler is
     [Parameter] public AppointmentDto Appointment { get; set; } = new AppointmentDto();
     [Parameter] public PatientDto Patient { get; set; }
     [Parameter] public Guid ScheduleId { get; set; } = Guid.Empty;
@@ -76,6 +76,7 @@ namespace FrontDesk.Blazor.Pages
 
     protected override async Task OnInitializedAsync()
     {
+      Logger.LogInformation($"Initialize AppointmentEditor with appointment starting at {Appointment.Start}");
       Doctors = await DoctorService.ListAsync();
       if (IsAdd)
       {
@@ -138,6 +139,7 @@ namespace FrontDesk.Blazor.Pages
             AppointmentTypeId = Appointment.AppointmentTypeId,
             DateOfAppointment = Appointment.Start.DateTime,
           };
+          Logger.LogInformation($"Creating appointment starting at {toCreate.DateOfAppointment}");
 
           await AppointmentService.CreateAsync(toCreate);
         }

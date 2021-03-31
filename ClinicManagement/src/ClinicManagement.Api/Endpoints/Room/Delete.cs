@@ -32,7 +32,7 @@ namespace ClinicManagement.Api.RoomEndpoints
     ]
     public override async Task<ActionResult<DeleteRoomResponse>> HandleAsync([FromRoute] DeleteRoomRequest request, CancellationToken cancellationToken)
     {
-      var response = new DeleteRoomResponse(request.CorrelationId());
+      var response = new DeleteRoomResponse(request.CorrelationId);
 
       var toDelete = _mapper.Map<Room>(request);
       await _repository.DeleteAsync(toDelete);

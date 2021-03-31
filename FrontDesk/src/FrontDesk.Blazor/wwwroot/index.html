@@ -329,6 +329,7 @@
             }
 
             currentAppointment['start'] = event['start'];
+            console.log("Appt start: " + event['start'].toISOString());
             currentAppointment['end'] = event['end'];
             currentAppointment['description'] = event['description'];
             currentAppointment['isAllDay'] = event['isAllDay'];

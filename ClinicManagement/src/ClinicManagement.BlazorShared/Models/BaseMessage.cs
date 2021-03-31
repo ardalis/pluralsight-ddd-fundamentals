@@ -11,6 +11,6 @@ namespace BlazorShared.Models
     /// Unique Identifier used by logging
     /// </summary>
     protected Guid _correlationId = Guid.NewGuid();
-    public Guid CorrelationId() => _correlationId;
+    public Guid CorrelationId => _correlationId;
   }
 }

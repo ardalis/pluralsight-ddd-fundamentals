@@ -34,7 +34,7 @@ namespace ClinicManagement.Api.ClientEndpoints
     ]
     public override async Task<ActionResult<ListClientResponse>> HandleAsync([FromQuery] ListClientRequest request, CancellationToken cancellationToken)
     {
-      var response = new ListClientResponse(request.CorrelationId());
+      var response = new ListClientResponse(request.CorrelationId);
 
       var spec = new ClientsIncludePatientsSpec();
       var clients = await _repository.ListAsync(spec);

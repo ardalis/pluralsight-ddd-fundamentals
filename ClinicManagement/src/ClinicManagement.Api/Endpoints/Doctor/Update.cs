@@ -32,7 +32,7 @@ namespace ClinicManagement.Api.DoctorEndpoints
     ]
     public override async Task<ActionResult<UpdateDoctorResponse>> HandleAsync(UpdateDoctorRequest request, CancellationToken cancellationToken)
     {
-      var response = new UpdateDoctorResponse(request.CorrelationId());
+      var response = new UpdateDoctorResponse(request.CorrelationId);
 
       var toUpdate = _mapper.Map<Doctor>(request);
       await _repository.UpdateAsync(toUpdate);

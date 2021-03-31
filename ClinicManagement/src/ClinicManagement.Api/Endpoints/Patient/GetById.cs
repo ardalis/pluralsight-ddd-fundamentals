@@ -35,7 +35,7 @@ namespace ClinicManagement.Api.PatientEndpoints
     public override async Task<ActionResult<GetByIdPatientResponse>> HandleAsync([FromRoute] GetByIdPatientRequest request, 
       CancellationToken cancellationToken)
     {
-      var response = new GetByIdPatientResponse(request.CorrelationId());
+      var response = new GetByIdPatientResponse(request.CorrelationId);
 
       var spec = new ClientByIdIncludePatientsSpec(request.ClientId);
       var client = await _repository.GetBySpecAsync(spec);

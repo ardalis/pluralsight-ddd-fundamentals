@@ -38,7 +38,7 @@ namespace ClinicManagement.Api.DoctorEndpoints
     ]
     public override async Task<ActionResult<CreateDoctorResponse>> HandleAsync(CreateDoctorRequest request, CancellationToken cancellationToken)
     {
-      var response = new CreateDoctorResponse(request.CorrelationId());
+      var response = new CreateDoctorResponse(request.CorrelationId);
 
       var toAdd = _mapper.Map<Doctor>(request);
       toAdd = await _repository.AddAsync(toAdd);

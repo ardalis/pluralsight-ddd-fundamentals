@@ -221,9 +221,11 @@ namespace FrontDesk.Blazor.Pages
       }
       else
       {
-        Logger.LogInformation($"Creating a new appointment for {SelectedPatient.Name}");
+        // convert to EDT time (UTC-4)
+        var startDate = new DateTimeOffset(args.Start, new TimeSpan(-4, 0, 0));
+        Logger.LogInformation($"[Index.razor.cs] Creating a new appointment for {SelectedPatient.Name} at {args.Start}");
 
-        CurrentAppointment = new AppointmentDto() { Start = args.Start, End = args.End, IsAllDay = args.IsAllDay };
+        CurrentAppointment = new AppointmentDto() { Start = startDate, End = args.End, IsAllDay = args.IsAllDay };
       }
     }
 
@@ -241,6 +243,10 @@ namespace FrontDesk.Blazor.Pages
 
     private void OpenEdit(AppointmentDto appointment)
     {
+      // convert to EDT time (UTC-4)
+      int offset = -4;
+      appointment.Start = new DateTimeOffset(appointment.Start.DateTime.AddHours(offset), new TimeSpan(offset, 0, 0));
+      appointment.End = new DateTimeOffset(appointment.End.DateTime.AddHours(offset), new TimeSpan(offset, 0, 0));
       Logger.LogInformation($"OpenEdit called for {appointment}");
 
       CurrentAppointment = appointment;

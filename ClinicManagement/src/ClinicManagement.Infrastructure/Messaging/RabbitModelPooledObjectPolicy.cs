@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.ObjectPool;
+﻿using System;
+using Ardalis.GuardClauses;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.ObjectPool;
+using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
-using PluralsightDdd.SharedKernel;
 
 namespace ClinicManagement.Infrastructure.Messaging
 {
@@ -8,24 +11,37 @@ namespace ClinicManagement.Infrastructure.Messaging
   public class RabbitModelPooledObjectPolicy : IPooledObjectPolicy<IModel>
   {
     private readonly IConnection _connection;
+    private readonly ILogger<RabbitModelPooledObjectPolicy> _logger;
 
-    public RabbitModelPooledObjectPolicy()
+    public RabbitModelPooledObjectPolicy(
+      IOptions<RabbitMqConfiguration> rabbitMqOptions,
+      ILogger<RabbitModelPooledObjectPolicy> logger)
     {
-      _connection = GetConnection();
+      _connection = GetConnection(rabbitMqOptions.Value);
+      _logger = Guard.Against.Null(logger, nameof(logger));
     }
 
-    private IConnection GetConnection()
+    private IConnection GetConnection(RabbitMqConfiguration settings)
     {
-      var factory = new ConnectionFactory()
+      Guard.Against.Null(settings, nameof(settings));
+      try
       {
-        HostName = "localhost", // TODO: Read from config
-        UserName = MessagingConstants.Credentials.DEFAULT_USERNAME,
-        Password = MessagingConstants.Credentials.DEFAULT_PASSWORD,
-        Port = 5672,
-        VirtualHost = "/",
-      };
+        var factory = new ConnectionFactory()
+        {
+          HostName = settings.Hostname,
+          UserName = settings.UserName,
+          Password = settings.Password,
+          Port = settings.Port,
+          VirtualHost = settings.VirtualHost,
+        };
 
-      return factory.CreateConnection();
+        return factory.CreateConnection();
+      }
+      catch (Exception ex)
+      {
+        _logger.LogError(ex, "Failed to connect to RabbitMQ", settings);
+        throw;
+      }
     }
 
     public IModel Create()

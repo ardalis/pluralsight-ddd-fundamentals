@@ -33,7 +33,7 @@ namespace ClinicManagement.Api.DoctorEndpoints
     ]
     public override async Task<ActionResult<ListDoctorResponse>> HandleAsync([FromQuery] ListDoctorRequest request, CancellationToken cancellationToken)
     {
-      var response = new ListDoctorResponse(request.CorrelationId());
+      var response = new ListDoctorResponse(request.CorrelationId);
 
       var doctors = await _repository.ListAsync();
       if (doctors is null) return NotFound();

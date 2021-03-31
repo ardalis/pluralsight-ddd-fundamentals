@@ -36,7 +36,7 @@ namespace ClinicManagement.Api.RoomEndpoints
     ]
     public override async Task<ActionResult<ListRoomResponse>> HandleAsync([FromQuery] ListRoomRequest request, CancellationToken cancellationToken)
     {
-      var response = new ListRoomResponse(request.CorrelationId());
+      var response = new ListRoomResponse(request.CorrelationId);
 
       var roomSpec = new RoomSpecification();
       var rooms = await _repository.ListAsync(roomSpec);

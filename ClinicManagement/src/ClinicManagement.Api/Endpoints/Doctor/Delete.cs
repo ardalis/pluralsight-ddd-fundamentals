@@ -32,7 +32,7 @@ namespace ClinicManagement.Api.DoctorEndpoints
     ]
     public override async Task<ActionResult<DeleteDoctorResponse>> HandleAsync([FromRoute] DeleteDoctorRequest request, CancellationToken cancellationToken)
     {
-      var response = new DeleteDoctorResponse(request.CorrelationId());
+      var response = new DeleteDoctorResponse(request.CorrelationId);
 
       var toDelete = _mapper.Map<Doctor>(request);
       await _repository.DeleteAsync(toDelete);

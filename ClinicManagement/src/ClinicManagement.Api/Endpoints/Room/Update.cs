@@ -32,7 +32,7 @@ namespace ClinicManagement.Api.RoomEndpoints
     ]
     public override async Task<ActionResult<UpdateRoomResponse>> HandleAsync(UpdateRoomRequest request, CancellationToken cancellationToken)
     {
-      var response = new UpdateRoomResponse(request.CorrelationId());
+      var response = new UpdateRoomResponse(request.CorrelationId);
 
       var toUpdate = _mapper.Map<Room>(request);
       await _repository.UpdateAsync(toUpdate);

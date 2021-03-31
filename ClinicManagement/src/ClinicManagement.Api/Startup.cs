@@ -7,6 +7,7 @@ using ClinicManagement.Api.Hubs;
 using ClinicManagement.Core.Interfaces;
 using ClinicManagement.Infrastructure;
 using ClinicManagement.Infrastructure.Data;
+using ClinicManagement.Infrastructure.Messaging;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,6 +16,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.ObjectPool;
+using RabbitMQ.Client;
 
 namespace ClinicManagement.Api
 {
@@ -103,9 +106,11 @@ namespace ClinicManagement.Api
       services.AddAutoMapper(typeof(Startup).Assembly);
       services.AddSwaggerGenCustom();
 
-      // RabbitMQ service must be running on port 5673
-      // 
-      //services.AddHostedService<RabbitMQService>();
+      // configure messaging
+      var messagingConfig = Configuration.GetSection("RabbitMq");
+      services.Configure<RabbitMqConfiguration>(messagingConfig);
+      services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
+      services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
     }
 
     public void ConfigureContainer(ContainerBuilder builder)

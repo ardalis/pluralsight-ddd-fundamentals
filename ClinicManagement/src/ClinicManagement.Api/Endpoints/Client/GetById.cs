@@ -32,7 +32,7 @@ namespace ClinicManagement.Api.ClientEndpoints
     ]
     public override async Task<ActionResult<GetByIdClientResponse>> HandleAsync([FromRoute] GetByIdClientRequest request, CancellationToken cancellationToken)
     {
-      var response = new GetByIdClientResponse(request.CorrelationId());
+      var response = new GetByIdClientResponse(request.CorrelationId);
 
       var client = await _repository.GetByIdAsync(request.ClientId);
       if (client is null) return NotFound();
