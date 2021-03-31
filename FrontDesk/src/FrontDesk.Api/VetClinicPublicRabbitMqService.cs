@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using FrontDesk.Api.Hubs;
+using FrontDesk.Core.Events.ApplicationEvents;
 using FrontDesk.Infrastructure.Messaging;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
@@ -107,26 +108,25 @@ namespace FrontDesk.Api
       using var doc = JsonDocument.Parse(message);
       var root = doc.RootElement;
       var eventType = root.GetProperty("EventType");
-      //var entity = root.GetProperty("Entity");
 
       using var scope = _serviceScopeFactory.CreateScope();
       var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-      //if (eventType.GetString() == "Doctor-Created")
-      //{
-      //  int id = entity.GetProperty("Id").GetInt32();
-      //  string name = entity.GetProperty("Name").GetString();
-      //  var command = new CreateDoctorCommand
-      //  {
-      //    Id = id,
-      //    Name = name
-      //  };
-      //  await mediator.Send(command);
+      if (eventType.GetString() == "AppointmentConfirmedEvent")
+      {
+        Guid appointmentId = root.GetProperty("AppointmentId").GetGuid();
+        DateTimeOffset dateTimeOffset = root.GetProperty("DateTimeEventOccurred").GetDateTimeOffset();
+        var appEvent = new AppointmentConfirmedAppEvent(dateTimeOffset)
+        {
+          AppointmentId = appointmentId
+        };
+        await mediator.Publish(appEvent);
 
-        string notification = $"AppointmentConfirmed!";
+        // TODO: remove duplicate; real notification is in FrontDesk.Api.Hubs
+        // AppointmentConfirmedHandler
+        string notification = $"Appointment Confirmed!";
         await _scheduleHub.Clients.All.SendAsync("ReceiveMessage", notification);
-      //}
-      // TODO: Implement other kinds of updates
+      }
     }
 
     public override void Dispose()

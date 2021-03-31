@@ -3,15 +3,20 @@ using PluralsightDdd.SharedKernel;
 
 namespace FrontDesk.Core.Events.ApplicationEvents
 {
+  // This is fired by the message queue handler when an appointment should
+  // be marked confirmed. It happens before the appointment is confirmed in
+  // the model.
   public class AppointmentConfirmedAppEvent : BaseDomainEvent
   {
-    public AppointmentConfirmedAppEvent()
+    public AppointmentConfirmedAppEvent() : this(DateTime.Now)
     {
-      this.Id = Guid.NewGuid();
-      DateOccurred = DateTime.Now;
     }
 
-    public Guid Id { get; private set; }
+    public AppointmentConfirmedAppEvent(DateTimeOffset dateOccurred)
+    {
+      DateOccurred = dateOccurred.DateTime;
+    }
+
     public Guid AppointmentId { get; set; }
     public string EventType
     {

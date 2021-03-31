@@ -7,6 +7,7 @@ using FrontDesk.Core.Events.ApplicationEvents;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.Specifications;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel.Interfaces;
 
 namespace FrontDesk.Core.Handlers
@@ -18,20 +19,25 @@ namespace FrontDesk.Core.Handlers
   {
     private readonly IRepository<Schedule> _scheduleRepository;
     private readonly IReadRepository<Schedule> _scheduleReadRepository;
-
     private readonly IApplicationSettings _settings;
+    private readonly ILogger<EmailConfirmationHandler> _logger;
 
     public EmailConfirmationHandler(IRepository<Schedule> scheduleRepository,
       IReadRepository<Schedule> scheduleReadRepository,
-      IApplicationSettings settings)
+      IApplicationSettings settings,
+      ILogger<EmailConfirmationHandler> logger)
     {
       _scheduleRepository = scheduleRepository;
       _scheduleReadRepository = scheduleReadRepository;
       _settings = settings;
+      _logger = logger;
     }
 
-    public async Task Handle(AppointmentConfirmedAppEvent appointmentConfirmedEvent, CancellationToken cancellationToken)
+    public async Task Handle(AppointmentConfirmedAppEvent appointmentConfirmedEvent,
+      CancellationToken cancellationToken)
     {
+      _logger.LogInformation($"Handling appointment confirmation: {appointmentConfirmedEvent.AppointmentId}");
+
       var scheduleSpec = new ScheduleForClinicAndDateWithAppointmentsSpec(_settings.ClinicId, _settings.TestDate);
       // Note: In this demo this only works for appointments scheduled on TestDate
       var schedule = (await _scheduleReadRepository.GetBySpecAsync(scheduleSpec));
