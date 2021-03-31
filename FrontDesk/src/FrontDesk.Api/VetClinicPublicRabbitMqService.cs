@@ -121,11 +121,6 @@ namespace FrontDesk.Api
           AppointmentId = appointmentId
         };
         await mediator.Publish(appEvent);
-
-        // TODO: remove duplicate; real notification is in FrontDesk.Api.Hubs
-        // AppointmentConfirmedHandler
-        string notification = $"Appointment Confirmed!";
-        await _scheduleHub.Clients.All.SendAsync("ReceiveMessage", notification);
       }
     }
 
