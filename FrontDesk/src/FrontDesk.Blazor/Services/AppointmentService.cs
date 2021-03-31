@@ -25,6 +25,7 @@ namespace FrontDesk.Blazor.Services
 
     public async Task<AppointmentDto> EditAsync(UpdateAppointmentRequest appointment)
     {
+      _logger.LogInformation($"Creating new appointment for {appointment}");
       return (await _httpService.HttpPutAsync<UpdateAppointmentResponse>(UpdateAppointmentRequest.Route, appointment)).Appointment;
     }
 
