@@ -4,7 +4,7 @@ using FrontDesk.Core.Aggregates;
 namespace FrontDesk.Core.Interfaces
 {
   /// <summary>
-  /// Note: This repository will save changes with each method
+  /// Note: This interface is just an example; it's not used in this app.
   /// </summary>
   public interface IScheduleRepository
   {
