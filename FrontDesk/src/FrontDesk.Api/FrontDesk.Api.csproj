@@ -13,6 +13,21 @@
     <None Remove="images\doctors\dr_smith.jpg" />
     <None Remove="images\doctors\dr_who.jpg" />
     <None Remove="images\doctors\no_Doctor_selected.jpg" />
+    <None Remove="images\patients\arya.jpg" />
+    <None Remove="images\patients\athena.jpg" />
+    <None Remove="images\patients\benfranklin.jpg" />
+    <None Remove="images\patients\bokeh.jpg" />
+    <None Remove="images\patients\darwin.jpg" />
+    <None Remove="images\patients\gusto.jpg" />
+    <None Remove="images\patients\hugo.jpg" />
+    <None Remove="images\patients\jasper.jpg" />
+    <None Remove="images\patients\max.jpg" />
+    <None Remove="images\patients\mim.jpg" />
+    <None Remove="images\patients\rosie.jpg" />
+    <None Remove="images\patients\roxy.jpg" />
+    <None Remove="images\patients\sampson.jpg" />
+    <None Remove="images\patients\sugar.jpg" />
+    <None Remove="images\patients\violet.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +44,51 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="images\doctors\no_doctor_selected.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\arya.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\athena.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\benfranklin.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\bokeh.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\darwin.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\gusto.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\hugo.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\jasper.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\max.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\mim.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\rosie.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\roxy.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\sampson.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\sugar.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="images\patients\violet.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
