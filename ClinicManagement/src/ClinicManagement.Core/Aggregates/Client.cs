@@ -8,9 +8,9 @@ namespace ClinicManagement.Core.Aggregates
   {
     public string FullName { get; set; }
     public string PreferredName { get; set; }
-    public string Salutation { get; private set; }
-    public string EmailAddress { get; private set; }
-    public int PreferredDoctorId { get; private set; }
+    public string Salutation { get; set; }
+    public string EmailAddress { get; set; }
+    public int PreferredDoctorId { get; set; }
     public IList<Patient> Patients { get; private set; } = new List<Patient>();
 
     public Client(string fullName,
