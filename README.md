@@ -118,7 +118,7 @@ Don't worry about submitting a pull request for any `TODO` comments you fix. The
 
 ## 3. Architecture Notes
 
-## 4. Deveoper Notes
+## 4. Developer Notes
 
 ## 5. Credits
 
