@@ -101,7 +101,8 @@ docker run --name=papercut -p 25:25 -p 37408:37408 jijiechen/papercut:latest
 
 You should be able to open [localhost:37408](http://localhost:37408) to view Papercut test mailserver management interface, where sent emails will appear.
 
-![Papercut management app](https://user-images.githubusercontent.com/782127/112649314-b4e5f880-8e20-11eb-92d3-b120165847e6.png)
+![Papercut management app](https://user-images.githubusercontent.com/5007120/113427976-fb4cd180-93a3-11eb-826e-9ba2b76466c0.png)
+)
 
 You can run individual solutions independently from one another, but obviously you won't see live sync between them when entities are updated, new appointments created, appointment confirmation emails clicked, etc. To get that, you'll need to run all three of the web applications:
 
