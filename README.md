@@ -79,6 +79,7 @@ If you want to quickly clean up all of your docker containers (**All** of them n
 ```powershell
 docker kill $(docker ps -q)
 ```
+Note that any data changes you make will not be persisted if you **docker remove** the SQL Server container. The Docker container for SQL Server will be recreated and seeded on the next **docker run**. In other scenarios, you might be using Docker volumes to persist or share the database across container instances but that's overkill for this demo.
 
 ### 1.2 Visual Studio
 
