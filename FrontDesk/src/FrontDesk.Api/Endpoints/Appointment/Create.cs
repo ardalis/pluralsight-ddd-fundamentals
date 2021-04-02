@@ -57,7 +57,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       var appointmentStart = request.DateOfAppointment;
       var timeRange = new DateTimeOffsetRange(appointmentStart, TimeSpan.FromMinutes(appointmentType.Duration));
 
-      var newAppointment = new Appointment(request.AppointmentTypeId, request.ScheduleId, request.ClientId, request.SelectedDoctor, request.PatientId, request.RoomId, timeRange, request.Details);
+      var newAppointment = new Appointment(request.AppointmentTypeId, request.ScheduleId, request.ClientId, request.SelectedDoctor, request.PatientId, request.RoomId, timeRange, request.Title);
 
       schedule.AddNewAppointment(newAppointment);
 

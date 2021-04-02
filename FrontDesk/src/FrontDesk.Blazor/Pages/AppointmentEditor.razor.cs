@@ -130,7 +130,7 @@ namespace FrontDesk.Blazor.Pages
         {
           CreateAppointmentRequest toCreate = new CreateAppointmentRequest()
           {
-            Details = Title,
+            Title = Title,
             SelectedDoctor = (int)Appointment.DoctorId,
             PatientId = Patient.PatientId,
             ClientId = Patient.ClientId,

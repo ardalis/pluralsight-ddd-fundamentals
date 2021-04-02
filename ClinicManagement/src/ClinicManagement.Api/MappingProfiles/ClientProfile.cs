@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BlazorShared.Models.Client;
+using ClinicManagement.Api.ApplicationEvents;
 using ClinicManagement.Core.Aggregates;
 
 namespace ClinicManagement.Api.MappingProfiles
@@ -17,6 +18,9 @@ namespace ClinicManagement.Api.MappingProfiles
           .ForMember(dto => dto.Id, options => options.MapFrom(src => src.ClientId));
       CreateMap<DeleteClientRequest, Client>();
       CreateMap<Patient, int>().ConvertUsing(src => src.Id);
+      CreateMap<Client, NamedEntity>()
+          .ForMember(dest => dest.Name, options => options.MapFrom(src => src.FullName));
+      ;
     }
   }
 }

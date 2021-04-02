@@ -18,7 +18,6 @@ namespace FrontDesk.Api.MappingProfiles
           .ForPath(dto => dto.TimeRange.Start, options => options.MapFrom(src => src.Start))
           .ForPath(dto => dto.TimeRange.End, options => options.MapFrom(src => src.End));
       CreateMap<CreateAppointmentRequest, Appointment>()
-          .ForMember(dto => dto.Title, options => options.MapFrom(src => src.Details))
           .ForMember(dto => dto.DoctorId, options => options.MapFrom(src => src.SelectedDoctor))
           .ForPath(dto => dto.TimeRange.Start, options => options.MapFrom(src => src.DateOfAppointment))
           .ForPath(dto => dto.TimeRange.End, options => options.MapFrom(src => src.DateOfAppointment));

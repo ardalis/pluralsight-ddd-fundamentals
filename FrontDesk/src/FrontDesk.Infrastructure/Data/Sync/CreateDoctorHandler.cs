@@ -1,16 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using FrontDesk.Core.Aggregates;
 using MediatR;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace FrontDesk.Infrastructure.Data.Sync
 {
-  public class CreateDoctorCommand : IRequest
-  { 
-    public int Id { get; set; }
-    public string Name { get; set; }
-  }
 
   public class CreateDoctorHandler : IRequestHandler<CreateDoctorCommand>
   {

@@ -46,7 +46,7 @@
                StartDate="@StartDate" StartTime="@DayStart"
                EndTime="@DayEnd" Groups="Groups"
                OnEditCallback="@((e) => OpenEdit(e))"
-        OnScheduleChangedCallback="@(() => RefreshDataAsync())">
+        OnScheduleChangedCallback="@(() => RefreshAppointmentsAsync())">
         <Resource Name="AppointmentTypes" TextField="Name" ValueField="AppointmentTypeId" Field="AppointmentTypeId" Title="Appointment Type" Data="@AppointmentTypes" />
         <Resource Name="Rooms" TextField="Name" ValueField="RoomId" Field="RoomId" Title="Room" Data="@Rooms" />
     </Scheduler>
@@ -59,6 +59,6 @@
     </WindowActions>
     <WindowContent>
         @* This component is in the Pages folder *@
-        <AppointmentEditor Patient="SelectedPatient" ScheduleId="ScheduleId" RoomId="RoomId" Appointment="@CurrentAppointment" OnAppointmentChanged="@RefreshDataAsync" />
+        <AppointmentEditor Patient="SelectedPatient" ScheduleId="ScheduleId" RoomId="RoomId" Appointment="@CurrentAppointment" OnAppointmentChanged="@RefreshAppointmentsAsync" />
     </WindowContent>
 </TelerikWindow>

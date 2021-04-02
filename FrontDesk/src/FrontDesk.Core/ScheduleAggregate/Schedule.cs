@@ -10,6 +10,13 @@ namespace FrontDesk.Core.Aggregates
 {
   public class Schedule : BaseEntity<Guid>, IAggregateRoot
   {
+    public int ClinicId { get; private set; }
+    private readonly List<Appointment> _appointments = new List<Appointment>();
+    public IEnumerable<Appointment> Appointments => _appointments.AsReadOnly();
+
+    [NotMapped]
+    public virtual DateTimeOffsetRange DateRange { get; private set; }
+
     public Schedule(Guid id,
       DateTimeOffsetRange dateRange,
       int clinicId,
@@ -28,14 +35,6 @@ namespace FrontDesk.Core.Aggregates
       Id = id;
       ClinicId = clinicId;
     }
-
-    public int ClinicId { get; private set; }
-
-    // not persisted
-    [NotMapped]
-    public virtual DateTimeOffsetRange DateRange { get; private set; }
-    private readonly List<Appointment> _appointments = new List<Appointment>();
-    public IEnumerable<Appointment> Appointments => _appointments.AsReadOnly();
 
     public Appointment AddNewAppointment(Appointment appointment)
     {

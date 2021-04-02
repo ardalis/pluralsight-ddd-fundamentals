@@ -2,12 +2,12 @@
 
 namespace ClinicManagement.Api.ApplicationEvents
 {
-  public class EntityCreatedEvent : IApplicationEvent
+  public class NamedEntityCreatedEvent : IApplicationEvent
   {
-    public string EventType => "Doctor-Created";
+    public string EventType { get; set; }
     public NamedEntity Entity { get; set; }
 
-    public EntityCreatedEvent(NamedEntity entity)
+    public NamedEntityCreatedEvent(NamedEntity entity, string eventType)
     {
       Entity = entity;
     }

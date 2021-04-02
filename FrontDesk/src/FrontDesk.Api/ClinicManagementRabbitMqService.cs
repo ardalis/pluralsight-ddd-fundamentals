@@ -105,6 +105,8 @@ namespace FrontDesk.Api
     private async Task HandleMessage(string message)
     {
       _logger.LogInformation($"Handling Message: {message}");
+
+      // TODO: A real app would have better error handling for parsing and routing messages
       using var doc = JsonDocument.Parse(message);
       var root = doc.RootElement;
       var eventType = root.GetProperty("EventType");
@@ -124,7 +126,22 @@ namespace FrontDesk.Api
         };
         await mediator.Send(command);
 
-        string notification = $"New Doctor Added: {name}";
+        string notification = $"New Doctor {name} added in Clinic Management. ";
+        await _scheduleHub.Clients.All.SendAsync("ReceiveMessage", notification);
+      }
+      if (eventType.GetString() == "Client-Updated")
+      {
+        int id = entity.GetProperty("Id").GetInt32();
+        string name = entity.GetProperty("Name").GetString();
+        var command = new UpdateClientCommand
+        {
+          Id = id,
+          Name = name
+        };
+        await mediator.Send(command);
+
+        // TODO: Only send notification if changes occurred
+        string notification = $"Client {name} updated in Clinic Management.";
         await _scheduleHub.Clients.All.SendAsync("ReceiveMessage", notification);
       }
       // TODO: Implement other kinds of updates

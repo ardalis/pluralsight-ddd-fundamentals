@@ -180,19 +180,28 @@ namespace FrontDesk.Blazor.Pages
 
       hubConnection.On<string>("ReceiveMessage", async (message) =>
       {
-        await RefreshDataAsync();
+        if (message.Contains("Client") && message.Contains("updated"))
+        {
+          await RefreshClientsAsync();
+        }
+        await RefreshAppointmentsAsync();
         ToastService.SendMessage(message);
       });
 
       return hubConnection.StartAsync();
     }
 
-    private Task CancelEditing()
+    private async Task RefreshClientsAsync()
     {
-      return RefreshDataAsync();
+      Clients = await ClientService.ListAsync();
     }
 
-    private async Task RefreshDataAsync()
+    private Task CancelEditing()
+    {
+      return RefreshAppointmentsAsync();
+    }
+
+    private async Task RefreshAppointmentsAsync()
     {
       Logger.LogInformation("RefreshDataAsync()...");
       //an event callback needs to be raised in this component context to re-render the contents and to hide the dialog

@@ -19,7 +19,7 @@ namespace FrontDesk.Blazor.Services
 
     public async Task<AppointmentDto> CreateAsync(CreateAppointmentRequest appointment)
     {
-      _logger.LogInformation($"Creating new appointment for {appointment.Details}");
+      _logger.LogInformation($"Creating new appointment for {appointment.Title}");
       return (await _httpService.HttpPostAsync<CreateAppointmentResponse>(CreateAppointmentRequest.Route, appointment)).Appointment;
     }
 

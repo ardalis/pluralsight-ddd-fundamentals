@@ -37,11 +37,6 @@ namespace FrontDesk.Core.Aggregates
     public int PreferredDoctorId { get; private set; }
     public IList<Patient> Patients { get; private set; }
 
-    public void UpdateFullName(string fullName)
-    {
-      FullName = fullName;
-    }
-
     public override string ToString()
     {
       return FullName.ToString();

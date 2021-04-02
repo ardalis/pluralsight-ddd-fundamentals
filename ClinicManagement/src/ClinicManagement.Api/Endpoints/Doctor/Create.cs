@@ -49,7 +49,7 @@ namespace ClinicManagement.Api.DoctorEndpoints
       // Note: These messages could be triggered from the Repository or DbContext events
       // In the DbContext you could look for entities marked with an interface saying they needed
       // to be synchronized via cross-domain events and publish the appropriate message.
-      var appEvent = new EntityCreatedEvent(_mapper.Map<NamedEntity>(toAdd));
+      var appEvent = new NamedEntityCreatedEvent(_mapper.Map<NamedEntity>(toAdd), "Doctor-Created");
       _messagePublisher.Publish(appEvent);
 
       return Ok(response);

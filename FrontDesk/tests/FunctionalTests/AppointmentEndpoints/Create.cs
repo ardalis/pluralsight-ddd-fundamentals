@@ -54,7 +54,7 @@ namespace FunctionalTests.AppointmentEndpoints
         AppointmentTypeId = _testAppointmentTypeId,
         ClientId = _testClientId,
         DateOfAppointment = new OfficeSettings().TestDate,
-        Details = "new appointment details",
+        Title = "new appointment title",
         PatientId = _testPatientId,
         RoomId = _testRoomId,
         ScheduleId = scheduleId,
