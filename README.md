@@ -79,6 +79,7 @@ If you want to quickly clean up all of your docker containers (**All** of them n
 ```powershell
 docker kill $(docker ps -q)
 ```
+Note that any data changes you make will not be persisted if you **docker remove** the SQL Server container. The Docker container for SQL Server will be recreated and seeded on the next **docker run**. In other scenarios, you might be using Docker volumes to persist or share the database across container instances but that's overkill for this demo.
 
 ### 1.2 Visual Studio
 
@@ -100,7 +101,7 @@ docker run --name=papercut -p 25:25 -p 37408:37408 jijiechen/papercut:latest
 
 You should be able to open [localhost:37408](http://localhost:37408) to view Papercut test mailserver management interface, where sent emails will appear.
 
-![Papercut management app](https://user-images.githubusercontent.com/782127/112649314-b4e5f880-8e20-11eb-92d3-b120165847e6.png)
+![Papercut management app](https://user-images.githubusercontent.com/5007120/113427976-fb4cd180-93a3-11eb-826e-9ba2b76466c0.png)
 
 You can run individual solutions independently from one another, but obviously you won't see live sync between them when entities are updated, new appointments created, appointment confirmation emails clicked, etc. To get that, you'll need to run all three of the web applications:
 
@@ -112,7 +113,7 @@ Some of the ports may not be set up in config; you may need to adjust them by ha
 
 ## 2. Student Recommendations
 
-If you're coming here from the Pluralsight Domain-Driven Design Fudndamentals course, great! Download this sample and look around. See if you can run it on your machine (docker recommended). Your next assignment is to look at the `TODO` comments in the code, and see if you can implement any of them. You can [view todo comments as tasks in Visual Studio](https://ardalis.com/tracking-tasks-in-visual-studio/), or there are plugins for VS Code.
+If you're coming here from the Pluralsight Domain-Driven Design Fundamentals course, great! Download this sample and look around. See if you can run it on your machine (docker recommended). Your next assignment is to look at the `TODO` comments in the code, and see if you can implement any of them. You can [view todo comments as tasks in Visual Studio](https://ardalis.com/tracking-tasks-in-visual-studio/), or there are plugins for VS Code.
 
 Don't worry about submitting a pull request for any `TODO` comments you fix. They're left there intentionally to help students learn by providing some ways to extend the solution from the course.
 
