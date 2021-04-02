@@ -178,13 +178,46 @@ namespace ClinicManagement.Infrastructure.Data
 
       var clientSmith = (CreateClientWithPatient("Steve Smith", "Steve", "Mr.", drSmith.Id, MALE_SEX, "Darwin", "Dog",
         "Poodle"));
-      var rumor = new Patient(1, "Rumor", FEMALE_SEX, drWho.Id);
-        rumor.AnimalType = new AnimalType("Cat", "Alley");
-      clientSmith.Patients.Add(rumor);
+      clientSmith.Patients.Add(new Patient { 
+        ClientId = 1,
+        Name = "Arya",
+        Sex = FEMALE_SEX,
+        PreferredDoctorId = drWho.Id,
+        AnimalType = new AnimalType("Cat", "Feral") });
+      clientSmith.Patients.Add(new Patient
+      {
+        ClientId = 1,
+        Name = "Rosie",
+        Sex = FEMALE_SEX,
+        PreferredDoctorId = drWho.Id,
+        AnimalType = new AnimalType("Dog", "Golden Retriever")
+      });
 
       clientGraphs.Add(clientSmith);
 
       clientGraphs.Add(CreateClientWithPatient("Julia Lerman", "Julie", "Mrs.", drMcDreamy.Id, MALE_SEX, "Sampson", "Dog", "Newfoundland"));
+
+      clientGraphs.Add(CreateClientWithPatient("David Batten", "David", "Mr.", drWho.Id, MALE_SEX, "Max", "Dog", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Gill Cleeren", "Gill", "Mr.", drWho.Id, MALE_SEX, "Violet", "Dog", "Lhasa apso"));
+
+      clientGraphs.Add(CreateClientWithPatient("James Millar", "James", "Mr.", drSmith.Id, MALE_SEX, "Gusto", "Dog", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("John Elliott", "John", "Mr.", drSmith.Id, MALE_SEX, "Hugo", "Dog", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Katie Tabor", "Katie", "", drSmith.Id, FEMALE_SEX, "Athena", "Dog", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Kim Karnatz", "Kim", "", drSmith.Id, FEMALE_SEX, "Roxy", "Dog", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Leigh Bogardis", "Leigh", "", drSmith.Id, MALE_SEX, "Bokeh", "Cat", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Michael Jenkins", "", "", drSmith.Id, MALE_SEX, "BenFranklin", "Dog", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Patrick Neborg", "", "", drSmith.Id, MALE_SEX, "Sugar", "Dog", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Shelley Benhoff", "", "", drSmith.Id, MALE_SEX, "Mim", "Cat", ""));
+
+      clientGraphs.Add(CreateClientWithPatient("Steve Gordon", "", "", drSmith.Id, MALE_SEX, "Jasper", "Cat", ""));
 
       return clientGraphs;
     }
@@ -200,8 +233,14 @@ namespace ClinicManagement.Infrastructure.Data
     {
       var client = new Client(fullName, preferredName, salutation, doctorId, "client@example.com");
 
-      var patient = new Patient(1, patient1Name, patient1Sex, doctorId);
-      patient.AnimalType = new AnimalType(animalType, breed);
+      var patient = new Patient
+      {
+        ClientId = 1,
+        Name = patient1Name,
+        Sex = patient1Sex,
+        AnimalType = new AnimalType(animalType, breed),
+        PreferredDoctorId = doctorId
+      };
       client.Patients.Add(patient);
 
       return client;

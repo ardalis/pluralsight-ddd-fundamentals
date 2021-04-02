@@ -5,6 +5,7 @@ using AutoMapper;
 using BlazorShared.Models.Patient;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Specifications;
+using ClinicManagement.Core.ValueObjects;
 using Microsoft.AspNetCore.Mvc;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
@@ -39,8 +40,13 @@ namespace ClinicManagement.Api.PatientEndpoints
       var client = await _repository.GetBySpecAsync(spec);
       if (client == null) return NotFound();
 
-      var newPatient = new Patient(client.Id, request.PatientName, "");
-      newPatient.AnimalType = new Core.ValueObjects.AnimalType("Dog", "Husky");
+      // right now we only add huskies
+      var newPatient = new Patient
+      {
+        ClientId = client.Id,
+        Name = request.PatientName,
+        AnimalType = new AnimalType("Dog", "Husky")
+      };
       client.Patients.Add(newPatient);
 
       await _repository.UpdateAsync(client);
