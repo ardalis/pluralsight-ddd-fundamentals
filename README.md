@@ -31,11 +31,11 @@ You can run this sample in Docker or in Visual Studio. Docker is recommended.
 The easiest way to run the sample is using docker. Download the source and run this command from the root folder:
 
 ```powershell
-docker-compose build
+docker-compose build --parallel
 docker-compose up
 ```
 
-The `build` step will take a while; the `up` command is much faster but will also take a moment and you may see some errors as apps try to connect to docker or databases before they're responsive. Give it a minute or two and it should succeed. RabbitMQ errors should go away once that service starts up. If you get SQL Server login errors, I've found it's best to just restart everything (`ctrl-c`, then `docker-compose up` again).
+The `build` step will take a while. It's way faster if you run it in parallel, assuming you have a fast machine and download speed. The `up` command is much faster but will also take a moment and you may see some errors as apps try to connect to docker or databases before they're responsive. Give it a minute or two and it should succeed. RabbitMQ errors should go away once that service starts up. If you get SQL Server login errors, I've found it's best to just restart everything (`ctrl-c`, then `docker-compose up` again).
 
 This will start RabbitMQ (for messaging between apps) and build and run each of the applications involved in the sample:
 
