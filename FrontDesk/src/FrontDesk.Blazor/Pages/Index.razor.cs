@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
 using BlazorShared;
 using BlazorShared.Models.Appointment;
 using BlazorShared.Models.AppointmentType;
@@ -56,6 +57,9 @@ namespace FrontDesk.Blazor.Pages
     [Inject]
     SchedulerService SchedulerService { get; set; }
 
+    [Inject]
+    ISyncLocalStorageService LocalStorage { get; set; }
+
     private bool IsShowEdit = false;
     private bool IsLoaded = false;
     private List<string> Groups = new List<string>();
@@ -89,6 +93,8 @@ namespace FrontDesk.Blazor.Pages
     public bool IsConnected =>
         hubConnection.State == HubConnectionState.Connected;
 
+    private ScheduleState _currentScheduleState = new();
+
     protected override async Task OnInitializedAsync()
     {
       Logger.LogInformation("OnInitializedAsync()");
@@ -109,6 +115,9 @@ namespace FrontDesk.Blazor.Pages
 
       Groups.Add("Rooms");
 
+      // check for saved client/patient Id
+      await LoadScheduleState();
+
       IsLoaded = true;
 
       await InitSignalR();
@@ -116,16 +125,26 @@ namespace FrontDesk.Blazor.Pages
 
     protected async Task ClientChanged(object selectedClientId)
     {
-      if (selectedClientId == null)
+      try
       {
-        // reset UI
-        Patients = new List<PatientDto>();
-        return;
-      }
-      ClientId = (int)selectedClientId;
-      Logger.LogInformation($"Client changed: {ClientId}");
+        if (selectedClientId == null || ((int)selectedClientId) == 0)
+        {
+          // reset UI
+          Patients = new List<PatientDto>();
+          return;
+        }
+        ClientId = (int)selectedClientId;
+        Logger.LogInformation($"Client changed: {ClientId}");
 
-      await GetClientPatientsAsync();
+        await GetClientPatientsAsync();
+      }
+      finally
+      {
+        if (ClientId != _currentScheduleState.SelectedClientId)
+        {
+          SaveScheduleState();
+        }
+      }
     }
 
     private async Task GetClientPatientsAsync()
@@ -160,15 +179,22 @@ namespace FrontDesk.Blazor.Pages
 
     private void PatientChanged(object id)
     {
-      if (id == null)
+      try
       {
-        SelectedPatient = null;
-        return;
+        if (id == null)
+        {
+          SelectedPatient = null;
+          return;
+        }
+        PatientId = (int)id;
+        if (PatientId > 0)
+        {
+          SelectedPatient = Patients.FirstOrDefault(p => p.PatientId == PatientId);
+        }
       }
-      PatientId = (int)id;
-      if (PatientId > 0)
+      finally
       {
-        SelectedPatient = Patients.FirstOrDefault(p => p.PatientId == PatientId);
+        SaveScheduleState();
       }
     }
 
@@ -268,11 +294,48 @@ namespace FrontDesk.Blazor.Pages
         return;
       }
       CustomEditFormShown = true;
+      SaveScheduleState();
     }
 
     public void Dispose()
     {
       _ = hubConnection.DisposeAsync();
+    }
+
+    public class ScheduleState
+    {
+      public int SelectedClientId { get; set; }
+      public int SelectedPatientId { get; set; }
+
+      public override string ToString()
+      {
+        return $"C{SelectedClientId}-P{SelectedPatientId}";
+      }
+    }
+
+    private void SaveScheduleState()
+    {
+      _currentScheduleState.SelectedClientId = ClientId;
+      _currentScheduleState.SelectedPatientId = PatientId;
+
+      Logger.LogInformation($"SaveScheduleState: {_currentScheduleState}");
+      LocalStorage.SetItem(nameof(ScheduleState), _currentScheduleState);
+    }
+
+    private async Task LoadScheduleState()
+    {
+      var currentState = LocalStorage.GetItem<ScheduleState>(nameof(ScheduleState));
+
+      if (currentState == null) return;
+
+      _currentScheduleState = currentState;
+      await ClientChanged(_currentScheduleState.SelectedClientId);
+
+      if (_currentScheduleState.SelectedPatientId > 0)
+      {
+        PatientId = _currentScheduleState.SelectedPatientId;
+        SelectedPatient = Patients.FirstOrDefault(p => p.PatientId == PatientId);
+      }
     }
   }
 }

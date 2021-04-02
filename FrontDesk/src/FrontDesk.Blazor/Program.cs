@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
 using BlazorShared;
 using FrontDesk.Blazor.Services;
 using FrontDesk.Blazor.Shared.SchedulerComponent;
@@ -38,6 +39,9 @@ namespace FrontDesk.Blazor
       builder.Services.AddScoped<ConfigurationService>();
       builder.Services.AddScoped<ToastService>();
       builder.Services.AddScoped<SchedulerService>();
+
+      // Blazor WebAssembly
+      builder.Services.AddBlazoredLocalStorage();
 
       // register the Telerik services
       builder.Services.AddTelerikBlazor();
