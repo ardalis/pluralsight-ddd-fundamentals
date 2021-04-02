@@ -14,6 +14,14 @@ If you like or are using this project to learn, please give it a star. Thanks!
 
 &nbsp;&nbsp;[1.2 Visual Studio](#12-visual-studio)
 
+[2. Student Recommendations](#2-student-recommendations)
+
+[3. Architecture Notes](#3-architecture-notes)
+
+[4. Developer Notes](#4-developer-notes)
+
+[5. Credits](#5-credits)
+
 ## 1. Running the Sample
 
 You can run this sample in Docker or in Visual Studio. Docker is recommended.
@@ -94,11 +102,25 @@ You should be able to open [localhost:37408](http://localhost:37408) to view Pap
 
 ![Papercut management app](https://user-images.githubusercontent.com/782127/112649314-b4e5f880-8e20-11eb-92d3-b120165847e6.png)
 
-## Architecture Notes
+You can run individual solutions independently from one another, but obviously you won't see live sync between them when entities are updated, new appointments created, appointment confirmation emails clicked, etc. To get that, you'll need to run all three of the web applications:
 
-## Deveoper Notes
+- FrontDesk
+- ClinicManagement
+- VetClinicPublic
 
-## Credits
+Some of the ports may not be set up in config; you may need to adjust them by hand. They assume you'll run primarily in docker to see everything running. If you're trying to get things working outside of docker, you should try with the ports shown in the table above.
+
+## 2. Student Recommendations
+
+If you're coming here from the Pluralsight Domain-Driven Design Fudndamentals course, great! Download this sample and look around. See if you can run it on your machine (docker recommended). Your next assignment is to look at the `TODO` comments in the code, and see if you can implement any of them. You can [view todo comments as tasks in Visual Studio](https://ardalis.com/tracking-tasks-in-visual-studio/), or there are plugins for VS Code.
+
+Don't worry about submitting a pull request for any `TODO` comments you fix. They're left there intentionally to help students learn by providing some ways to extend the solution from the course.
+
+## 3. Architecture Notes
+
+## 4. Deveoper Notes
+
+## 5. Credits
 
 This sample is from [Julie Lerman](https://www.pluralsight.com/authors/julie-lerman) and [Steve Smith](https://www.pluralsight.com/authors/steve-smith)'s Pluralsight course. The original sample was written for .NET Framework by Steve. The current .NET 5 version was initially ported with the help of [Shady Nagy](https://twitter.com/ShadyNagy_). Progress Software provided the [Blazor Scheduler control](https://www.telerik.com/blazor-ui/scheduler) used to display the clinic's schedule. Additional credits include:
 
