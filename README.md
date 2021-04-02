@@ -113,7 +113,7 @@ Some of the ports may not be set up in config; you may need to adjust them by ha
 
 ## 2. Student Recommendations
 
-If you're coming here from the Pluralsight Domain-Driven Design Fudndamentals course, great! Download this sample and look around. See if you can run it on your machine (docker recommended). Your next assignment is to look at the `TODO` comments in the code, and see if you can implement any of them. You can [view todo comments as tasks in Visual Studio](https://ardalis.com/tracking-tasks-in-visual-studio/), or there are plugins for VS Code.
+If you're coming here from the Pluralsight Domain-Driven Design Fundamentals course, great! Download this sample and look around. See if you can run it on your machine (docker recommended). Your next assignment is to look at the `TODO` comments in the code, and see if you can implement any of them. You can [view todo comments as tasks in Visual Studio](https://ardalis.com/tracking-tasks-in-visual-studio/), or there are plugins for VS Code.
 
 Don't worry about submitting a pull request for any `TODO` comments you fix. They're left there intentionally to help students learn by providing some ways to extend the solution from the course.
 
