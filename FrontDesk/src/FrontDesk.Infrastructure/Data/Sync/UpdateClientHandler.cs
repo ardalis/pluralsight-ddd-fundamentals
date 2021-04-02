@@ -49,7 +49,7 @@ namespace FrontDesk.Infrastructure.Data.Sync
       _logger.LogInformation($"UpdateClientHandler updating Client {request.Name}-{request.Id}'s appointments.");
       // update appointment titles that include client name
       var appointments = _dbContext.Set<Appointment>()
-        .Where(appointment => appointment.ClientId == request.Id && appointment.Title.Contains(request.Name))
+        .Where(appointment => appointment.ClientId == request.Id && appointment.Title.Contains(currentName))
         .ToList();
       _logger.LogInformation($"UpdateClientHandler found {appointments.Count} appointments to update.");
 
