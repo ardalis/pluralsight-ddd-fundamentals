@@ -6,7 +6,27 @@ Sample code for the Pluralsight DDD Fundamentals course (coming soon) by Julie L
 
 If you like or are using this project to learn, please give it a star. Thanks!
 
-## Running the Sample
+## Table of Contents
+
+[1. Running the Sample](#1-running-the-sample)
+
+&nbsp;&nbsp;[1.1 Docker](#11-docker)
+
+&nbsp;&nbsp;[1.2 Visual Studio](#12-visual-studio)
+
+[2. Student Recommendations](#2-student-recommendations)
+
+[3. Architecture Notes](#3-architecture-notes)
+
+[4. Developer Notes](#4-developer-notes)
+
+[5. Credits](#5-credits)
+
+## 1. Running the Sample
+
+You can run this sample in Docker or in Visual Studio. Docker is recommended.
+
+### 1.1 Docker
 
 The easiest way to run the sample is using docker. Download the source and run this command from the root folder:
 
@@ -15,7 +35,7 @@ docker-compose build
 docker-compose up
 ```
 
-The `build` step will take a while; the `up` command is much faster but will also take a moment and you may see some errors as apps try to connect to docker or databases before they're responsive. Give it a minute or two and it should succeed.
+The `build` step will take a while; the `up` command is much faster but will also take a moment and you may see some errors as apps try to connect to docker or databases before they're responsive. Give it a minute or two and it should succeed. RabbitMQ errors should go away once that service starts up. If you get SQL Server login errors, I've found it's best to just restart everything (`ctrl-c`, then `docker-compose up` again).
 
 This will start RabbitMQ (for messaging between apps) and build and run each of the applications involved in the sample:
 
@@ -60,7 +80,7 @@ If you want to quickly clean up all of your docker containers (**All** of them n
 docker kill $(docker ps -q)
 ```
 
-### Visual Studio
+### 1.2 Visual Studio
 
 Running the sample from Visual Studio requires some additional setup. You will need to run multiple solutions side by side. You will also need to run RabbitMQ, ideally as a docker image, which you can so using this command:
 
@@ -82,11 +102,25 @@ You should be able to open [localhost:37408](http://localhost:37408) to view Pap
 
 ![Papercut management app](https://user-images.githubusercontent.com/782127/112649314-b4e5f880-8e20-11eb-92d3-b120165847e6.png)
 
-## Architecture Notes
+You can run individual solutions independently from one another, but obviously you won't see live sync between them when entities are updated, new appointments created, appointment confirmation emails clicked, etc. To get that, you'll need to run all three of the web applications:
 
-## Deveoper Notes
+- FrontDesk
+- ClinicManagement
+- VetClinicPublic
 
-## Credits
+Some of the ports may not be set up in config; you may need to adjust them by hand. They assume you'll run primarily in docker to see everything running. If you're trying to get things working outside of docker, you should try with the ports shown in the table above.
+
+## 2. Student Recommendations
+
+If you're coming here from the Pluralsight Domain-Driven Design Fudndamentals course, great! Download this sample and look around. See if you can run it on your machine (docker recommended). Your next assignment is to look at the `TODO` comments in the code, and see if you can implement any of them. You can [view todo comments as tasks in Visual Studio](https://ardalis.com/tracking-tasks-in-visual-studio/), or there are plugins for VS Code.
+
+Don't worry about submitting a pull request for any `TODO` comments you fix. They're left there intentionally to help students learn by providing some ways to extend the solution from the course.
+
+## 3. Architecture Notes
+
+## 4. Developer Notes
+
+## 5. Credits
 
 This sample is from [Julie Lerman](https://www.pluralsight.com/authors/julie-lerman) and [Steve Smith](https://www.pluralsight.com/authors/steve-smith)'s Pluralsight course. The original sample was written for .NET Framework by Steve. The current .NET 5 version was initially ported with the help of [Shady Nagy](https://twitter.com/ShadyNagy_). Progress Software provided the [Blazor Scheduler control](https://www.telerik.com/blazor-ui/scheduler) used to display the clinic's schedule. Additional credits include:
 
