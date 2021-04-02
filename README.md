@@ -6,7 +6,19 @@ Sample code for the Pluralsight DDD Fundamentals course (coming soon) by Julie L
 
 If you like or are using this project to learn, please give it a star. Thanks!
 
-## Running the Sample
+## Table of Contents
+
+[1. Running the Sample](#1-running-the-sample)
+
+&nbsp;&nbsp;[1.1 Docker](#11-docker)
+
+&nbsp;&nbsp;[1.2 Visual Studio](#12-visual-studio)
+
+## 1. Running the Sample
+
+You can run this sample in Docker or in Visual Studio. Docker is recommended.
+
+### 1.1 Docker
 
 The easiest way to run the sample is using docker. Download the source and run this command from the root folder:
 
@@ -15,7 +27,7 @@ docker-compose build
 docker-compose up
 ```
 
-The `build` step will take a while; the `up` command is much faster but will also take a moment and you may see some errors as apps try to connect to docker or databases before they're responsive. Give it a minute or two and it should succeed.
+The `build` step will take a while; the `up` command is much faster but will also take a moment and you may see some errors as apps try to connect to docker or databases before they're responsive. Give it a minute or two and it should succeed. RabbitMQ errors should go away once that service starts up. If you get SQL Server login errors, I've found it's best to just restart everything (`ctrl-c`, then `docker-compose up` again).
 
 This will start RabbitMQ (for messaging between apps) and build and run each of the applications involved in the sample:
 
@@ -60,7 +72,7 @@ If you want to quickly clean up all of your docker containers (**All** of them n
 docker kill $(docker ps -q)
 ```
 
-### Visual Studio
+### 1.2 Visual Studio
 
 Running the sample from Visual Studio requires some additional setup. You will need to run multiple solutions side by side. You will also need to run RabbitMQ, ideally as a docker image, which you can so using this command:
 
