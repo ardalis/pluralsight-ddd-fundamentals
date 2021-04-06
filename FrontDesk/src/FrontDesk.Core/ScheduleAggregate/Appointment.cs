@@ -19,7 +19,6 @@ namespace FrontDesk.Core.Aggregates
     public DateTimeOffset? DateTimeConfirmed { get; set; }
     public bool IsPotentiallyConflicting { get; set; }
 
-    // EF https://github.com/dotnet/efcore/issues/12078#issuecomment-498379223
     public Appointment(int appointmentTypeId,
       Guid scheduleId,
       int clientId,
@@ -30,21 +29,13 @@ namespace FrontDesk.Core.Aggregates
       string title,
       DateTime? dateTimeConfirmed = null)
     {
-      Guard.Against.NegativeOrZero(appointmentTypeId, nameof(appointmentTypeId));
-      Guard.Against.Default(scheduleId, nameof(scheduleId));
-      Guard.Against.NegativeOrZero(clientId, nameof(clientId));
-      Guard.Against.NegativeOrZero(doctorId, nameof(doctorId));
-      Guard.Against.NegativeOrZero(patientId, nameof(patientId));
-      Guard.Against.NegativeOrZero(roomId, nameof(roomId));
-      Guard.Against.NullOrEmpty(title, nameof(title));
-      AppointmentTypeId = appointmentTypeId;
-      ScheduleId = scheduleId;
-      ClientId = clientId;
-      DoctorId = doctorId;
-      PatientId = patientId;
-      RoomId = roomId;
-      TimeRange = timeRange;
-      Title = title;
+      AppointmentTypeId = Guard.Against.NegativeOrZero(appointmentTypeId, nameof(appointmentTypeId));
+      ScheduleId = Guard.Against.Default(scheduleId, nameof(scheduleId));
+      ClientId = Guard.Against.NegativeOrZero(clientId, nameof(clientId));
+      DoctorId = Guard.Against.NegativeOrZero(doctorId, nameof(doctorId));
+      PatientId = Guard.Against.NegativeOrZero(patientId, nameof(patientId));
+      RoomId = Guard.Against.NegativeOrZero(roomId, nameof(roomId));
+      Title = Guard.Against.NullOrEmpty(title, nameof(title));
       DateTimeConfirmed = dateTimeConfirmed;
     }
 
@@ -110,6 +101,21 @@ namespace FrontDesk.Core.Aggregates
 
       var appointmentConfirmedEvent = new AppointmentConfirmedEvent(this);
       Events.Add(appointmentConfirmedEvent);
+    }
+
+    public void Schedule()
+    {
+      #region Verify Appointment Fits in Schedule
+      // stuff
+      #endregion
+
+      #region Store the appointment
+      // stuff
+      #endregion  
+
+      #region Raise AppointmentScheduled Event
+      // stuff
+      #endregion
     }
   }
 }
