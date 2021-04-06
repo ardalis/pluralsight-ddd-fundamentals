@@ -7,18 +7,6 @@ namespace FrontDesk.Core.Aggregates
 {
   public class Appointment : BaseEntity<Guid>
   {
-    public Guid ScheduleId { get; private set; }
-    public int ClientId { get; private set; }
-    public int PatientId { get; private set; }
-    public int RoomId { get; private set; }
-    public int DoctorId { get; private set; }
-    public int AppointmentTypeId { get; private set; }
-
-    public DateTimeOffsetRange TimeRange { get; private set; }
-    public string Title { get; private set; }
-    public DateTimeOffset? DateTimeConfirmed { get; set; }
-    public bool IsPotentiallyConflicting { get; set; }
-
     public Appointment(int appointmentTypeId,
       Guid scheduleId,
       int clientId,
@@ -35,14 +23,28 @@ namespace FrontDesk.Core.Aggregates
       DoctorId = Guard.Against.NegativeOrZero(doctorId, nameof(doctorId));
       PatientId = Guard.Against.NegativeOrZero(patientId, nameof(patientId));
       RoomId = Guard.Against.NegativeOrZero(roomId, nameof(roomId));
+      TimeRange = Guard.Against.Null(timeRange, nameof(timeRange));
       Title = Guard.Against.NullOrEmpty(title, nameof(title));
       DateTimeConfirmed = dateTimeConfirmed;
     }
 
     private Appointment() { } // EF required
 
+    public Guid ScheduleId { get; private set; }
+    public int ClientId { get; private set; }
+    public int PatientId { get; private set; }
+    public int RoomId { get; private set; }
+    public int DoctorId { get; private set; }
+    public int AppointmentTypeId { get; private set; }
+
+    public DateTimeOffsetRange TimeRange { get; private set; }
+    public string Title { get; private set; }
+    public DateTimeOffset? DateTimeConfirmed { get; set; }
+    public bool IsPotentiallyConflicting { get; set; }
+
     public void UpdateRoom(int newRoomId)
     {
+      Guard.Against.NegativeOrZero(newRoomId, nameof(newRoomId));
       if (newRoomId == RoomId) return;
 
       RoomId = newRoomId;
@@ -53,6 +55,7 @@ namespace FrontDesk.Core.Aggregates
 
     public void UpdateDoctor(int newDoctorId)
     {
+      Guard.Against.NegativeOrZero(newDoctorId, nameof(newDoctorId));
       if (newDoctorId == DoctorId) return;
 
       DoctorId = newDoctorId;

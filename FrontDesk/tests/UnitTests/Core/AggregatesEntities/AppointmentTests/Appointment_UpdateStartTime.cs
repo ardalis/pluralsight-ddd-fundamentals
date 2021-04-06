@@ -7,8 +7,8 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
 {
   public class Appointment_UpdateStartTime
   {
-    private readonly DateTime _startTime = new DateTime(2021, 01, 01, 10, 00, 00);
-    private readonly DateTime _endTime = new DateTime(2021, 01, 01, 12, 00, 00);
+    private readonly DateTimeOffset _startTime = new DateTimeOffset(2021, 01, 01, 10, 00, 00, new TimeSpan(-4, 0, 0));
+    private readonly DateTimeOffset _endTime = new DateTimeOffset(2021, 01, 01, 12, 00, 00, new TimeSpan(-4, 0, 0));
 
     [Fact]
     public void UpdatesTimeRange()

@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Ardalis.HttpClientTestExtensions;
 using BlazorShared.Models.Appointment;
+using BlazorShared.Models.Schedule;
 using FrontDesk.Api;
 using Xunit;
 using Xunit.Abstractions;
@@ -31,7 +32,12 @@ namespace FunctionalTests.AppointmentEndpoints
     [Fact]
     public async Task UpdatesAnExistingAppointment()
     {
-      var result = await _client.GetAndDeserialize<ListAppointmentResponse>(ListAppointmentRequest.Route, _outputHelper);
+      var scheduleRoute = ListScheduleRequest.Route;
+      var schedule = (await _client.GetAndDeserialize<ListScheduleResponse>(scheduleRoute)).Schedules.First();
+
+      string route = ListAppointmentRequest.Route.Replace("{ScheduleId}", schedule.Id.ToString());
+
+      var result = await _client.GetAndDeserialize<ListAppointmentResponse>(route, _outputHelper);
 
       var firstAppt = result.Appointments.First();
 

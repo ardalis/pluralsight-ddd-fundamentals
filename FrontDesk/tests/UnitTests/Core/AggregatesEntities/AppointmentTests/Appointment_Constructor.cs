@@ -17,7 +17,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
       const int patientId = 4;
       const int roomId = 5;
       const string title = "Title Test";
-      var startTime = new DateTime(2021, 01, 01, 10, 00, 00);
+      var startTime = new DateTimeOffset(2021, 01, 01, 10, 00, 00, new TimeSpan(-4, 0, 0));
       var endTime = startTime.AddHours(3);
       var range = new DateTimeOffsetRange(startTime, endTime);
       const int threeHours = 3 * 60;
