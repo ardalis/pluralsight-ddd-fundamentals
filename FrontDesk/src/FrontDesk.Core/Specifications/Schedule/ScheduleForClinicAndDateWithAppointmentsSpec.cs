@@ -13,8 +13,10 @@ namespace FrontDesk.Core.Specifications
           .Include(nameof(Schedule.Appointments))
           .Where(schedule =>
               schedule.ClinicId == clinicId &&
-              schedule.Appointments != null &&
-              schedule.Appointments.Any(appointment => appointment.TimeRange.Start.Date == date.Date));
+              schedule.Appointments != null);
+      // TODO: Only include appointments for the specified date
+      // NOTE: This worked when using DateTime, but EF Core has 
+      // issues with DateTimeOffset in queries
     }
   }
 }

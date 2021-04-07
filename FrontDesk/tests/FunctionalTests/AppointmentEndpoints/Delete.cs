@@ -32,10 +32,10 @@ namespace FunctionalTests.AppointmentEndpoints
       _outputHelper.WriteLine(firstAppt.ToString());
 
       // delete it
-      string route = DeleteAppointmentRequest.Route.Replace("{appointmentId}", firstAppt.AppointmentId.ToString());
+      string route = DeleteAppointmentRequest.Route.Replace("{AppointmentId}", firstAppt.AppointmentId.ToString());
       var scheduleId = firstAppt.ScheduleId.ToString();
 
-      route = route.Replace("{scheduleId}", scheduleId);
+      route = route.Replace("{ScheduleId}", scheduleId);
       var deleteResponse = await _client.DeleteAsync(route);
       deleteResponse.EnsureSuccessStatusCode();
 

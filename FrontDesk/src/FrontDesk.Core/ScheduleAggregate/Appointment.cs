@@ -7,6 +7,29 @@ namespace FrontDesk.Core.Aggregates
 {
   public class Appointment : BaseEntity<Guid>
   {
+    public Appointment(int appointmentTypeId,
+      Guid scheduleId,
+      int clientId,
+      int doctorId,
+      int patientId,
+      int roomId,
+      DateTimeOffsetRange timeRange, // EF Core 5 cannot provide this type
+      string title,
+      DateTime? dateTimeConfirmed = null)
+    {
+      AppointmentTypeId = Guard.Against.NegativeOrZero(appointmentTypeId, nameof(appointmentTypeId));
+      ScheduleId = Guard.Against.Default(scheduleId, nameof(scheduleId));
+      ClientId = Guard.Against.NegativeOrZero(clientId, nameof(clientId));
+      DoctorId = Guard.Against.NegativeOrZero(doctorId, nameof(doctorId));
+      PatientId = Guard.Against.NegativeOrZero(patientId, nameof(patientId));
+      RoomId = Guard.Against.NegativeOrZero(roomId, nameof(roomId));
+      TimeRange = Guard.Against.Null(timeRange, nameof(timeRange));
+      Title = Guard.Against.NullOrEmpty(title, nameof(title));
+      DateTimeConfirmed = dateTimeConfirmed;
+    }
+
+    private Appointment() { } // EF required
+
     public Guid ScheduleId { get; private set; }
     public int ClientId { get; private set; }
     public int PatientId { get; private set; }
@@ -19,39 +42,9 @@ namespace FrontDesk.Core.Aggregates
     public DateTimeOffset? DateTimeConfirmed { get; set; }
     public bool IsPotentiallyConflicting { get; set; }
 
-    // EF https://github.com/dotnet/efcore/issues/12078#issuecomment-498379223
-    public Appointment(int appointmentTypeId,
-      Guid scheduleId,
-      int clientId,
-      int doctorId,
-      int patientId,
-      int roomId,
-      DateTimeOffsetRange timeRange, // EF Core 5 cannot provide this type
-      string title,
-      DateTime? dateTimeConfirmed = null)
-    {
-      Guard.Against.NegativeOrZero(appointmentTypeId, nameof(appointmentTypeId));
-      Guard.Against.Default(scheduleId, nameof(scheduleId));
-      Guard.Against.NegativeOrZero(clientId, nameof(clientId));
-      Guard.Against.NegativeOrZero(doctorId, nameof(doctorId));
-      Guard.Against.NegativeOrZero(patientId, nameof(patientId));
-      Guard.Against.NegativeOrZero(roomId, nameof(roomId));
-      Guard.Against.NullOrEmpty(title, nameof(title));
-      AppointmentTypeId = appointmentTypeId;
-      ScheduleId = scheduleId;
-      ClientId = clientId;
-      DoctorId = doctorId;
-      PatientId = patientId;
-      RoomId = roomId;
-      TimeRange = timeRange;
-      Title = title;
-      DateTimeConfirmed = dateTimeConfirmed;
-    }
-
-    private Appointment() { } // EF required
-
     public void UpdateRoom(int newRoomId)
     {
+      Guard.Against.NegativeOrZero(newRoomId, nameof(newRoomId));
       if (newRoomId == RoomId) return;
 
       RoomId = newRoomId;
@@ -62,6 +55,7 @@ namespace FrontDesk.Core.Aggregates
 
     public void UpdateDoctor(int newDoctorId)
     {
+      Guard.Against.NegativeOrZero(newDoctorId, nameof(newDoctorId));
       if (newDoctorId == DoctorId) return;
 
       DoctorId = newDoctorId;
@@ -110,6 +104,21 @@ namespace FrontDesk.Core.Aggregates
 
       var appointmentConfirmedEvent = new AppointmentConfirmedEvent(this);
       Events.Add(appointmentConfirmedEvent);
+    }
+
+    public void Schedule()
+    {
+      #region Verify Appointment Fits in Schedule
+      // stuff
+      #endregion
+
+      #region Store the appointment
+      // stuff
+      #endregion  
+
+      #region Raise AppointmentScheduled Event
+      // stuff
+      #endregion
     }
   }
 }

@@ -8,10 +8,10 @@ using Xunit;
 
 namespace UnitTests.Core.AggregatesEntities.AppointmentTests
 {
-  public class Appointment_UpdateRoom
+  public class Appointment_UpdateDoctor
   {
     private readonly Fixture _fixture = new Fixture();
-    public Appointment_UpdateRoom()
+    public Appointment_UpdateDoctor()
     {
       _fixture.Customizations.Add(
         new FilteringSpecimenBuilder(
@@ -31,41 +31,41 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     }
 
     [Fact]
-    public void DoesNothingGivenSameRoomId()
+    public void DoesNothingGivenSameDoctorId()
     {
       var appointment = GetUnconfirmedAppointment();
-      var initialRoomId = appointment.RoomId;
+      var initialDoctorId = appointment.DoctorId;
       var initialEventCount = appointment.Events.Count;
 
-      appointment.UpdateRoom(initialRoomId);
+      appointment.UpdateDoctor(initialDoctorId);
 
-      Assert.Equal(initialRoomId, appointment.RoomId);
+      Assert.Equal(initialDoctorId, appointment.DoctorId);
       Assert.Equal(initialEventCount, appointment.Events.Count);
     }
 
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
-    public void ThrowsGivenNegativeOrZeroRoomId(int invalidRoomId)
+    public void ThrowsGivenNegativeOrZeroDoctorId(int invalidDoctorId)
     {
       var appointment = GetUnconfirmedAppointment();
 
-      Action action = () => appointment.UpdateRoom(invalidRoomId);
+      Action action = () => appointment.UpdateDoctor(invalidDoctorId);
 
       Assert.Throws<ArgumentException>(action);
     }
 
     [Fact]
-    public void UpdatesRoomIdAndAddsEventGivenNewRoomId()
+    public void UpdatesDoctorIdAndAddsEventGivenNewDoctorId()
     {
       var appointment = GetUnconfirmedAppointment();
-      var initialRoomId = appointment.RoomId;
+      var initialDoctorId = appointment.DoctorId;
       var initialEventCount = appointment.Events.Count;
 
-      int newRoomId = initialRoomId + 1;
-      appointment.UpdateRoom(newRoomId);
+      int newDoctorId = initialDoctorId + 1;
+      appointment.UpdateDoctor(newDoctorId);
 
-      Assert.Equal(newRoomId, appointment.RoomId);
+      Assert.Equal(newDoctorId, appointment.DoctorId);
       Assert.Single(appointment.Events);
       Assert.Contains(appointment.Events, x => x.GetType() == typeof(AppointmentUpdatedEvent));
     }

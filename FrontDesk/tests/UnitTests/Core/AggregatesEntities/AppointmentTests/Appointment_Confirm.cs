@@ -1,6 +1,5 @@
 ﻿using System;
 using AutoFixture;
-using AutoFixture.Kernel;
 using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Events;
 using PluralsightDdd.SharedKernel;
@@ -11,25 +10,33 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
   public class Appointment_Confirm
   {
     private readonly Fixture _fixture = new Fixture();
-    private readonly DateTime _confirmedDate = new DateTime(2021, 01, 01);
+    private readonly DateTime _confirmedDate;
+    private readonly DateTimeOffsetRange _appointmentRange;
 
     public Appointment_Confirm()
     {
-      _fixture.Customizations.Add(
-        new FilteringSpecimenBuilder(
-          new FixedBuilder(new DateTimeRange(DateTime.Today.AddHours(12),
-            DateTime.Today.AddHours(13))),
-          new ParameterSpecification(
-            typeof(DateTimeRange), "timeRange")));
+      _appointmentRange = new DateTimeOffsetRange(DateTime.Today.AddHours(12),
+            DateTime.Today.AddHours(13));
+      _fixture.Register(() => _appointmentRange);
+
+      _confirmedDate = DateTime.Today.AddHours(16);
+    }
+
+    private Appointment GetUnconfirmedAppointment()
+    {
+      var newAppt = _fixture.Build<Appointment>()
+        .Without(z => z.Events)
+        .Create();
+      newAppt.DateTimeConfirmed = null;
+      return newAppt;
     }
 
     [Fact]
     public void ReconfirmResultDateNotChanged()
     {
-      var appointment = _fixture.Build<Appointment>()
-        .Without(z => z.Events)
-        .Create();
+      var appointment = GetUnconfirmedAppointment();
 
+      appointment.Confirm(_confirmedDate.AddHours(-1));
       appointment.Confirm(_confirmedDate);
 
       Assert.NotEqual(_confirmedDate, appointment.DateTimeConfirmed);
@@ -38,10 +45,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     [Fact]
     public void ConfirmFirstTimeResultConfirmDateUpdated()
     {
-      var appointment = _fixture.Build<Appointment>()
-        .Without(z => z.Events)
-        .Create();
-      appointment.DateTimeConfirmed = null;
+      var appointment = GetUnconfirmedAppointment();
 
       appointment.Confirm(_confirmedDate);
 
@@ -51,10 +55,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     [Fact]
     public void ConfirmFirstTimeResultEventCreated()
     {
-      var appointment = _fixture.Build<Appointment>()
-        .Without(z => z.Events)
-        .Create();
-      appointment.DateTimeConfirmed = null;
+      var appointment = GetUnconfirmedAppointment();
 
       appointment.Confirm(_confirmedDate);
 

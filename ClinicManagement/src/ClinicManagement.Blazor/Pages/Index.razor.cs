@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using BlazorShared;
 using ClinicManagement.Blazor.Shared.ToastComponent;
 using Microsoft.AspNetCore.Components;
@@ -50,17 +49,17 @@ namespace ClinicManagement.Blazor.Pages
     //  return hubConnection.StartAsync();
     //}
 
-    private async Task RefreshDataAsync()
-    {
-      //an event callback needs to be raised in this component context to re-render the contents and to hide the dialog
-      //CustomEditFormShown = false;
-      //CurrentAppointment = null;
-      //we also use it to fetch the fresh data from the service - in a real case other updates may have occurred
-      //which is why I chose to use a separate event and not two-way binding. It is also used for refreshing on Cancel
-      //var appointments = await AppointmentService.ListAsync();
+    // private async Task RefreshDataAsync()
+    // {
+    //   //an event callback needs to be raised in this component context to re-render the contents and to hide the dialog
+    //   //CustomEditFormShown = false;
+    //   //CurrentAppointment = null;
+    //   //we also use it to fetch the fresh data from the service - in a real case other updates may have occurred
+    //   //which is why I chose to use a separate event and not two-way binding. It is also used for refreshing on Cancel
+    //   //var appointments = await AppointmentService.ListAsync();
 
-      //SchedulerService.RefreshAppointments(appointments);
-    }
+    //   //SchedulerService.RefreshAppointments(appointments);
+    // }
 
 
     //private async Task AddPatientImages()
