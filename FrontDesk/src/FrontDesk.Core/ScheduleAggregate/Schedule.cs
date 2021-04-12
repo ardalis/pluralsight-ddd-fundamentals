@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using FrontDesk.Core.Events;
 using PluralsightDdd.SharedKernel;
@@ -14,8 +13,7 @@ namespace FrontDesk.Core.Aggregates
     private readonly List<Appointment> _appointments = new List<Appointment>();
     public IEnumerable<Appointment> Appointments => _appointments.AsReadOnly();
 
-    [NotMapped]
-    public virtual DateTimeOffsetRange DateRange { get; private set; }
+    public DateTimeOffsetRange DateRange { get; private set; }
 
     public Schedule(Guid id,
       DateTimeOffsetRange dateRange,
@@ -67,19 +65,22 @@ namespace FrontDesk.Core.Aggregates
 
       MarkConflictingAppointments();
 
-      // TODO: Add appointment deleted event
+      // TODO: Add appointment deleted event and show delete message in Blazor client app
     }
 
     private void MarkConflictingAppointments()
     {
       foreach (var appointment in _appointments)
       {
+        // same patient cannot have two appointments at same time
         var potentiallyConflictingAppointments = _appointments
             .Where(a => a.PatientId == appointment.PatientId &&
             a.TimeRange.Overlaps(appointment.TimeRange) &&
             a != appointment)
             .ToList();
-        //  && a.State != TrackingState.Deleted).ToList();
+
+        // TODO: Add a rule to mark overlapping appointments in same room as conflicting
+        // TODO: Add a rule to mark same doctor with overlapping appointments as conflicting
 
         potentiallyConflictingAppointments.ForEach(a => a.IsPotentiallyConflicting = true);
 
@@ -87,8 +88,12 @@ namespace FrontDesk.Core.Aggregates
       }
     }
 
-    public void Handle(AppointmentUpdatedEvent args = null)
+    /// <summary>
+    /// Call any time this schedule's appointments are updated directly
+    /// </summary>
+    public void AppointmentUpdatedHandler()
     {
+      // TODO: Add ScheduleHandler calls to UpdateDoctor, UpdateRoom to complete additional rules described in MarkConflictingAppointments
       MarkConflictingAppointments();
     }
   }

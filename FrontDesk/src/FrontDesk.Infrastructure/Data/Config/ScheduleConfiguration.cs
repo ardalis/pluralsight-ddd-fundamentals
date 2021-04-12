@@ -8,7 +8,7 @@ namespace FrontDesk.Infrastructure.Data.Config
   {
     public void Configure(EntityTypeBuilder<Schedule> builder)
     {
-      builder.ToTable("Schedules").HasKey(x => x.Id);
+      builder.Ignore(s => s.DateRange);
     }
   }
 }

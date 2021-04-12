@@ -1,6 +1,7 @@
 ﻿using System;
 using FrontDesk.Core.Aggregates;
 using PluralsightDdd.SharedKernel;
+using UnitTests.Builders;
 using Xunit;
 
 namespace UnitTests.Core.AggregatesEntities.AppointmentTests
@@ -9,27 +10,64 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
   {
     private readonly DateTimeOffset _startTime = new DateTimeOffset(2021, 01, 01, 10, 00, 00, new TimeSpan(-4, 0, 0));
     private readonly DateTimeOffset _endTime = new DateTimeOffset(2021, 01, 01, 12, 00, 00, new TimeSpan(-4, 0, 0));
+    private AppointmentBuilder _builder = new AppointmentBuilder();
+    private DateTimeOffsetRange _newDateTimeOffsetRange;
+
+    public Appointment_UpdateStartTime()
+    {
+      _newDateTimeOffsetRange = new DateTimeOffsetRange(_startTime, _endTime);
+    }
 
     [Fact]
     public void UpdatesTimeRange()
     {
-      var scheduleId = Guid.NewGuid();
-      const int clientId = 1;
-      const int patientId = 2;
-      const int roomId = 3;
-      const int appointmentTypeId = 4;
-      const int doctorId = 5;
-      const string title = "Title Test";
-      var dateTimeRange = new DateTimeOffsetRange(_startTime, _endTime);
-
-      var appointment = new Appointment(appointmentTypeId, scheduleId, clientId, doctorId, patientId, roomId, dateTimeRange, title, null);
+      var appointment = _builder
+        .WithDefaultValues()
+        .WithDateTimeOffsetRange(_newDateTimeOffsetRange)
+        .Build();
 
       var newStartTime = new DateTime(2021, 01, 01, 11, 00, 00);
 
-      appointment.UpdateStartTime(newStartTime);
+      appointment.UpdateStartTime(newStartTime, null);
 
-      Assert.Equal(dateTimeRange.DurationInMinutes(), appointment.TimeRange.DurationInMinutes());
+      Assert.Equal(_newDateTimeOffsetRange.DurationInMinutes(), appointment.TimeRange.DurationInMinutes());
       Assert.Equal(newStartTime, appointment.TimeRange.Start);
+    }
+
+    [Fact]
+    public void CallsHandlerWhenSuccessful()
+    {
+      var handlerCalled = false;
+      Action handler = () => handlerCalled = true;
+
+      var appointment = _builder
+        .WithDefaultValues()
+        .WithDateTimeOffsetRange(_newDateTimeOffsetRange)
+        .Build();
+
+      var newStartTime = new DateTime(2021, 01, 01, 11, 00, 00);
+
+      appointment.UpdateStartTime(newStartTime, handler);
+
+      Assert.True(handlerCalled);
+    }
+
+    [Fact]
+    public void DoesNotCallHandlerWhenNoActualUpdateMade()
+    {
+      var handlerCalled = false;
+      Action handler = () => handlerCalled = true;
+
+      var appointment = _builder
+        .WithDefaultValues()
+        .WithDateTimeOffsetRange(_newDateTimeOffsetRange)
+        .Build();
+
+      var newStartTime = _startTime;
+
+      appointment.UpdateStartTime(newStartTime, handler);
+
+      Assert.False(handlerCalled);
     }
   }
 }

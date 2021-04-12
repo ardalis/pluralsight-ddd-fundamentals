@@ -54,14 +54,9 @@ namespace FrontDesk.Api.AppointmentEndpoints
       var apptToUpdate = schedule.Appointments.FirstOrDefault(a => a.Id == request.Id);
       apptToUpdate.UpdateAppointmentType(apptType);
       apptToUpdate.UpdateRoom(request.RoomId);
-      apptToUpdate.UpdateStartTime(request.Start);
+      apptToUpdate.UpdateStartTime(request.Start, schedule.AppointmentUpdatedHandler);
       apptToUpdate.UpdateTitle(request.Title);
       apptToUpdate.UpdateDoctor(request.DoctorId);
-
-      // TODO: Implement updating other properties
-
-      // TODO: Have schedule update in response to appointmetn update calls
-      schedule.Handle();
 
       await _scheduleRepository.UpdateAsync(schedule);
 
