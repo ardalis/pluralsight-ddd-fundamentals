@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Ardalis.GuardClauses;
+using Ardalis.Specification;
+using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Events;
 using PluralsightDdd.SharedKernel;
+using PluralsightDdd.SharedKernel.Interfaces;
 
-namespace FrontDesk.Core.Aggregates
+namespace FrontDesk.Core.AppointmentAggregate
 {
-  public class Appointment : BaseEntity<Guid>
+  public class Appointment : BaseEntity<Guid>, IAggregateRoot
   {
     public Appointment(int appointmentTypeId,
       Guid scheduleId,
@@ -30,7 +35,6 @@ namespace FrontDesk.Core.Aggregates
 
     private Appointment() { } // EF required
 
-    public Guid ScheduleId { get; private set; }
     public int ClientId { get; private set; }
     public int PatientId { get; private set; }
     public int RoomId { get; private set; }
@@ -108,19 +112,40 @@ namespace FrontDesk.Core.Aggregates
       Events.Add(appointmentConfirmedEvent);
     }
 
-    public void Schedule()
+    private void MarkPotentiallyConflictingAppointments(List<Appointment> appointments)
     {
-      #region Verify Appointment Fits in Schedule
-      // stuff
-      #endregion
+      // mark appointments that overlap as conflicting
+    }
 
-      #region Store the appointment
-      // stuff
-      #endregion  
+    public async Task Schedule(IRepository<Appointment> appointmentRepository)
+    {
+      // Verify Appointment Fits in Schedule
+      var spec = new AppointmentsOnDateSpec(TimeRange.Start.Date);
+      var appointments = await appointmentRepository.ListAsync(spec);
 
-      #region Raise AppointmentScheduled Event
-      // stuff
-      #endregion
+      MarkPotentiallyConflictingAppointments(appointments);
+
+      var appointmentScheduledEvent = new AppointmentScheduledEvent(this);
+      Events.Add(appointmentScheduledEvent);
+
+      // this will save any appointments with state changes (including those just marked as conflicting)
+      await appointmentRepository.UpdateAsync(this);
     }
   }
+
+
+
+
+
+
+
+  public class AppointmentsOnDateSpec : Specification<Appointment>
+  {
+    public AppointmentsOnDateSpec(DateTime startDate)
+    {
+
+    }
+  }
+
 }
+

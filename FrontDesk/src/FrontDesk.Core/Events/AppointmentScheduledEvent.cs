@@ -1,5 +1,6 @@
 ﻿using System;
 using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.AppointmentAggregate;
 using PluralsightDdd.SharedKernel;
 
 namespace FrontDesk.Core.Events

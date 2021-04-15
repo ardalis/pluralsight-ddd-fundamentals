@@ -10,6 +10,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     [Fact]
     public void ConstructorCreatedAndIdSetToEmptyGuid()
     {
+      // TODO: Use AppointmentBuilder to create initial Appointment
       const int appointmentTypeId = 1;
       var scheduleId = Guid.NewGuid();
       const int clientId = 2;
