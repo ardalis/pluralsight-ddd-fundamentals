@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using AutoMapper;
 using BlazorShared.Models.Schedule;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Api.MappingProfiles
 {

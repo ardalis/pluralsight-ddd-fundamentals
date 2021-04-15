@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Autofac;
-using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Infrastructure.Data;
 using FrontDesk.Infrastructure.Messaging;
 using MediatR;
-using MediatR.Pipeline;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Module = Autofac.Module;
+using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Infrastructure
 {

@@ -1,7 +1,7 @@
 ﻿using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 
-namespace FrontDesk.Core.Aggregates
+namespace FrontDesk.Core.SyncedAggregates
 {
   public class AppointmentType : BaseEntity<int>, IAggregateRoot
   {
@@ -25,6 +25,5 @@ namespace FrontDesk.Core.Aggregates
     {
       return Name;
     }
-
   }
 }

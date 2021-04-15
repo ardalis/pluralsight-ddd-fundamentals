@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
@@ -26,9 +26,11 @@ namespace IntegrationTests.DoctorTests
       Assert.True(doctors?.Count > 0);
     }
 
-    private async Task<FrontDesk.Core.Aggregates.Doctor> AddDoctor()
+    private async Task<Doctor> AddDoctor()
     {
-      var doctor = new DoctorBuilder().Id(7).Build();
+      var doctor = new DoctorBuilder()
+        .Id(7)
+        .Build();
 
       await _repository.AddAsync(doctor);
 

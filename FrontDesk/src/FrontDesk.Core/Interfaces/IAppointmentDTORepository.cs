@@ -1,5 +1,5 @@
 ﻿using BlazorShared.Models.Appointment;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Core.Interfaces
 {

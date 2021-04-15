@@ -1,5 +1,5 @@
 ﻿using System;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.SyncedAggregates;
 using PluralsightDdd.SharedKernel;
 using UnitTests.Builders;
 using Xunit;

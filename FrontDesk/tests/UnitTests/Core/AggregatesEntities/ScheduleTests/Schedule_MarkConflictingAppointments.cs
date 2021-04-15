@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.ScheduleAggregate;
 using PluralsightDdd.SharedKernel;
 using Xunit;
 

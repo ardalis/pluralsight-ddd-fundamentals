@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BlazorShared.Models.Room;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.SyncedAggregates;
 
 namespace FrontDesk.Api.MappingProfiles
 {

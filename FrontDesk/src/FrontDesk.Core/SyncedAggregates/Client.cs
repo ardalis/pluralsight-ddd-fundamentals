@@ -2,7 +2,7 @@
 using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 
-namespace FrontDesk.Core.Aggregates
+namespace FrontDesk.Core.SyncedAggregates
 {
   public class Client : BaseEntity<int>, IAggregateRoot
   {

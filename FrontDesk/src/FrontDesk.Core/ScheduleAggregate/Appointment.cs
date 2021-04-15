@@ -1,9 +1,10 @@
 ﻿using System;
 using Ardalis.GuardClauses;
 using FrontDesk.Core.Events;
+using FrontDesk.Core.SyncedAggregates;
 using PluralsightDdd.SharedKernel;
 
-namespace FrontDesk.Core.Aggregates
+namespace FrontDesk.Core.ScheduleAggregate
 {
   public class Appointment : BaseEntity<Guid>
   {

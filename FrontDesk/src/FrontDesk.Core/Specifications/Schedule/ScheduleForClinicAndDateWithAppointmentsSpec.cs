@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Ardalis.Specification;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Core.Specifications
 {

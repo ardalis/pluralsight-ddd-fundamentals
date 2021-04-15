@@ -5,7 +5,7 @@ using FrontDesk.Core.Events;
 using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 
-namespace FrontDesk.Core.Aggregates
+namespace FrontDesk.Core.ScheduleAggregate
 {
   public class Schedule : BaseEntity<Guid>, IAggregateRoot
   {

@@ -1,7 +1,7 @@
 ﻿using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 
-namespace FrontDesk.Core.Aggregates
+namespace FrontDesk.Core.SyncedAggregates
 {
   public class Doctor : BaseEntity<int>, IAggregateRoot
   {

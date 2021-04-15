@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
 using Xunit;
@@ -27,7 +27,7 @@ namespace IntegrationTests.RoomTests
       Assert.True(newRoom?.Id == id);
     }
 
-    private async Task<FrontDesk.Core.Aggregates.Room> AddRoom(int id)
+    private async Task<Room> AddRoom(int id)
     {
       var room = new RoomBuilder().Id(id).Build();
 

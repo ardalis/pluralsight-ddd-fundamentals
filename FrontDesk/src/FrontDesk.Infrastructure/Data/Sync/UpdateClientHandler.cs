@@ -1,7 +1,8 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.ScheduleAggregate;
+using FrontDesk.Core.SyncedAggregates;
 using MediatR;
 using Microsoft.Extensions.Logging;
 

@@ -1,7 +1,7 @@
 ﻿using FrontDesk.Core.ValueObjects;
 using PluralsightDdd.SharedKernel;
 
-namespace FrontDesk.Core.Aggregates
+namespace FrontDesk.Core.SyncedAggregates
 {
   public class Patient : BaseEntity<int>
   {

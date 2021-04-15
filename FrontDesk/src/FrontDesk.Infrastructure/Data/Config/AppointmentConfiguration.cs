@@ -1,4 +1,4 @@
-﻿using FrontDesk.Core.Aggregates;
+﻿using FrontDesk.Core.ScheduleAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

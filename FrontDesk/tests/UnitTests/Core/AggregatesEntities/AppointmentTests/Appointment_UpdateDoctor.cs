@@ -1,10 +1,10 @@
 ﻿using System;
 using AutoFixture;
 using AutoFixture.Kernel;
-using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Events;
 using PluralsightDdd.SharedKernel;
 using Xunit;
+using FrontDesk.Core.ScheduleAggregate;
 
 namespace UnitTests.Core.AggregatesEntities.AppointmentTests
 {
