@@ -59,6 +59,8 @@ namespace FrontDesk.Api.AppointmentEndpoints
 
       var newAppointment = new Appointment(request.AppointmentTypeId, request.ScheduleId, request.ClientId, request.SelectedDoctor, request.PatientId, request.RoomId, timeRange, request.Title);
 
+      newAppointment.Id = Guid.NewGuid();
+
       schedule.AddNewAppointment(newAppointment);
 
       int conflictedAppointmentsCount = schedule.Appointments

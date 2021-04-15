@@ -13,10 +13,6 @@ namespace FrontDesk.Core.SyncedAggregates
       Duration = duration;
     }
 
-    private AppointmentType() // required for EF
-    {
-    }
-
     public string Name { get; private set; }
     public string Code { get; private set; }
     public int Duration { get; private set; }
