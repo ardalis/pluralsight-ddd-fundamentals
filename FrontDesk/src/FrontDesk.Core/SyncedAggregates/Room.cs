@@ -11,9 +11,6 @@ namespace FrontDesk.Core.SyncedAggregates
       Name = name;
     }
 
-    private Room() // required for EF
-    {
-    }
     public string Name { get; private set; }
 
     public override string ToString()

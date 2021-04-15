@@ -27,8 +27,7 @@ namespace FrontDesk.Core.ScheduleAggregate
       MarkConflictingAppointments();
     }
 
-    public Schedule(Guid id,
-      int clinicId)
+    public Schedule(Guid id, int clinicId) // used by EF
     {
       Id = id;
       ClinicId = clinicId;
