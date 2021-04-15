@@ -48,7 +48,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
         OperationId = "appointments.List",
         Tags = new[] { "AppointmentEndpoints" })
     ]
-    public override async Task<ActionResult<ListAppointmentResponse>> HandleAsync([FromQuery] ListAppointmentRequest request,
+    public override async Task<ActionResult<ListAppointmentResponse>> HandleAsync([FromRoute] ListAppointmentRequest request,
       CancellationToken cancellationToken)
     {
       var response = new ListAppointmentResponse(request.CorrelationId());

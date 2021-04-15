@@ -6,6 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Ardalis.HttpClientTestExtensions;
 using BlazorShared.Models.Appointment;
+using BlazorShared.Models.Schedule;
 using FrontDesk.Api;
 using Xunit;
 using Xunit.Abstractions;
@@ -32,19 +33,24 @@ namespace FunctionalTests.AppointmentEndpoints
     [Fact]
     public async Task CreatesANewAppointment()
     {
-      var result = await _client.GetAndDeserialize<ListAppointmentResponse>(ListAppointmentRequest.Route, _outputHelper);
+      // get schedule
+      var listResult = await _client.GetAndDeserialize<ListScheduleResponse>(ListScheduleRequest.Route, _outputHelper);
+      var schedule = listResult.Schedules.First();
+      string scheduleId = schedule.Id.ToString();
 
-      var firstAppt = result.Appointments.First();
-      Guid scheduleId = firstAppt.ScheduleId;
+      string listRoute = ListAppointmentRequest.Route.Replace("{ScheduleId}", scheduleId);
 
-      var jsonContent = GetValidNewAppointmentJson(scheduleId);
+      var result = await _client.GetAndDeserialize<ListAppointmentResponse>(listRoute, _outputHelper);
 
-      var rawResult = await _client.PostAsync(CreateAppointmentRequest.Route, jsonContent);
+      var jsonContent = GetValidNewAppointmentJson(schedule.Id);
+
+      string createRoute = CreateAppointmentRequest.Route.Replace("{ScheduleId}", scheduleId);
+      var rawResult = await _client.PostAsync(createRoute, jsonContent);
       rawResult.EnsureSuccessStatusCode();
       var stringResponse = await rawResult.Content.ReadAsStringAsync();
       var endResult = stringResponse.FromJson<CreateAppointmentResponse>();
 
-      Assert.Equal(scheduleId, endResult.Appointment.ScheduleId);
+      Assert.Equal(schedule.Id, endResult.Appointment.ScheduleId);
     }
 
     private StringContent GetValidNewAppointmentJson(Guid scheduleId)

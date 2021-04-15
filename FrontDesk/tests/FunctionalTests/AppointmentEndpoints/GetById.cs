@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Ardalis.HttpClientTestExtensions;
 using BlazorShared.Models.Appointment;
+using BlazorShared.Models.Schedule;
 using FrontDesk.Api;
 using Xunit;
 using Xunit.Abstractions;
@@ -24,13 +25,22 @@ namespace FunctionalTests.AppointmentEndpoints
     [Fact]
     public async Task GetsExistingAppointment()
     {
-      var listResponse = await _client.GetAndDeserialize<ListAppointmentResponse>(ListAppointmentRequest.Route, _outputHelper);
+      // get schedule
+      var listResult = await _client.GetAndDeserialize<ListScheduleResponse>(ListScheduleRequest.Route, _outputHelper);
+      var schedule = listResult.Schedules.First();
+      _outputHelper.WriteLine($"Schedule: {schedule}");
+
+      string listRoute = ListAppointmentRequest.Route.Replace("{ScheduleId}", schedule.Id.ToString());
+
+      _outputHelper.WriteLine($"Route: {listRoute}");
+
+      var listResponse = await _client.GetAndDeserialize<ListAppointmentResponse>(listRoute, _outputHelper);
 
       var firstAppt = listResponse.Appointments.First();
       _outputHelper.WriteLine(firstAppt.ToString());
 
       string route = GetByIdAppointmentRequest.Route.Replace("{AppointmentId}", firstAppt.AppointmentId.ToString());
-      route = route.Replace("{ScheduleId}", firstAppt.ScheduleId.ToString());
+      route = route.Replace("{ScheduleId}", schedule.Id.ToString());
       var result = await _client.GetAndDeserialize<GetByIdAppointmentResponse>(route, _outputHelper);
 
       Assert.Equal(firstAppt.PatientId, result.Appointment.PatientId);
