@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Appointment;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Core.Exceptions;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.Specifications;
@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
+using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
@@ -47,7 +48,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
         OperationId = "appointments.List",
         Tags = new[] { "AppointmentEndpoints" })
     ]
-    public override async Task<ActionResult<ListAppointmentResponse>> HandleAsync([FromQuery] ListAppointmentRequest request,
+    public override async Task<ActionResult<ListAppointmentResponse>> HandleAsync([FromRoute] ListAppointmentRequest request,
       CancellationToken cancellationToken)
     {
       var response = new ListAppointmentResponse(request.CorrelationId());

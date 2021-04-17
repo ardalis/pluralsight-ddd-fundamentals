@@ -1,9 +1,10 @@
 ﻿using System;
 using Ardalis.GuardClauses;
 using FrontDesk.Core.Events;
+using FrontDesk.Core.SyncedAggregates;
 using PluralsightDdd.SharedKernel;
 
-namespace FrontDesk.Core.Aggregates
+namespace FrontDesk.Core.ScheduleAggregate
 {
   public class Appointment : BaseEntity<Guid>
   {
@@ -64,11 +65,13 @@ namespace FrontDesk.Core.Aggregates
       Events.Add(appointmentUpdatedEvent);
     }
 
-    public void UpdateStartTime(DateTimeOffset newStartTime)
+    public void UpdateStartTime(DateTimeOffset newStartTime, Action scheduleHandler)
     {
       if (newStartTime == TimeRange.Start) return;
 
       TimeRange = new DateTimeOffsetRange(newStartTime, TimeSpan.FromMinutes(TimeRange.DurationInMinutes()));
+
+      scheduleHandler?.Invoke();
 
       var appointmentUpdatedEvent = new AppointmentUpdatedEvent(this);
       Events.Add(appointmentUpdatedEvent);

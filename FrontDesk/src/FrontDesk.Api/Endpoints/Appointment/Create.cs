@@ -2,17 +2,17 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml.Schema;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Appointment;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
+using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
@@ -58,6 +58,8 @@ namespace FrontDesk.Api.AppointmentEndpoints
       var timeRange = new DateTimeOffsetRange(appointmentStart, TimeSpan.FromMinutes(appointmentType.Duration));
 
       var newAppointment = new Appointment(request.AppointmentTypeId, request.ScheduleId, request.ClientId, request.SelectedDoctor, request.PatientId, request.RoomId, timeRange, request.Title);
+
+      newAppointment.Id = Guid.NewGuid();
 
       schedule.AddNewAppointment(newAppointment);
 

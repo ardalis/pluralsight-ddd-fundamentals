@@ -1,16 +1,15 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Appointment;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
-using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
+using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
@@ -54,14 +53,9 @@ namespace FrontDesk.Api.AppointmentEndpoints
       var apptToUpdate = schedule.Appointments.FirstOrDefault(a => a.Id == request.Id);
       apptToUpdate.UpdateAppointmentType(apptType);
       apptToUpdate.UpdateRoom(request.RoomId);
-      apptToUpdate.UpdateStartTime(request.Start);
+      apptToUpdate.UpdateStartTime(request.Start, schedule.AppointmentUpdatedHandler);
       apptToUpdate.UpdateTitle(request.Title);
       apptToUpdate.UpdateDoctor(request.DoctorId);
-
-      // TODO: Implement updating other properties
-
-      // TODO: Have schedule update in response to appointmetn update calls
-      schedule.Handle();
 
       await _scheduleRepository.UpdateAsync(schedule);
 

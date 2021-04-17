@@ -1,4 +1,4 @@
-﻿using FrontDesk.Core.Aggregates;
+﻿using FrontDesk.Core.ScheduleAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,6 +9,7 @@ namespace FrontDesk.Infrastructure.Data.Config
     public void Configure(EntityTypeBuilder<Appointment> builder)
     {
       builder.ToTable("Appointments").HasKey(x => x.Id);
+      builder.Property(p => p.Id).ValueGeneratedNever();
       builder.OwnsOne(p => p.TimeRange, p =>
       {
         p.Property(pp => pp.Start)

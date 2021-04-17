@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using BlazorShared.Models.Appointment;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Api.MappingProfiles
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.ScheduleAggregate;
 using PluralsightDdd.SharedKernel;
 using Xunit;
 

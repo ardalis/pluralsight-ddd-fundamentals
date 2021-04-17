@@ -6,7 +6,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using BlazorShared.Models.AppointmentType;
 using BlazorShared.Models.Room;
-using FrontDesk.Core.Aggregates;
+using FrontDesk.Core.ScheduleAggregate;
+using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Core.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -273,7 +274,7 @@ namespace FrontDesk.Infrastructure.Data
                     _darwin.Id,
                     room1,
                     new DateTimeOffsetRange(_testDate.AddHours(10), TimeSpan.FromMinutes(30)),
-                    "(WE) Darwin - Steve Smith"),
+                    "(WE) Darwin - Steve Smith") { Id = Guid.NewGuid() },
                 new Appointment(
                     wellnessVisit,
                     scheduleId,
@@ -282,7 +283,7 @@ namespace FrontDesk.Infrastructure.Data
                     _steve.Patients[1].Id,
                     room1,
                     new DateTimeOffsetRange(_testDate.AddHours(10).AddMinutes(30), TimeSpan.FromMinutes(30)),
-                    "(WE) Arya - Steve Smith"),
+                    "(WE) Arya - Steve Smith") { Id = Guid.NewGuid() },
                 new Appointment(
                     wellnessVisit,
                     scheduleId,
@@ -291,7 +292,7 @@ namespace FrontDesk.Infrastructure.Data
                     _steve.Patients[2].Id,
                     room1,
                     new DateTimeOffsetRange(_testDate.AddHours(11), TimeSpan.FromMinutes(30)),
-                    "(WE) Rosie - Steve Smith"),
+                    "(WE) Rosie - Steve Smith") { Id = Guid.NewGuid() },
                 new Appointment(
                     diagnosticVisit,
                     scheduleId,
@@ -300,7 +301,7 @@ namespace FrontDesk.Infrastructure.Data
                     _sampson.Id,
                     room2,
                     new DateTimeOffsetRange(_testDate.AddHours(11), TimeSpan.FromMinutes(60)),
-                    "(DE) Sampson - Julie Lerman")
+                    "(DE) Sampson - Julie Lerman") { Id = Guid.NewGuid() }
               };
 
       appointmentList.Add(CreateAppointment(scheduleId, "David Batten", "Max", room3, 10));
@@ -326,6 +327,7 @@ namespace FrontDesk.Infrastructure.Data
         var client = _context.Clients.First(c => c.FullName == clientName);
         var patient = _context.Patients.First(p => p.Name == patientName);
         var appt = new Appointment(diagnosticVisit, scheduleId, client.Id, patient.PreferredDoctorId.Value, patient.Id, roomId, new DateTimeOffsetRange(_testDate.AddHours(hour), TimeSpan.FromMinutes(60)), $"(DE) {patientName} - {clientName}");
+        appt.Id = Guid.NewGuid();
         return appt;
       }
       catch (Exception ex)

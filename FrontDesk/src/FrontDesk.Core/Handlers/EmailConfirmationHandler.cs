@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
-using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Events.ApplicationEvents;
 using FrontDesk.Core.Interfaces;
+using FrontDesk.Core.ScheduleAggregate;
 using FrontDesk.Core.Specifications;
 using MediatR;
 using Microsoft.Extensions.Logging;

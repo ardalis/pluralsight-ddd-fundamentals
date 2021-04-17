@@ -1,7 +1,7 @@
 ﻿using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 
-namespace FrontDesk.Core.Aggregates
+namespace FrontDesk.Core.SyncedAggregates
 {
   public class Room : BaseEntity<int>, IAggregateRoot
   {
@@ -11,9 +11,6 @@ namespace FrontDesk.Core.Aggregates
       Name = name;
     }
 
-    private Room() // required for EF
-    {
-    }
     public string Name { get; private set; }
 
     public override string ToString()

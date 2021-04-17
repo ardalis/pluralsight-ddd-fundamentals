@@ -1,12 +1,12 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FrontDesk.Core.Aggregates;
 using FrontDesk.Core.Events;
 using FrontDesk.Core.Events.ApplicationEvents;
 using FrontDesk.Core.Exceptions;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.Specifications;
+using FrontDesk.Core.SyncedAggregates;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel.Interfaces;

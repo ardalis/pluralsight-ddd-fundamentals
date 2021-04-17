@@ -1,4 +1,4 @@
-﻿using FrontDesk.Core.Aggregates;
+﻿using FrontDesk.Core.SyncedAggregates;
 
 namespace UnitTests.Builders
 {

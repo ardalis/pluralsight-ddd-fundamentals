@@ -1,7 +1,7 @@
 ﻿using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 
-namespace FrontDesk.Core.Aggregates
+namespace FrontDesk.Core.SyncedAggregates
 {
   public class AppointmentType : BaseEntity<int>, IAggregateRoot
   {
@@ -13,10 +13,6 @@ namespace FrontDesk.Core.Aggregates
       Duration = duration;
     }
 
-    private AppointmentType() // required for EF
-    {
-    }
-
     public string Name { get; private set; }
     public string Code { get; private set; }
     public int Duration { get; private set; }
@@ -25,6 +21,5 @@ namespace FrontDesk.Core.Aggregates
     {
       return Name;
     }
-
   }
 }

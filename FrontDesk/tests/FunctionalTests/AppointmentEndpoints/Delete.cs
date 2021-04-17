@@ -25,16 +25,21 @@ namespace FunctionalTests.AppointmentEndpoints
     [Fact]
     public async Task DeletesExistingAppointment()
     {
+      // get schedule
+      var listResult = await _client.GetAndDeserialize<ListScheduleResponse>(ListScheduleRequest.Route, _outputHelper);
+      var schedule = listResult.Schedules.First();
+      string scheduleId = schedule.Id.ToString();
+
+      string getRoute = ListAppointmentRequest.Route.Replace("{ScheduleId}", scheduleId);
+
       // get existing appointment
-      var result = await _client.GetAndDeserialize<ListAppointmentResponse>(ListAppointmentRequest.Route, _outputHelper);
+      var result = await _client.GetAndDeserialize<ListAppointmentResponse>(getRoute, _outputHelper);
 
       var firstAppt = result.Appointments.First();
       _outputHelper.WriteLine(firstAppt.ToString());
 
       // delete it
       string route = DeleteAppointmentRequest.Route.Replace("{AppointmentId}", firstAppt.AppointmentId.ToString());
-      var scheduleId = firstAppt.ScheduleId.ToString();
-
       route = route.Replace("{ScheduleId}", scheduleId);
       var deleteResponse = await _client.DeleteAsync(route);
       deleteResponse.EnsureSuccessStatusCode();

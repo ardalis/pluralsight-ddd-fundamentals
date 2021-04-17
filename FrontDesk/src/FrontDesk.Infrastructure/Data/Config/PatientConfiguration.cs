@@ -1,4 +1,4 @@
-﻿using FrontDesk.Core.Aggregates;
+﻿using FrontDesk.Core.SyncedAggregates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
