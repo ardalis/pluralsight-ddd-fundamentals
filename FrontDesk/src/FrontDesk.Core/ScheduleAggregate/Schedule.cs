@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ardalis.GuardClauses;
 using FrontDesk.Core.Events;
+using FrontDesk.Core.Exceptions;
 using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 
@@ -9,20 +11,14 @@ namespace FrontDesk.Core.ScheduleAggregate
 {
   public class Schedule : BaseEntity<Guid>, IAggregateRoot
   {
-    public int ClinicId { get; private set; }
-    private readonly List<Appointment> _appointments = new List<Appointment>();
-    public IEnumerable<Appointment> Appointments => _appointments.AsReadOnly();
-
-    public DateTimeOffsetRange DateRange { get; private set; }
-
     public Schedule(Guid id,
       DateTimeOffsetRange dateRange,
       int clinicId,
       IEnumerable<Appointment> appointments)
     {
-      Id = id;
+      Id = Guard.Against.Default(id, nameof(id));
       DateRange = dateRange;
-      ClinicId = clinicId;
+      ClinicId = Guard.Against.NegativeOrZero(clinicId, nameof(clinicId));
       _appointments.AddRange(appointments ?? new List<Appointment>());
       MarkConflictingAppointments();
     }
@@ -33,13 +29,17 @@ namespace FrontDesk.Core.ScheduleAggregate
       ClinicId = clinicId;
     }
 
+    public int ClinicId { get; private set; }
+    private readonly List<Appointment> _appointments = new List<Appointment>();
+    public IEnumerable<Appointment> Appointments => _appointments.AsReadOnly();
+
+    public DateTimeOffsetRange DateRange { get; private set; }
+
     public Appointment AddNewAppointment(Appointment appointment)
     {
-      if (appointment.Id != Guid.Empty &&
-        _appointments.Any(a => a.Id == appointment.Id))
-      {
-        throw new ArgumentException("Cannot add duplicate appointment to schedule.", nameof(appointment));
-      }
+      Guard.Against.Null(appointment, nameof(appointment));
+      Guard.Against.Default(appointment.Id, nameof(appointment.Id));
+      Guard.Against.DuplicateAppointment(_appointments, appointment, nameof(appointment));
 
       _appointments.Add(appointment);
 

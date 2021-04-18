@@ -49,11 +49,11 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
       var roomId = 4;
 
       var lisaTitle = "Lisa Appointment";
-      var lisaAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, lisaTitle);
+      var lisaAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, lisaTitle);
       schedule.AddNewAppointment(lisaAppointment);
 
       var mimiTitle = "Mimi Appointment";
-      var mimiAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, mimiTitle);
+      var mimiAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, mimiTitle);
       schedule.AddNewAppointment(mimiAppointment);
 
       Assert.True(lisaAppointment.IsPotentiallyConflicting, "lisa not conflicting");
@@ -72,11 +72,11 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
       var roomId = 4;
 
       var lisaTitle = "Lisa Appointment";
-      var lisaAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, lisaTitle);
+      var lisaAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, lisaTitle);
       schedule.AddNewAppointment(lisaAppointment);
 
       var lisaTitle2 = "Lisa Appointment 2";
-      var lisaAppointment2 = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId+1, _dateRange, lisaTitle2);
+      var lisaAppointment2 = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId+1, _dateRange, lisaTitle2);
       schedule.AddNewAppointment(lisaAppointment2);
 
       Assert.True(lisaAppointment.IsPotentiallyConflicting, "lisa1 not conflicting");

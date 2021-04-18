@@ -15,6 +15,7 @@ namespace UnitTests.Builders
     public const string TEST_TITLE = "Test Title";
 
     private Guid _scheduleId;
+    private Guid _id = Guid.NewGuid();
     private int _appointmentTypeId;
     private int _clientId;
     private int _doctorId;
@@ -27,6 +28,12 @@ namespace UnitTests.Builders
     {
     }
 
+    public AppointmentBuilder WithId(Guid id)
+    {
+      _id = id;
+      return this;
+    }
+
     public AppointmentBuilder WithDateTimeOffsetRange(DateTimeOffsetRange dateTimeOffsetRange)
     {
       _dateTimeOffsetRange = dateTimeOffsetRange;
@@ -35,6 +42,7 @@ namespace UnitTests.Builders
 
     public AppointmentBuilder WithDefaultValues()
     {
+      _id = Guid.NewGuid();
       _appointmentTypeId = TEST_APPOINTMENT_TYPE_ID;
       _scheduleId = TEST_SCHEDULE_ID;
       _clientId = TEST_CLIENT_ID;
@@ -53,7 +61,7 @@ namespace UnitTests.Builders
 
     public Appointment Build()
     {
-      return new Appointment(_appointmentTypeId, _scheduleId, _clientId, _doctorId, _patientId, _roomId, _dateTimeOffsetRange, _title);
+      return new Appointment(_id, _appointmentTypeId, _scheduleId, _clientId, _doctorId, _patientId, _roomId, _dateTimeOffsetRange, _title);
     }
   }
 }

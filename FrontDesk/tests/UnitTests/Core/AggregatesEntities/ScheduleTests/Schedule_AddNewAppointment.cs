@@ -38,14 +38,14 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
       DateTime lisaEndTime = new DateTime(2021, 01, 01, 11, 00, 00);
       var lisaDateRange = new DateTimeOffsetRange(lisaStartTime, lisaEndTime);
       var lisaTitle = "Lisa Appointment";
-      var lisaAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, lisaDateRange, lisaTitle);
+      var lisaAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, lisaDateRange, lisaTitle);
       schedule.AddNewAppointment(lisaAppointment);
 
       DateTime mimiStartTime = new DateTime(2021, 01, 01, 12, 00, 00);
       DateTime mimiEndTime = new DateTime(2021, 01, 01, 14, 00, 00);
       var mimiDateRange = new DateTimeOffsetRange(mimiStartTime, mimiEndTime);
       var mimiTitle = "Mimi Appointment";
-      var mimiAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, mimiDateRange, mimiTitle);
+      var mimiAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, mimiDateRange, mimiTitle);
       schedule.AddNewAppointment(mimiAppointment);
 
       Assert.Equal(2, schedule.Appointments.Count());
