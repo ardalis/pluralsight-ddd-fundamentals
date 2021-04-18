@@ -115,6 +115,7 @@ namespace FrontDesk.Core.AppointmentAggregate
     private void MarkPotentiallyConflictingAppointments(List<Appointment> appointments)
     {
       // mark appointments that overlap as conflicting
+      var foo = 0;
     }
 
     public async Task Schedule(IRepository<Appointment> appointmentRepository)
