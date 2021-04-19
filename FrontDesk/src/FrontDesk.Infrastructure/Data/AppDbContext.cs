@@ -27,6 +27,7 @@ namespace FrontDesk.Infrastructure.Data
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Patient> Patients { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
+
     public DbSet<AppointmentType> AppointmentTypes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
