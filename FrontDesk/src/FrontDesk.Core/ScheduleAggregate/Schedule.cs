@@ -47,8 +47,11 @@ namespace FrontDesk.Core.ScheduleAggregate
       return appointment;
     }
 
+
+
     public void DeleteAppointment(Appointment appointment)
     {
+      Guard.Against.Null(appointment, nameof(appointment));
       var appointmentToDelete = _appointments
                                 .Where(a => a.Id == appointment.Id)
                                 .FirstOrDefault();
@@ -62,6 +65,9 @@ namespace FrontDesk.Core.ScheduleAggregate
 
       // TODO: Add appointment deleted event and show delete message in Blazor client app
     }
+
+
+
 
     private void MarkConflictingAppointments()
     {
