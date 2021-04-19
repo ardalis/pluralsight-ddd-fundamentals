@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Ardalis.GuardClauses;
 using FrontDesk.Core.Events;
-using FrontDesk.Core.Exceptions;
 using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
 
