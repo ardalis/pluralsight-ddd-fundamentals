@@ -5,7 +5,7 @@ using Ardalis.GuardClauses;
 using FrontDesk.Core.Events.ApplicationEvents;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.ScheduleAggregate;
-using FrontDesk.Core.Specifications;
+using FrontDesk.Core.ScheduleAggregate.Specifications;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel.Interfaces;

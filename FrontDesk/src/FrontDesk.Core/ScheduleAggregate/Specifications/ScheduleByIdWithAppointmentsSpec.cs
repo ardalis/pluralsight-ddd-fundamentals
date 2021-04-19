@@ -2,7 +2,7 @@
 using Ardalis.Specification;
 using FrontDesk.Core.ScheduleAggregate;
 
-namespace FrontDesk.Core.Specifications
+namespace FrontDesk.Core.ScheduleAggregate.Specifications
 {
   public class ScheduleByIdWithAppointmentsSpec : Specification<Schedule>, ISingleResultSpecification
   {

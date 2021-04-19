@@ -13,22 +13,22 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
     private readonly DateTimeOffsetRange _dateRange = new DateTimeOffsetRange(DateTime.Today, DateTime.Today.AddDays(1));
     private readonly int _clinicId = 1;
 
-    [Fact]
-    public async Task ThrowsGivenDuplicateAppointmentWithNonEmptyId()
-    {
-      // TODO: Implement Test
-    }
+    //[Fact]
+    //public async Task ThrowsGivenDuplicateAppointmentWithNonEmptyId()
+    //{
+    //  // TODO: Implement Test
+    //}
 
-    [Fact]
-    public async Task MarksConflictingAppointments()
-    {
-      // TODO: Implement Test
-    }
+    //[Fact]
+    //public async Task MarksConflictingAppointments()
+    //{
+    //  // TODO: Implement Test
+    //}
 
     [Fact]
     public void AddsAppointmentScheduledEvent()
     {
-      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId, null);
+      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId);
       var appointmentType = 1;
       var doctorId = 2;
       var patientId = 3;

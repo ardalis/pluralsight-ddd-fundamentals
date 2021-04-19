@@ -24,7 +24,7 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
 
     private Schedule CreateScheduleWithAppointment()
     {
-      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId, null);
+      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId);
       var appointmentType = 1;
       var doctorId = 2;
       var patientId = 3;

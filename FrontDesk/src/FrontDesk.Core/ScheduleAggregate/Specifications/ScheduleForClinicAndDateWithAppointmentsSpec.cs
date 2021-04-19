@@ -3,7 +3,7 @@ using System.Linq;
 using Ardalis.Specification;
 using FrontDesk.Core.ScheduleAggregate;
 
-namespace FrontDesk.Core.Specifications
+namespace FrontDesk.Core.ScheduleAggregate.Specifications
 {
   public class ScheduleForClinicAndDateWithAppointmentsSpec : Specification<Schedule>, ISingleResultSpecification
   {

@@ -31,7 +31,7 @@ namespace FrontDesk.Infrastructure.Data.Migrations
                     b.Property<int>("ClientId")
                         .HasColumnType("int");
 
-                    b.Property<DateTimeOffset?>("DateTimeConfirmed")
+                    b.Property<DateTimeOffset>("DateTimeConfirmed")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<int>("DoctorId")

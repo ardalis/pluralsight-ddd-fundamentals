@@ -21,6 +21,7 @@ namespace FrontDesk.Infrastructure.Data
     private Doctor DrWho => new Doctor(2, "Dr. Who");
     private Doctor DrMcDreamy => new Doctor(3, "Dr. McDreamy");
     private readonly Guid _scheduleId = Guid.Parse("f9369039-9d11-4442-9738-ed65d8a8ad52");
+    private readonly int _clinicId = 1;
     private DateTimeOffset _testDate = DateTime.UtcNow.Date;
     public const string MALE_SEX = "Male";
     public const string FEMALE_SEX = "Female";
@@ -144,7 +145,7 @@ namespace FrontDesk.Infrastructure.Data
 
     private Schedule CreateSchedule()
     {
-      return new Schedule(_scheduleId, new DateTimeOffsetRange(_testDate, _testDate), 1, null);
+      return new Schedule(_scheduleId, new DateTimeOffsetRange(_testDate, _testDate), _clinicId);
     }
 
     private async Task<List<AppointmentType>> CreateAppointmentTypes()

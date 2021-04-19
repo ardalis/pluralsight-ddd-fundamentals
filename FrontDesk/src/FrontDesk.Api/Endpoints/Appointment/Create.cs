@@ -6,7 +6,7 @@ using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Appointment;
 using FrontDesk.Core.SyncedAggregates;
-using FrontDesk.Core.Specifications;
+using FrontDesk.Core.ScheduleAggregate.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel;

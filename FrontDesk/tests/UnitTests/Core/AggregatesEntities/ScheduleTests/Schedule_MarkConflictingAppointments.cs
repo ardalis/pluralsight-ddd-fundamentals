@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using FrontDesk.Core.ScheduleAggregate;
 using PluralsightDdd.SharedKernel;
 using Xunit;
@@ -21,28 +19,20 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
     }
 
     [Fact]
-    public async Task SetsProperties()
+    public void SetsProperties()
     {
-      // verify this method
-      //     public Schedule(Guid id, DateTimeRange dateRange, int clinicId, IEnumerable<Appointment> appointments)
-
-      var appointments = new List<Appointment>();
-
-      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId, appointments);
+      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId);
 
       Assert.Equal(_scheduleId, schedule.Id);
       Assert.Equal(_startTime, schedule.DateRange.Start);
       Assert.Equal(_endTime, schedule.DateRange.End);
       Assert.Equal(_clinicId, schedule.ClinicId);
-      Assert.Equal(appointments, schedule.Appointments);
     }
 
     [Fact]
-    public async Task MarksConflictingAppointments()
+    public void MarksConflictingAppointments()
     {
-      // given appts with conflicts verify it marks them
-
-      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId, null);
+      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId);
       var appointmentType = 1;
       var doctorId = 2;
       var patientId = 3;
@@ -61,11 +51,9 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
     }
 
     [Fact]
-    public async Task MarksConflictingAppointmentsForSameAnimalInTwoRoomsAtSameTime()
+    public void MarksConflictingAppointmentsForSameAnimalInTwoRoomsAtSameTime()
     {
-      // given appts with conflicts verify it marks them
-
-      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId, null);
+      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId);
       var appointmentType = 1;
       var doctorId = 2;
       var patientId = 3;

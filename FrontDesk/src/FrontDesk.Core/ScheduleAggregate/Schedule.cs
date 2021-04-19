@@ -12,14 +12,11 @@ namespace FrontDesk.Core.ScheduleAggregate
   {
     public Schedule(Guid id,
       DateTimeOffsetRange dateRange,
-      int clinicId,
-      IEnumerable<Appointment> appointments)
+      int clinicId)
     {
       Id = Guard.Against.Default(id, nameof(id));
       DateRange = dateRange;
       ClinicId = Guard.Against.NegativeOrZero(clinicId, nameof(clinicId));
-      _appointments.AddRange(appointments ?? new List<Appointment>());
-      MarkConflictingAppointments();
     }
 
     public Schedule(Guid id, int clinicId) // used by EF

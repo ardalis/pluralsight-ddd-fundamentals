@@ -5,10 +5,10 @@ using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Room;
 using FrontDesk.Core.SyncedAggregates;
-using FrontDesk.Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
+using FrontDesk.Core.SyncedAggregates.Specifications;
 
 namespace FrontDesk.Api.RoomEndpoints
 {

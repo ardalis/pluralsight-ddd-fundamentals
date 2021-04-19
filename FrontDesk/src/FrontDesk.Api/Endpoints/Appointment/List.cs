@@ -9,12 +9,13 @@ using BlazorShared.Models.Appointment;
 using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Core.Exceptions;
 using FrontDesk.Core.Interfaces;
-using FrontDesk.Core.Specifications;
+using FrontDesk.Core.ScheduleAggregate.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using FrontDesk.Core.ScheduleAggregate;
+using FrontDesk.Core.SyncedAggregates.Specifications;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
