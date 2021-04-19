@@ -19,7 +19,7 @@ namespace FrontDesk.Core.ScheduleAggregate
       ClinicId = Guard.Against.NegativeOrZero(clinicId, nameof(clinicId));
     }
 
-    public Schedule(Guid id, int clinicId) // used by EF
+    private Schedule(Guid id, int clinicId) // used by EF
     {
       Id = id;
       ClinicId = clinicId;
