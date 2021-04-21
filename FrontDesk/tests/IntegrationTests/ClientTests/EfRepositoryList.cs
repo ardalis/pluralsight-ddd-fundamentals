@@ -11,11 +11,6 @@ namespace IntegrationTests.ClientTests
   {
     private readonly EfRepository<Client> _repository;
 
-    public EfRepositoryList()
-    {
-      _repository = GetRepositoryAsync<Client>().Result;
-    }
-
     [Fact]
     public async Task ListsClientAfterAddingIt()
     {
