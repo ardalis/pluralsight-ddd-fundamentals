@@ -1,6 +1,5 @@
 ﻿using System;
 using Ardalis.Specification;
-using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Core.ScheduleAggregate.Specifications
 {
@@ -10,7 +9,7 @@ namespace FrontDesk.Core.ScheduleAggregate.Specifications
     {
       Query
         .Where(schedule => schedule.Id == scheduleId)
-        .Include(schedule => schedule.Appointments);
+        .Include(schedule => schedule.Appointments); // NOTE: Includes *all* appointments
     }
   }
 }
