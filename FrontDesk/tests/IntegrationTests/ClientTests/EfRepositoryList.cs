@@ -7,27 +7,26 @@ using Xunit;
 
 namespace IntegrationTests.ClientTests
 {
-  public class EfRepositoryList : BaseEfRepoTestFixture
+  public class EfRepositoryList : IClassFixture<SharedDatabaseFixture>
   {
-    private readonly EfRepository<Client> _repository;
+    public SharedDatabaseFixture Fixture { get; }
+    public EfRepositoryList(SharedDatabaseFixture fixture) => Fixture = fixture;
 
     [Fact]
     public async Task ListsClientAfterAddingIt()
     {
-      await AddClient();
+      using (var transaction = await Fixture.Connection.BeginTransactionAsync())
+      {
+        var client = new ClientBuilder().WithDefaultValues().Id(0).Build();
 
-      var clients = (await _repository.ListAsync()).ToList();
+        var repo1 = new EfRepository<Client>(Fixture.CreateContext(transaction));
+        await repo1.AddAsync(client);
 
-      Assert.True(clients?.Count > 0);
-    }
+        var repo2 = new EfRepository<Client>(Fixture.CreateContext(transaction));
+        var clients = (await repo2.ListAsync()).ToList();
 
-    private async Task<Client> AddClient()
-    {
-      var client = new ClientBuilder().Id(200).Build();
-
-      await _repository.AddAsync(client);
-
-      return client;
+        Assert.True(clients?.Count > 0);
+      }
     }
   }
 }

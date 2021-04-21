@@ -10,42 +10,34 @@ using Xunit;
 
 namespace IntegrationTests.ScheduleTests
 {
-  public class EfRepositoryGetByScheduleByIdWithAppointmentsSpec : BaseEfRepoTestFixture
+  public class EfRepositoryGetByScheduleByIdWithAppointmentsSpec : IClassFixture<SharedDatabaseFixture>
   {
-    private readonly EfRepository<Schedule> _repository;
-
-    public EfRepositoryGetByScheduleByIdWithAppointmentsSpec()
-    {
-      _repository = GetRepositoryAsync<Schedule>().Result;
-    }
+    public SharedDatabaseFixture Fixture { get; }
+    public EfRepositoryGetByScheduleByIdWithAppointmentsSpec(SharedDatabaseFixture fixture) => Fixture = fixture;
 
     [Fact]
     public async Task ReturnScheduleWithAllAppointments()
     {
-      var id = Guid.NewGuid();
-      var newSchedule = await AddSchedule(id);
+      using (var transaction = await Fixture.Connection.BeginTransactionAsync())
+      {
+        var id = Guid.NewGuid();
+        var newSchedule = new ScheduleBuilder().WithDefaultValues().WithId(id).Build();
 
-      var builder = new AppointmentBuilder();
-      newSchedule.AddNewAppointment(builder.WithDefaultValues().Build());
-      newSchedule.AddNewAppointment(builder.WithDefaultValues().Build());
-      newSchedule.AddNewAppointment(builder.WithDefaultValues().Build());
+        newSchedule.AddNewAppointment(new AppointmentBuilder().WithDefaultValues().Build());
+        newSchedule.AddNewAppointment(new AppointmentBuilder().WithDefaultValues().Build());
+        newSchedule.AddNewAppointment(new AppointmentBuilder().WithDefaultValues().Build());
 
-      var spec = new ScheduleByIdWithAppointmentsSpec(id);
-      var scheduleFromRepo = await _repository.GetBySpecAsync(spec);
+        var repo1 = new EfRepository<Schedule>(Fixture.CreateContext(transaction));
+        await repo1.AddAsync(newSchedule);
 
-      Assert.Equal(newSchedule, scheduleFromRepo);
-      Assert.True(scheduleFromRepo.Id == id);
-      Assert.Equal(3, scheduleFromRepo.Appointments.Count());
-    }
+        var spec = new ScheduleByIdWithAppointmentsSpec(id);
+        var repo2 = new EfRepository<Schedule>(Fixture.CreateContext(transaction));
+        var scheduleFromRepo = await repo2.GetBySpecAsync(spec);
 
-    private async Task<Schedule> AddSchedule(Guid id)
-    {
-      int clinicId = 2;
-      var schedule = new Schedule(id, new DateTimeOffsetRange(DateTimeOffset.Now.Date, TimeSpan.FromDays(1)), clinicId);
-
-      await _repository.AddAsync(schedule);
-
-      return schedule;
+        Assert.Equal(newSchedule.Id, scheduleFromRepo.Id);
+        Assert.True(scheduleFromRepo.Id == id);
+        Assert.Equal(3, scheduleFromRepo.Appointments.Count());
+      }
     }
   }
 }
