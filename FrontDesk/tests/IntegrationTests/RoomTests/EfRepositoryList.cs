@@ -17,7 +17,7 @@ namespace IntegrationTests.RoomTests
     {
       using (var transaction = await Fixture.Connection.BeginTransactionAsync())
       {
-        var room = new RoomBuilder().WithDefaultValues().Id(0).Build();
+        var room = new RoomBuilder().WithDefaultValues().Build();
 
         var repo1 = new EfRepository<Room>(Fixture.CreateContext(transaction));
         await repo1.AddAsync(room);

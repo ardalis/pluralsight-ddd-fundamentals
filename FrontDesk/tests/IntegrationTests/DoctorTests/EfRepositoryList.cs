@@ -17,7 +17,7 @@ namespace IntegrationTests.DoctorTests
     {
       using (var transaction = await Fixture.Connection.BeginTransactionAsync())
       {
-        var doctor = new DoctorBuilder().WithDefaultValues().Id(0).Build();
+        var doctor = new DoctorBuilder().WithDefaultValues().Build();
 
         var repo1 = new EfRepository<Doctor>(Fixture.CreateContext(transaction));
         await repo1.AddAsync(doctor);

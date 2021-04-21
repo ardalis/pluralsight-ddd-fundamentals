@@ -17,7 +17,7 @@ namespace IntegrationTests.ClientTests
     {
       using (var transaction = await Fixture.Connection.BeginTransactionAsync())
       {
-        var client = new ClientBuilder().WithDefaultValues().Id(0).Build();
+        var client = new ClientBuilder().WithFullname(ClientBuilder.DEFAULT_FULL_NAME).Build();
 
         var repo1 = new EfRepository<Client>(Fixture.CreateContext(transaction));
         await repo1.AddAsync(client);
