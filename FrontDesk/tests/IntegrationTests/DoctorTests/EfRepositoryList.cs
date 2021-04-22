@@ -7,34 +7,26 @@ using Xunit;
 
 namespace IntegrationTests.DoctorTests
 {
-  public class EfRepositoryList : BaseEfRepoTestFixture
+  public class EfRepositoryList : IClassFixture<SharedDatabaseFixture>
   {
-    private readonly EfRepository<Doctor> _repository;
-
-    public EfRepositoryList()
-    {
-      _repository = GetRepositoryAsync<Doctor>().Result;
-    }
+    public SharedDatabaseFixture Fixture { get; }
+    public EfRepositoryList(SharedDatabaseFixture fixture) => Fixture = fixture;
 
     [Fact]
     public async Task ListsDoctorAfterAddingIt()
     {
-      await AddDoctor();
+      using (var transaction = await Fixture.Connection.BeginTransactionAsync())
+      {
+        var doctor = new DoctorBuilder().WithDefaultValues().Build();
 
-      var doctors = (await _repository.ListAsync()).ToList();
+        var repo1 = new EfRepository<Doctor>(Fixture.CreateContext(transaction));
+        await repo1.AddAsync(doctor);
 
-      Assert.True(doctors?.Count > 0);
-    }
+        var repo2 = new EfRepository<Doctor>(Fixture.CreateContext(transaction));
+        var doctors = (await repo2.ListAsync()).ToList();
 
-    private async Task<Doctor> AddDoctor()
-    {
-      var doctor = new DoctorBuilder()
-        .Id(7)
-        .Build();
-
-      await _repository.AddAsync(doctor);
-
-      return doctor;
+        Assert.True(doctors?.Count > 0);
+      }
     }
   }
 }

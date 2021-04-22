@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
@@ -6,34 +7,28 @@ using Xunit;
 
 namespace IntegrationTests.ClientTests
 {
-  public class EfRepositoryGetById : BaseEfRepoTestFixture
+  public class EfRepositoryGetById : IClassFixture<SharedDatabaseFixture>
   {
-    private readonly EfRepository<Client> _repository;
-
-    public EfRepositoryGetById()
-    {
-      _repository = GetRepositoryAsync<Client>().Result;
-    }
+    public SharedDatabaseFixture Fixture { get; }
+    public EfRepositoryGetById(SharedDatabaseFixture fixture) => Fixture = fixture;
 
     [Fact]
     public async Task GetsByIdClientAfterAddingIt()
     {
-      var id = 100;
-      var client = await AddClient(id);
+      using (var transaction = await Fixture.Connection.BeginTransactionAsync())
+      {
+        string name = Guid.NewGuid().ToString();
+        var client = new ClientBuilder().WithFullname(name).Build();
 
-      var newClient = await _repository.GetByIdAsync(id);
+        var repo1 = new EfRepository<Client>(Fixture.CreateContext(transaction));
+        await repo1.AddAsync(client);
 
-      Assert.Equal(client, newClient);
-      Assert.True(newClient?.Id == id);
-    }
+        var repo2 = new EfRepository<Client>(Fixture.CreateContext(transaction));
+        var clientFromDb = (await repo2.GetByIdAsync(client.Id));
 
-    private async Task<Client> AddClient(int id)
-    {
-      var client = new ClientBuilder().Id(id).Build();
-
-      await _repository.AddAsync(client);
-
-      return client;
+        Assert.Equal(client.Id, clientFromDb.Id);
+        Assert.Equal(client.FullName, clientFromDb.FullName);
+      }
     }
   }
 }

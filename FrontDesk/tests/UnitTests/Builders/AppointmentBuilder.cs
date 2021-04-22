@@ -13,6 +13,7 @@ namespace UnitTests.Builders
     public const int TEST_DOCTOR_ID = 4;
     public const int TEST_ROOM_ID = 5;
     public const string TEST_TITLE = "Test Title";
+    public static readonly DateTime TEST_START_TIME = new DateTime(2021, 01, 01, 10, 00, 00);
 
     private Guid _scheduleId;
     private Guid _id = Guid.NewGuid();
@@ -50,7 +51,7 @@ namespace UnitTests.Builders
       _patientId = TEST_PATIENT_ID;
       _roomId = TEST_ROOM_ID;
 
-      var startTime = new DateTime(2021, 01, 01, 10, 00, 00);
+      var startTime = TEST_START_TIME;
       var endTime = new DateTime(2021, 01, 01, 12, 00, 00);
       _dateTimeOffsetRange = new DateTimeOffsetRange(startTime, endTime);
 
