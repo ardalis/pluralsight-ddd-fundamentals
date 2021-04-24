@@ -7,32 +7,26 @@ using Xunit;
 
 namespace IntegrationTests.AppointmentTypeTests
 {
-  public class EfRepositoryList : BaseEfRepoTestFixture
+  public class EfRepositoryList : IClassFixture<SharedDatabaseFixture>
   {
-    private readonly EfRepository<AppointmentType> _repository;
-
-    public EfRepositoryList()
-    {
-      _repository = GetRepositoryAsync<AppointmentType>().Result;
-    }
+    public SharedDatabaseFixture Fixture { get; }
+    public EfRepositoryList(SharedDatabaseFixture fixture) => Fixture = fixture;
 
     [Fact]
     public async Task ListsAppointmentTypeAfterAddingIt()
     {
-      await AddAppointmentType();
+      using (var transaction = await Fixture.Connection.BeginTransactionAsync())
+      {
+        var appointmentType = new AppointmentTypeBuilder().Id(0).Build();
 
-      var appointmentTypes = (await _repository.ListAsync()).ToList();
+        var repo1 = new EfRepository<AppointmentType>(Fixture.CreateContext(transaction));
+        await repo1.AddAsync(appointmentType);
 
-      Assert.True(appointmentTypes?.Count > 0);
-    }
+        var repo2 = new EfRepository<AppointmentType>(Fixture.CreateContext(transaction));
+        var appointmentTypes = (await repo2.ListAsync()).ToList();
 
-    private async Task<AppointmentType> AddAppointmentType()
-    {
-      var appointmentType = new AppointmentTypeBuilder().Id(7).Build();
-
-      await _repository.AddAsync(appointmentType);
-
-      return appointmentType;
+        Assert.True(appointmentTypes?.Count > 0);
+      }
     }
   }
 }

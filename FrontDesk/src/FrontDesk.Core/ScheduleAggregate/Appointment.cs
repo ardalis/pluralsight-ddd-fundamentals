@@ -8,7 +8,8 @@ namespace FrontDesk.Core.ScheduleAggregate
 {
   public class Appointment : BaseEntity<Guid>
   {
-    public Appointment(int appointmentTypeId,
+    public Appointment(Guid id,
+      int appointmentTypeId,
       Guid scheduleId,
       int clientId,
       int doctorId,
@@ -18,6 +19,7 @@ namespace FrontDesk.Core.ScheduleAggregate
       string title,
       DateTime? dateTimeConfirmed = null)
     {
+      Id = Guard.Against.Default(id, nameof(id));
       AppointmentTypeId = Guard.Against.NegativeOrZero(appointmentTypeId, nameof(appointmentTypeId));
       ScheduleId = Guard.Against.Default(scheduleId, nameof(scheduleId));
       ClientId = Guard.Against.NegativeOrZero(clientId, nameof(clientId));

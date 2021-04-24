@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
-    <Folder Include="SyncedAggregates\" />
   </ItemGroup>
 
 </Project>

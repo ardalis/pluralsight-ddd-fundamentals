@@ -4,32 +4,33 @@ namespace UnitTests.Builders
 {
   public class DoctorBuilder
   {
+    public const string DEFAULT_NAME = "Test Doctor";
     private Doctor _doctor;
+    private int _id;
+    private string _name = DEFAULT_NAME;
 
     public DoctorBuilder()
     {
-      WithDefaultValues();
     }
 
-    public DoctorBuilder Id(int id)
+    public DoctorBuilder WithId(int id)
     {
-      _doctor.Id = id;
+      _id = id;
       return this;
     }
-
-    public DoctorBuilder SetDoctor(Doctor doctor)
+    public DoctorBuilder WithName(string name)
     {
-      _doctor = doctor;
+      _name = name;
       return this;
     }
 
     public DoctorBuilder WithDefaultValues()
     {
-      _doctor = new Doctor(1, "Test Doctor");
+      _doctor = new Doctor(0, DEFAULT_NAME);
 
       return this;
     }
 
-    public Doctor Build() => _doctor;
+    public Doctor Build() => new Doctor(_id, _name);
   }
 }

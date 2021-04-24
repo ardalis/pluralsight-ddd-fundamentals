@@ -24,7 +24,7 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
 
     private Schedule CreateScheduleWithAppointment()
     {
-      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId, null);
+      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId);
       var appointmentType = 1;
       var doctorId = 2;
       var patientId = 3;
@@ -34,7 +34,7 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
       DateTime lisaEndTime = new DateTime(2021, 01, 01, 11, 00, 00);
       var lisaDateRange = new DateTimeOffsetRange(lisaStartTime, lisaEndTime);
       var lisaTitle = "Lisa Appointment";
-      var lisaAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId,
+      var lisaAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId,
         lisaDateRange, lisaTitle);
       schedule.AddNewAppointment(lisaAppointment);
 

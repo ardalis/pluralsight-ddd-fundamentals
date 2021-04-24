@@ -24,13 +24,12 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
     {
       var appointments = new List<Appointment>();
 
-      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId, appointments);
+      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId);
 
       Assert.Equal(_scheduleId, schedule.Id);
       Assert.Equal(_startTime, schedule.DateRange.Start);
       Assert.Equal(_endTime, schedule.DateRange.End);
       Assert.Equal(_clinicId, schedule.ClinicId);
-      Assert.Equal(appointments, schedule.Appointments);
     }
   }
 }

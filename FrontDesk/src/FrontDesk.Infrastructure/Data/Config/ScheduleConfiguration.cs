@@ -8,6 +8,7 @@ namespace FrontDesk.Infrastructure.Data.Config
   {
     public void Configure(EntityTypeBuilder<Schedule> builder)
     {
+      builder.Property(p => p.Id).ValueGeneratedNever();
       builder.Ignore(s => s.DateRange);
     }
   }

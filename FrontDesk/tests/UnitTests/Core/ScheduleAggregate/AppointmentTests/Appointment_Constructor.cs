@@ -12,6 +12,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
     {
       const int appointmentTypeId = 1;
       var scheduleId = Guid.NewGuid();
+      var appointmentId = Guid.NewGuid();
       const int clientId = 2;
       const int doctorId = 3;
       const int patientId = 4;
@@ -22,7 +23,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
       var range = new DateTimeOffsetRange(startTime, endTime);
       const int threeHours = 3 * 60;
 
-      var appointment = new Appointment(appointmentTypeId, scheduleId, clientId, doctorId, patientId, roomId, range, title);
+      var appointment = new Appointment(appointmentId, appointmentTypeId, scheduleId, clientId, doctorId, patientId, roomId, range, title);
 
       Assert.Null(appointment.DateTimeConfirmed);
       Assert.Equal(appointmentTypeId, appointment.AppointmentTypeId);
@@ -33,7 +34,7 @@ namespace UnitTests.Core.AggregatesEntities.AppointmentTests
       Assert.Equal(roomId, appointment.RoomId);
       Assert.Equal(threeHours, appointment.TimeRange.DurationInMinutes());
       Assert.Equal(title, appointment.Title);
-      Assert.Equal(Guid.Empty, appointment.Id);
+      Assert.Equal(appointmentId, appointment.Id);
     }
   }
 }

@@ -24,7 +24,7 @@ namespace FrontDesk.Api.ClientEndpoints
       _mapper = mapper;
     }
 
-    [HttpGet("api/clients/{ClientId}")]
+    [HttpGet(GetByIdClientRequest.Route)]
     [SwaggerOperation(
         Summary = "Get a Client by Id",
         Description = "Gets a Client by Id",

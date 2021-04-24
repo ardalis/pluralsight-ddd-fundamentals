@@ -5,7 +5,7 @@ using Ardalis.ApiEndpoints;
 using AutoMapper;
 using BlazorShared.Models.Appointment;
 using BlazorShared.Models.Schedule;
-using FrontDesk.Core.Specifications;
+using FrontDesk.Core.ScheduleAggregate.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;

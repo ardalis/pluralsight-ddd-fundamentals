@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ardalis.GuardClauses;
 using FrontDesk.Core.Events;
 using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
@@ -9,37 +10,32 @@ namespace FrontDesk.Core.ScheduleAggregate
 {
   public class Schedule : BaseEntity<Guid>, IAggregateRoot
   {
+    public Schedule(Guid id,
+      DateTimeOffsetRange dateRange,
+      int clinicId)
+    {
+      Id = Guard.Against.Default(id, nameof(id));
+      DateRange = dateRange;
+      ClinicId = Guard.Against.NegativeOrZero(clinicId, nameof(clinicId));
+    }
+
+    private Schedule(Guid id, int clinicId) // used by EF
+    {
+      Id = id;
+      ClinicId = clinicId;
+    }
+
     public int ClinicId { get; private set; }
     private readonly List<Appointment> _appointments = new List<Appointment>();
     public IEnumerable<Appointment> Appointments => _appointments.AsReadOnly();
 
     public DateTimeOffsetRange DateRange { get; private set; }
 
-    public Schedule(Guid id,
-      DateTimeOffsetRange dateRange,
-      int clinicId,
-      IEnumerable<Appointment> appointments)
-    {
-      Id = id;
-      DateRange = dateRange;
-      ClinicId = clinicId;
-      _appointments.AddRange(appointments ?? new List<Appointment>());
-      MarkConflictingAppointments();
-    }
-
-    public Schedule(Guid id, int clinicId) // used by EF
-    {
-      Id = id;
-      ClinicId = clinicId;
-    }
-
     public Appointment AddNewAppointment(Appointment appointment)
     {
-      if (appointment.Id != Guid.Empty &&
-        _appointments.Any(a => a.Id == appointment.Id))
-      {
-        throw new ArgumentException("Cannot add duplicate appointment to schedule.", nameof(appointment));
-      }
+      Guard.Against.Null(appointment, nameof(appointment));
+      Guard.Against.Default(appointment.Id, nameof(appointment.Id));
+      Guard.Against.DuplicateAppointment(_appointments, appointment, nameof(appointment));
 
       _appointments.Add(appointment);
 
@@ -51,8 +47,11 @@ namespace FrontDesk.Core.ScheduleAggregate
       return appointment;
     }
 
+
+
     public void DeleteAppointment(Appointment appointment)
     {
+      Guard.Against.Null(appointment, nameof(appointment));
       var appointmentToDelete = _appointments
                                 .Where(a => a.Id == appointment.Id)
                                 .FirstOrDefault();
@@ -66,6 +65,9 @@ namespace FrontDesk.Core.ScheduleAggregate
 
       // TODO: Add appointment deleted event and show delete message in Blazor client app
     }
+
+
+
 
     private void MarkConflictingAppointments()
     {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using FrontDesk.Core.ScheduleAggregate;
 using PluralsightDdd.SharedKernel;
 using Xunit;
@@ -21,39 +19,31 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
     }
 
     [Fact]
-    public async Task SetsProperties()
+    public void SetsProperties()
     {
-      // verify this method
-      //     public Schedule(Guid id, DateTimeRange dateRange, int clinicId, IEnumerable<Appointment> appointments)
-
-      var appointments = new List<Appointment>();
-
-      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId, appointments);
+      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId);
 
       Assert.Equal(_scheduleId, schedule.Id);
       Assert.Equal(_startTime, schedule.DateRange.Start);
       Assert.Equal(_endTime, schedule.DateRange.End);
       Assert.Equal(_clinicId, schedule.ClinicId);
-      Assert.Equal(appointments, schedule.Appointments);
     }
 
     [Fact]
-    public async Task MarksConflictingAppointments()
+    public void MarksConflictingAppointments()
     {
-      // given appts with conflicts verify it marks them
-
-      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId, null);
+      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId);
       var appointmentType = 1;
       var doctorId = 2;
       var patientId = 3;
       var roomId = 4;
 
       var lisaTitle = "Lisa Appointment";
-      var lisaAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, lisaTitle);
+      var lisaAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, lisaTitle);
       schedule.AddNewAppointment(lisaAppointment);
 
       var mimiTitle = "Mimi Appointment";
-      var mimiAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, mimiTitle);
+      var mimiAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, mimiTitle);
       schedule.AddNewAppointment(mimiAppointment);
 
       Assert.True(lisaAppointment.IsPotentiallyConflicting, "lisa not conflicting");
@@ -61,22 +51,20 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
     }
 
     [Fact]
-    public async Task MarksConflictingAppointmentsForSameAnimalInTwoRoomsAtSameTime()
+    public void MarksConflictingAppointmentsForSameAnimalInTwoRoomsAtSameTime()
     {
-      // given appts with conflicts verify it marks them
-
-      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId, null);
+      var schedule = new Schedule(_scheduleId, _dateRange, _clinicId);
       var appointmentType = 1;
       var doctorId = 2;
       var patientId = 3;
       var roomId = 4;
 
       var lisaTitle = "Lisa Appointment";
-      var lisaAppointment = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, lisaTitle);
+      var lisaAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId, _dateRange, lisaTitle);
       schedule.AddNewAppointment(lisaAppointment);
 
       var lisaTitle2 = "Lisa Appointment 2";
-      var lisaAppointment2 = new Appointment(appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId+1, _dateRange, lisaTitle2);
+      var lisaAppointment2 = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, _clinicId, doctorId, patientId, roomId+1, _dateRange, lisaTitle2);
       schedule.AddNewAppointment(lisaAppointment2);
 
       Assert.True(lisaAppointment.IsPotentiallyConflicting, "lisa1 not conflicting");

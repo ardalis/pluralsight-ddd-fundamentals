@@ -9,12 +9,13 @@ using BlazorShared.Models.Appointment;
 using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Core.Exceptions;
 using FrontDesk.Core.Interfaces;
-using FrontDesk.Core.Specifications;
+using FrontDesk.Core.ScheduleAggregate.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 using FrontDesk.Core.ScheduleAggregate;
+using FrontDesk.Core.SyncedAggregates.Specifications;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
@@ -55,19 +56,16 @@ namespace FrontDesk.Api.AppointmentEndpoints
       Schedule schedule = null;
       if (request.ScheduleId == Guid.Empty)
       {
-        var spec = new ScheduleForClinicAndDateWithAppointmentsSpec(_settings.ClinicId, _settings.TestDate);
-        schedule = await _scheduleRepository.GetBySpecAsync(spec);
-        if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for clinic {_settings.ClinicId}.");
-      }
-      else
-      {
-        var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId);
-        schedule = await _scheduleRepository.GetBySpecAsync(spec);
-        if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for id {request.ScheduleId}.");
+        return NotFound();
       }
 
+      // TODO: Get date from API request and use a specification that only includes appointments on that date.
+      var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId);
+      schedule = await _scheduleRepository.GetBySpecAsync(spec);
+      if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for id {request.ScheduleId}.");
+
       int conflictedAppointmentsCount = schedule.Appointments
-      .Count(a => a.IsPotentiallyConflicting);
+        .Count(a => a.IsPotentiallyConflicting);
       _logger.LogInformation($"API:ListAppointments There are now {conflictedAppointmentsCount} conflicted appointments.");
 
       var myAppointments = _mapper.Map<List<AppointmentDto>>(schedule.Appointments);

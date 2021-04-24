@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
@@ -6,34 +7,28 @@ using Xunit;
 
 namespace IntegrationTests.DoctorTests
 {
-  public class EfRepositoryGetById : BaseEfRepoTestFixture
+  public class EfRepositoryGetById : IClassFixture<SharedDatabaseFixture>
   {
-    private readonly EfRepository<Doctor> _repository;
-
-    public EfRepositoryGetById()
-    {
-      _repository = GetRepositoryAsync<Doctor>().Result;
-    }
+    public SharedDatabaseFixture Fixture { get; }
+    public EfRepositoryGetById(SharedDatabaseFixture fixture) => Fixture = fixture;
 
     [Fact]
     public async Task GetsByIdDoctorAfterAddingIt()
     {
-      var id = 9;
-      var doctor = await AddDoctor(id);
+      using (var transaction = await Fixture.Connection.BeginTransactionAsync())
+      {
+        string name = Guid.NewGuid().ToString();
+        var doctor = new DoctorBuilder().WithName(name).Build();
 
-      var newDoctor = await _repository.GetByIdAsync(id);
+        var repo1 = new EfRepository<Doctor>(Fixture.CreateContext(transaction));
+        await repo1.AddAsync(doctor);
 
-      Assert.Equal(doctor, newDoctor);
-      Assert.True(newDoctor?.Id == id);
-    }
+        var repo2 = new EfRepository<Doctor>(Fixture.CreateContext(transaction));
+        var doctorFromDb = (await repo2.GetByIdAsync(doctor.Id));
 
-    private async Task<Doctor> AddDoctor(int id)
-    {
-      var doctor = new DoctorBuilder().Id(id).Build();
-
-      await _repository.AddAsync(doctor);
-
-      return doctor;
+        Assert.Equal(doctor.Id, doctorFromDb.Id);
+        Assert.Equal(doctor.Name, doctorFromDb.Name);
+      }
     }
   }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Infrastructure.Data;
 using UnitTests.Builders;
@@ -6,34 +7,28 @@ using Xunit;
 
 namespace IntegrationTests.RoomTests
 {
-  public class EfRepositoryGetById : BaseEfRepoTestFixture
+  public class EfRepositoryGetById : IClassFixture<SharedDatabaseFixture>
   {
-    private readonly EfRepository<Room> _repository;
-
-    public EfRepositoryGetById()
-    {
-      _repository = GetRepositoryAsync<Room>().Result;
-    }
+    public SharedDatabaseFixture Fixture { get; }
+    public EfRepositoryGetById(SharedDatabaseFixture fixture) => Fixture = fixture;
 
     [Fact]
     public async Task GetsByIdRoomAfterAddingIt()
     {
-      var id = 9;
-      var room = await AddRoom(id);
+      using (var transaction = await Fixture.Connection.BeginTransactionAsync())
+      {
+        string name = Guid.NewGuid().ToString();
+        var room = new RoomBuilder().WithName(name).Build();
 
-      var newRoom = await _repository.GetByIdAsync(id);
+        var repo1 = new EfRepository<Room>(Fixture.CreateContext(transaction));
+        await repo1.AddAsync(room);
 
-      Assert.Equal(room, newRoom);
-      Assert.True(newRoom?.Id == id);
-    }
+        var repo2 = new EfRepository<Room>(Fixture.CreateContext(transaction));
+        var roomFromDb = (await repo2.GetByIdAsync(room.Id));
 
-    private async Task<Room> AddRoom(int id)
-    {
-      var room = new RoomBuilder().Id(id).Build();
-
-      await _repository.AddAsync(room);
-
-      return room;
+        Assert.Equal(room.Id, roomFromDb.Id);
+        Assert.Equal(room.Name, roomFromDb.Name);
+      }
     }
   }
 }
