@@ -56,19 +56,16 @@ namespace FrontDesk.Api.AppointmentEndpoints
       Schedule schedule = null;
       if (request.ScheduleId == Guid.Empty)
       {
-        var spec = new ScheduleForClinicAndDateWithAppointmentsSpec(_settings.ClinicId, _settings.TestDate);
-        schedule = await _scheduleRepository.GetBySpecAsync(spec);
-        if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for clinic {_settings.ClinicId}.");
-      }
-      else
-      {
-        var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId);
-        schedule = await _scheduleRepository.GetBySpecAsync(spec);
-        if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for id {request.ScheduleId}.");
+        return NotFound();
       }
 
+      // TODO: Get date from API request and use a specification that only includes appointments on that date.
+      var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId);
+      schedule = await _scheduleRepository.GetBySpecAsync(spec);
+      if (schedule == null) throw new ScheduleNotFoundException($"No schedule found for id {request.ScheduleId}.");
+
       int conflictedAppointmentsCount = schedule.Appointments
-      .Count(a => a.IsPotentiallyConflicting);
+        .Count(a => a.IsPotentiallyConflicting);
       _logger.LogInformation($"API:ListAppointments There are now {conflictedAppointmentsCount} conflicted appointments.");
 
       var myAppointments = _mapper.Map<List<AppointmentDto>>(schedule.Appointments);
