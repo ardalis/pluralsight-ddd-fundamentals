@@ -1,7 +1,7 @@
 ﻿using System;
 using PluralsightDdd.SharedKernel.Interfaces;
 
-namespace FrontDesk.Core.Events.ApplicationEvents
+namespace FrontDesk.Core.Events.IntegrationEvents
 {
   public class CreateConfirmationEmailMessage : IApplicationEvent
   {

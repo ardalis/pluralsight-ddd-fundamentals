@@ -1,7 +1,7 @@
 ﻿using System;
 using PluralsightDdd.SharedKernel;
 
-namespace FrontDesk.Core.Events.ApplicationEvents
+namespace FrontDesk.Core.Events.IntegrationEvents
 {
   // This is fired by the message queue handler when an appointment should
   // be marked confirmed. It happens before the appointment is confirmed in

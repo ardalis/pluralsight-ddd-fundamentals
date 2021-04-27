@@ -2,7 +2,7 @@
 using BlazorShared.Models.Appointment;
 using PluralsightDdd.SharedKernel;
 
-namespace FrontDesk.Core.Events.ApplicationEvents
+namespace FrontDesk.Core.Events.IntegrationEvents
 {
   public class AppointmentScheduledAppEvent : BaseDomainEvent
   {

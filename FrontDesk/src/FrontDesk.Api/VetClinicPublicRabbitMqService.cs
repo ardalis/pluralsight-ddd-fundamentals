@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using FrontDesk.Api.Hubs;
-using FrontDesk.Core.Events.ApplicationEvents;
+using FrontDesk.Core.Events.IntegrationEvents;
 using FrontDesk.Infrastructure.Messaging;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;

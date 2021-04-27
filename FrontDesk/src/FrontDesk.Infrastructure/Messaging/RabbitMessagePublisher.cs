@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.Json;
 using Ardalis.GuardClauses;
-using FrontDesk.Core.Events.ApplicationEvents;
+using FrontDesk.Core.Events.IntegrationEvents;
 using FrontDesk.Core.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;

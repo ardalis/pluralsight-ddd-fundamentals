@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
-using FrontDesk.Core.Events.ApplicationEvents;
+using FrontDesk.Core.Events.IntegrationEvents;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.ScheduleAggregate;
 using FrontDesk.Core.ScheduleAggregate.Specifications;

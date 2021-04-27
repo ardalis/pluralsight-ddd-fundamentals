@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FrontDesk.Core.Events;
-using FrontDesk.Core.Events.ApplicationEvents;
+using FrontDesk.Core.Events.IntegrationEvents;
 using FrontDesk.Core.Exceptions;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.ScheduleAggregate.Specifications;
