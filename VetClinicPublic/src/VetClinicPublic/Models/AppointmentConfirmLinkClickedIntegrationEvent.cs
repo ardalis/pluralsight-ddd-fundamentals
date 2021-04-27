@@ -2,9 +2,9 @@
 
 namespace VetClinicPublic.Web.Models
 {
-    public class AppointmentConfirmedEvent
-    {
-        public AppointmentConfirmedEvent(Guid appointmentId)
+    public class AppointmentConfirmLinkClickedIntegrationEvent
+  {
+        public AppointmentConfirmLinkClickedIntegrationEvent(Guid appointmentId)
         {
             this.Id = Guid.NewGuid();
             DateTimeEventOccurred = DateTime.Now;
@@ -18,7 +18,7 @@ namespace VetClinicPublic.Web.Models
         {
             get
             {
-                return "AppointmentConfirmedEvent";
+                return nameof(AppointmentConfirmLinkClickedIntegrationEvent);
             }
         }
     }
