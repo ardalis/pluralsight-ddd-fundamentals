@@ -110,20 +110,5 @@ namespace FrontDesk.Core.ScheduleAggregate
       var appointmentConfirmedEvent = new AppointmentConfirmedEvent(this);
       Events.Add(appointmentConfirmedEvent);
     }
-
-    public void Schedule()
-    {
-      #region Verify Appointment Fits in Schedule
-      // stuff
-      #endregion
-
-      #region Store the appointment
-      // stuff
-      #endregion  
-
-      #region Raise AppointmentScheduled Event
-      // stuff
-      #endregion
-    }
   }
 }
