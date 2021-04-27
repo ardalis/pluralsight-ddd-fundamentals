@@ -23,7 +23,7 @@ namespace FrontDesk.Infrastructure.Messaging
       _logger = logger;
     }
 
-    public void Publish(CreateConfirmationEmailMessage eventToPublish)
+    public void Publish(AppointmentScheduledIntegrationEvent eventToPublish)
     {
       Guard.Against.Null(eventToPublish, nameof(eventToPublish));
 

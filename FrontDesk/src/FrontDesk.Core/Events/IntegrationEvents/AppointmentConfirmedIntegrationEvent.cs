@@ -1,21 +1,20 @@
 ﻿using System;
-using MediatR;
-using PluralsightDdd.SharedKernel.Interfaces;
+using PluralsightDdd.SharedKernel;
 
 namespace FrontDesk.Core.Events.IntegrationEvents
 {
   // This is fired by the message queue handler when an appointment should
   // be marked confirmed. It happens before the appointment is confirmed in
   // the model.
-  public class AppointmentConfirmedAppEvent : IIntegrationEvent, INotification
+  public class AppointmentConfirmedIntegrationEvent : BaseIntegrationEvent
   {
-    public AppointmentConfirmedAppEvent() : this(DateTime.Now)
+    public AppointmentConfirmedIntegrationEvent() : this(DateTimeOffset.Now)
     {
     }
 
-    public AppointmentConfirmedAppEvent(DateTimeOffset dateOccurred)
+    public AppointmentConfirmedIntegrationEvent(DateTimeOffset dateOccurred)
     {
-      DateOccurred = dateOccurred.DateTime;
+      DateOccurred = dateOccurred;
     }
 
     public Guid AppointmentId { get; set; }
@@ -23,7 +22,7 @@ namespace FrontDesk.Core.Events.IntegrationEvents
     {
       get
       {
-        return nameof(AppointmentConfirmedAppEvent);
+        return nameof(AppointmentConfirmedIntegrationEvent);
       }
     }
   }
