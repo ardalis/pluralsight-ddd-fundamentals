@@ -4,7 +4,6 @@ using PluralsightDdd.SharedKernel;
 
 namespace FrontDesk.Core.Events
 {
-  // This is fired from within the model when after an appt was confirmed
   public class AppointmentConfirmedEvent : BaseDomainEvent
   {
     public AppointmentConfirmedEvent(Appointment appointment) : this()

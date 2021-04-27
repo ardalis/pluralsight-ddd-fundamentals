@@ -17,7 +17,6 @@ namespace FrontDesk.Core.Events
     }
 
     public Guid Id { get; private set; }
-
     public Appointment AppointmentScheduled { get; private set; }
   }
 }
