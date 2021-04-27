@@ -116,7 +116,7 @@ namespace FrontDesk.Api
       {
         Guid appointmentId = root.GetProperty("AppointmentId").GetGuid();
         DateTimeOffset dateTimeOffset = root.GetProperty("DateTimeEventOccurred").GetDateTimeOffset();
-        var appEvent = new AppointmentConfirmedIntegrationEvent(dateTimeOffset)
+        var appEvent = new AppointmentConfirmLinkClickedIntegrationEvent(dateTimeOffset)
         {
           AppointmentId = appointmentId
         };
