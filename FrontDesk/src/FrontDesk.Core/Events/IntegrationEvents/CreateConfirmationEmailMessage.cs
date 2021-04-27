@@ -3,7 +3,7 @@ using PluralsightDdd.SharedKernel.Interfaces;
 
 namespace FrontDesk.Core.Events.IntegrationEvents
 {
-  public class CreateConfirmationEmailMessage : IApplicationEvent
+  public class CreateConfirmationEmailMessage : IIntegrationEvent
   {
     public Guid AppointmentId { get; set; }
     public string ClientName { get; set; }
