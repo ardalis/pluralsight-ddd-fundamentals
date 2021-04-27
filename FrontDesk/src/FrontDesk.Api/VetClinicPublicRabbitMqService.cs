@@ -112,7 +112,7 @@ namespace FrontDesk.Api
       using var scope = _serviceScopeFactory.CreateScope();
       var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-      if (eventType.GetString() == "AppointmentConfirmedEvent")
+      if (eventType.GetString() == nameof(AppointmentConfirmLinkClickedIntegrationEvent))
       {
         Guid appointmentId = root.GetProperty("AppointmentId").GetGuid();
         DateTimeOffset dateTimeOffset = root.GetProperty("DateTimeEventOccurred").GetDateTimeOffset();
@@ -121,6 +121,10 @@ namespace FrontDesk.Api
           AppointmentId = appointmentId
         };
         await mediator.Publish(appEvent);
+      }
+      else
+      {
+        throw new Exception($"Unknown message type: {eventType.GetString()}");
       }
     }
 

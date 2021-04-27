@@ -108,7 +108,7 @@ namespace VetClinicPublic
       using var scope = _serviceScopeFactory.CreateScope();
       var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-      if(eventType.GetString() == "CreateConfirmationEmailMessage")
+      if(eventType.GetString() == "AppointmentScheduledIntegrationEvent")
       {
         // TODO: deserialize with System.Text.Json
         var command = new AppointmentDTO()
@@ -122,7 +122,10 @@ namespace VetClinicPublic
           AppointmentStartDateTime = root.GetProperty("AppointmentStartDateTime").GetDateTime()
         };
       await mediator.Send(command);
-
+      }
+      else
+      {
+        throw new Exception($"Unknown message type: {eventType.GetString()}");
       }
     }
 
