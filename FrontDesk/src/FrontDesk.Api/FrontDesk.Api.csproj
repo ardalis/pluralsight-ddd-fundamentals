@@ -108,7 +108,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="MediatR" Version="9.0.0" />
-    <PackageReference Include="PluralsightDdd.SharedKernel" Version="2.1.0" />
+    <PackageReference Include="PluralsightDdd.SharedKernel" Version="2.1.1" />
     <PackageReference Include="RabbitMQ.Client" Version="6.2.1" />
     <PackageReference Include="SixLabors.ImageSharp" Version="1.0.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.3" />
