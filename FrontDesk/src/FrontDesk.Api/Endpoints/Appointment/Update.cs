@@ -52,7 +52,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
 
       var apptToUpdate = schedule.Appointments
                             .FirstOrDefault(a => a.Id == request.Id);
-      apptToUpdate.UpdateAppointmentType(apptType);
+      apptToUpdate.UpdateAppointmentType(apptType, schedule.AppointmentUpdatedHandler);
       apptToUpdate.UpdateRoom(request.RoomId);
       apptToUpdate.UpdateStartTime(request.Start, schedule.AppointmentUpdatedHandler);
       apptToUpdate.UpdateTitle(request.Title);

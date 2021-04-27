@@ -7,16 +7,11 @@ namespace FrontDesk.Core.Events
   public class AppointmentUpdatedEvent : BaseDomainEvent
   {
     public AppointmentUpdatedEvent(Appointment appointment)
-        : this()
     {
       AppointmentUpdated = appointment;
     }
-    public AppointmentUpdatedEvent()
-    {
-      this.Id = Guid.NewGuid();
-    }
 
-    public Guid Id { get; private set; }
+    public Guid Id { get; private set; } = Guid.NewGuid();
     public Appointment AppointmentUpdated { get; private set; }
   }
 }

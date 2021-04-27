@@ -6,17 +6,12 @@ namespace FrontDesk.Core.Events
 {
   public class AppointmentScheduledEvent : BaseDomainEvent
   {
-    public AppointmentScheduledEvent(Appointment appointment) : this()
+    public AppointmentScheduledEvent(Appointment appointment)
     {
       AppointmentScheduled = appointment;
     }
 
-    public AppointmentScheduledEvent()
-    {
-      this.Id = Guid.NewGuid();
-    }
-
-    public Guid Id { get; private set; }
+    public Guid Id { get; private set; } = Guid.NewGuid();
     public Appointment AppointmentScheduled { get; private set; }
   }
 }
