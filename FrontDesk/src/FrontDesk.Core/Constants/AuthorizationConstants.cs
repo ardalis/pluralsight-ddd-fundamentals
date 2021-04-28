@@ -2,7 +2,7 @@
 {
   public class AuthorizationConstants
   {
-    // TODO: Change this to an environment variable
+    // NOTE: Use an environment variable in a production app
     public const string JWT_SECRET_KEY = "SecretKeyOfDoomThatMustBeAMinimumNumberOfBytes";
   }
 }

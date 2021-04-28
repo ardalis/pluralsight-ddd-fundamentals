@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Specification;
 using Microsoft.Extensions.Caching.Memory;
@@ -32,9 +33,9 @@ namespace FrontDesk.Infrastructure.Data
       return _sourceRepository.AddAsync(entity);
     }
 
-    public Task<int> CountAsync(ISpecification<T> specification)
+    public Task<int> CountAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
     {
-      return _sourceRepository.CountAsync(specification);
+      return _sourceRepository.CountAsync(specification, cancellationToken);
     }
 
     public Task DeleteAsync(T entity)
@@ -47,7 +48,7 @@ namespace FrontDesk.Infrastructure.Data
       return _sourceRepository.DeleteRangeAsync(entities);
     }
 
-    public Task<T> GetByIdAsync<TId>(TId id)
+    public Task<T> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken = default)
     {
       string key = $"{typeof(T).Name}-{id}";
       _logger.LogInformation("Checking cache for " + key);
@@ -55,11 +56,12 @@ namespace FrontDesk.Infrastructure.Data
       {
         entry.SetOptions(_cacheOptions);
         _logger.LogWarning("Fetching source data for " + key);
-        return _sourceRepository.GetByIdAsync(id);
+        return _sourceRepository.GetByIdAsync(id, cancellationToken);
       });
     }
 
-  public Task<T> GetBySpecAsync<Spec>(Spec specification) where Spec : ISingleResultSpecification, ISpecification<T>
+    public Task<T> GetBySpecAsync<Spec>(Spec specification,
+      CancellationToken cancellationToken = default) where Spec : ISingleResultSpecification, ISpecification<T>
     {
       if (specification.CacheEnabled)
       {
@@ -69,13 +71,14 @@ namespace FrontDesk.Infrastructure.Data
         {
           entry.SetOptions(_cacheOptions);
           _logger.LogWarning("Fetching source data for " + key);
-          return _sourceRepository.GetBySpecAsync(specification);
+          return _sourceRepository.GetBySpecAsync(specification, cancellationToken);
         });
       }
       return _sourceRepository.GetBySpecAsync(specification);
     }
 
-    public Task<TResult> GetBySpecAsync<TResult>(ISpecification<T, TResult> specification)
+    public Task<TResult> GetBySpecAsync<TResult>(ISpecification<T, TResult> specification,
+      CancellationToken cancellationToken = default)
     {
       if (specification.CacheEnabled)
       {
@@ -85,13 +88,13 @@ namespace FrontDesk.Infrastructure.Data
         {
           entry.SetOptions(_cacheOptions);
           _logger.LogWarning("Fetching source data for " + key);
-          return _sourceRepository.GetBySpecAsync(specification);
+          return _sourceRepository.GetBySpecAsync(specification, cancellationToken);
         });
       }
-      return _sourceRepository.GetBySpecAsync(specification);
+      return _sourceRepository.GetBySpecAsync(specification, cancellationToken);
     }
 
-    public Task<List<T>> ListAsync()
+    public Task<List<T>> ListAsync(CancellationToken cancellationToken = default)
     {
       string key = $"{typeof(T).Name}-List";
       _logger.LogInformation($"Checking cache for {key}");
@@ -99,11 +102,12 @@ namespace FrontDesk.Infrastructure.Data
       {
         entry.SetOptions(_cacheOptions);
         _logger.LogWarning($"Fetching source data for {key}");
-        return _sourceRepository.ListAsync();
+        return _sourceRepository.ListAsync(cancellationToken);
       });
     }
 
-    public Task<List<T>> ListAsync(ISpecification<T> specification)
+    public Task<List<T>> ListAsync(ISpecification<T> specification,
+      CancellationToken cancellationToken = default)
     {
       if (specification.CacheEnabled)
       {
@@ -113,13 +117,14 @@ namespace FrontDesk.Infrastructure.Data
         {
           entry.SetOptions(_cacheOptions);
           _logger.LogWarning($"Fetching source data for {key}");
-          return _sourceRepository.ListAsync(specification);
+          return _sourceRepository.ListAsync(specification, cancellationToken);
         });
       }
-      return _sourceRepository.ListAsync(specification);
+      return _sourceRepository.ListAsync(specification, cancellationToken);
     }
 
-    public Task<List<TResult>> ListAsync<TResult>(ISpecification<T, TResult> specification)
+    public Task<List<TResult>> ListAsync<TResult>(ISpecification<T, TResult> specification,
+      CancellationToken cancellationToken = default)
     {
       if (specification.CacheEnabled)
       {
@@ -129,10 +134,10 @@ namespace FrontDesk.Infrastructure.Data
         {
           entry.SetOptions(_cacheOptions);
           _logger.LogWarning($"Fetching source data for {key}");
-          return _sourceRepository.ListAsync(specification);
+          return _sourceRepository.ListAsync(specification, cancellationToken);
         });
       }
-      return _sourceRepository.ListAsync(specification);
+      return _sourceRepository.ListAsync(specification, cancellationToken);
     }
 
     public Task SaveChangesAsync()

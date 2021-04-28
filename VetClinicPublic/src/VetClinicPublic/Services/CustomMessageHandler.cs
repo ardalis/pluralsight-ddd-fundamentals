@@ -29,5 +29,4 @@ namespace VetClinicPublic.Web.Services
       return Task.FromResult(Unit.Value);
     }
   }
-
 }

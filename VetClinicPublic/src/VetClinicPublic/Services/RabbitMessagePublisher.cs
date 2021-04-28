@@ -19,7 +19,7 @@ namespace VetClinicPublic.Web.Services
       _objectPool = new DefaultObjectPool<IModel>(objectPolicy, Environment.ProcessorCount * 2);
     }
 
-    public void Publish(AppointmentConfirmedEvent eventToPublish)
+    public void Publish(AppointmentConfirmLinkClickedIntegrationEvent eventToPublish)
     {
       Guard.Against.Null(eventToPublish, nameof(eventToPublish));
 

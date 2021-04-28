@@ -35,7 +35,8 @@ namespace FrontDesk.Infrastructure.Data
       modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
-    // TODO: Use event handler
+    // TODO: Use DbContext.SavedChanges event and handler to support events
+    // https://docs.microsoft.com/en-us/ef/core/logging-events-diagnostics/events
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
       int result = await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
