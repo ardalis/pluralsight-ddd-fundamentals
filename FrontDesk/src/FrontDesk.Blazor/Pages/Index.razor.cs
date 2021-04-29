@@ -206,6 +206,7 @@ namespace FrontDesk.Blazor.Pages
 
       hubConnection.On<string>("ReceiveMessage", async (message) =>
       {
+        Logger.LogInformation($"ReceiveMessage: {message}");
         if (message.Contains("Client") && message.Contains("updated"))
         {
           await RefreshClientsAsync();
