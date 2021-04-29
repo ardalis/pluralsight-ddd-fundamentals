@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
-using FrontDesk.Core.Events.ApplicationEvents;
+using FrontDesk.Core.Events.IntegrationEvents;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.ScheduleAggregate;
 using FrontDesk.Core.ScheduleAggregate.Specifications;
@@ -15,7 +15,7 @@ namespace FrontDesk.Core.Handlers
   /// <summary>
   /// This handler responds to incoming messages saying a user has confirmed an appointment
   /// </summary>
-  public class EmailConfirmationHandler : INotificationHandler<AppointmentConfirmedAppEvent>
+  public class EmailConfirmationHandler : INotificationHandler<AppointmentConfirmLinkClickedIntegrationEvent>
   {
     private readonly IRepository<Schedule> _scheduleRepository;
     private readonly IReadRepository<Schedule> _scheduleReadRepository;
@@ -33,7 +33,7 @@ namespace FrontDesk.Core.Handlers
       _logger = logger;
     }
 
-    public async Task Handle(AppointmentConfirmedAppEvent appointmentConfirmedEvent,
+    public async Task Handle(AppointmentConfirmLinkClickedIntegrationEvent appointmentConfirmedEvent,
       CancellationToken cancellationToken)
     {
       _logger.LogInformation($"Handling appointment confirmation: {appointmentConfirmedEvent.AppointmentId}");

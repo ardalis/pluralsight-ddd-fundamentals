@@ -5,6 +5,6 @@ namespace PluralsightDdd.SharedKernel
 {
   public abstract class BaseDomainEvent : INotification
   {
-    public DateTimeOffset DateOccurred { get; protected set; } = DateTime.UtcNow;
+    public DateTimeOffset DateOccurred { get; protected set; } = DateTimeOffset.UtcNow;
   }
 }

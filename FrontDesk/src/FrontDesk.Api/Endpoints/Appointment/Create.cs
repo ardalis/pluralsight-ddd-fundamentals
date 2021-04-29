@@ -22,19 +22,19 @@ namespace FrontDesk.Api.AppointmentEndpoints
   {
     private readonly IRepository<Schedule> _scheduleRepository;
     private readonly IReadRepository<Schedule> _scheduleReadRepository;
-    private readonly IReadRepository<AppointmentType> _appointmentTypeRepository;
+    private readonly IReadRepository<AppointmentType> _appointmentTypeReadRepository;
     private readonly IMapper _mapper;
     private readonly ILogger<Create> _logger;
 
     public Create(IRepository<Schedule> scheduleRepository,
       IReadRepository<Schedule> scheduleReadRepository,
-      IReadRepository<AppointmentType> appointmentTypeRepository,
+      IReadRepository<AppointmentType> appointmentTypeReadRepository,
       IMapper mapper,
       ILogger<Create> logger)
     {
       _scheduleRepository = scheduleRepository;
       _scheduleReadRepository = scheduleReadRepository;
-      _appointmentTypeRepository = appointmentTypeRepository;
+      _appointmentTypeReadRepository = appointmentTypeReadRepository;
       _mapper = mapper;
       _logger = logger;
     }
@@ -46,31 +46,24 @@ namespace FrontDesk.Api.AppointmentEndpoints
         OperationId = "appointments.create",
         Tags = new[] { "AppointmentEndpoints" })
     ]
-    public override async Task<ActionResult<CreateAppointmentResponse>> HandleAsync(CreateAppointmentRequest request, CancellationToken cancellationToken)
+    public override async Task<ActionResult<CreateAppointmentResponse>> HandleAsync(CreateAppointmentRequest request,
+      CancellationToken cancellationToken)
     {
       var response = new CreateAppointmentResponse(request.CorrelationId());
 
       var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId); // TODO: Just get that day's appointments
       var schedule = await _scheduleReadRepository.GetBySpecAsync(spec);
 
-      var appointmentType = await _appointmentTypeRepository.GetByIdAsync(request.AppointmentTypeId);
+      var appointmentType = await _appointmentTypeReadRepository.GetByIdAsync(request.AppointmentTypeId);
       var appointmentStart = request.DateOfAppointment;
       var timeRange = new DateTimeOffsetRange(appointmentStart, TimeSpan.FromMinutes(appointmentType.Duration));
 
-      var newAppointment = new Appointment(Guid.NewGuid(), request.AppointmentTypeId, request.ScheduleId, request.ClientId, request.SelectedDoctor, request.PatientId, request.RoomId, timeRange, request.Title);
-
-      newAppointment.Id = Guid.NewGuid();
+      var newAppointment = new Appointment(Guid.NewGuid(), request.AppointmentTypeId, request.ScheduleId,
+        request.ClientId, request.SelectedDoctor, request.PatientId, request.RoomId, timeRange, request.Title);
 
       schedule.AddNewAppointment(newAppointment);
 
-      int conflictedAppointmentsCount = schedule.Appointments
-        .Count(a => a.IsPotentiallyConflicting);
-      _logger.LogInformation($"There are now {conflictedAppointmentsCount} conflicted appointments.");
-
-      _logger.LogDebug($"Adding appointment to schedule. Total appointments: {schedule.Appointments.Count()}");
-
       await _scheduleRepository.UpdateAsync(schedule);
-
       _logger.LogInformation($"Appointment created for patient {request.PatientId} with Id {newAppointment.Id}");
 
       var dto = _mapper.Map<AppointmentDto>(newAppointment);

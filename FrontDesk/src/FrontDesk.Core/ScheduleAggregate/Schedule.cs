@@ -47,8 +47,6 @@ namespace FrontDesk.Core.ScheduleAggregate
       return appointment;
     }
 
-
-
     public void DeleteAppointment(Appointment appointment)
     {
       Guard.Against.Null(appointment, nameof(appointment));

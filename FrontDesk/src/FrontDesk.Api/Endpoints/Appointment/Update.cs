@@ -50,8 +50,9 @@ namespace FrontDesk.Api.AppointmentEndpoints
       var spec = new ScheduleByIdWithAppointmentsSpec(request.ScheduleId); // TODO: Just get that day's appointments
       var schedule = await _scheduleReadRepository.GetBySpecAsync(spec);
 
-      var apptToUpdate = schedule.Appointments.FirstOrDefault(a => a.Id == request.Id);
-      apptToUpdate.UpdateAppointmentType(apptType);
+      var apptToUpdate = schedule.Appointments
+                            .FirstOrDefault(a => a.Id == request.Id);
+      apptToUpdate.UpdateAppointmentType(apptType, schedule.AppointmentUpdatedHandler);
       apptToUpdate.UpdateRoom(request.RoomId);
       apptToUpdate.UpdateStartTime(request.Start, schedule.AppointmentUpdatedHandler);
       apptToUpdate.UpdateTitle(request.Title);

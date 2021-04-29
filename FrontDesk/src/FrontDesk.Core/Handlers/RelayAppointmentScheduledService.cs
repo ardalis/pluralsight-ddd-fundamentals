@@ -2,10 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FrontDesk.Core.Events;
-using FrontDesk.Core.Events.ApplicationEvents;
+using FrontDesk.Core.Events.IntegrationEvents;
 using FrontDesk.Core.Exceptions;
 using FrontDesk.Core.Interfaces;
-using FrontDesk.Core.ScheduleAggregate.Specifications;
 using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Core.SyncedAggregates.Specifications;
 using MediatR;
@@ -39,11 +38,12 @@ namespace FrontDesk.Core.Handlers
       _logger = logger;
     }
 
-    public async Task Handle(AppointmentScheduledEvent appointmentScheduledEvent, CancellationToken cancellationToken)
+    public async Task Handle(AppointmentScheduledEvent appointmentScheduledEvent,
+      CancellationToken cancellationToken)
     {
       _logger.LogInformation("Handling appointmentScheduledEvent");
-      // we are translating from a domain event to an application event here
-      var newMessage = new CreateConfirmationEmailMessage();
+      // we are translating from a domain event to an integration event here
+      var newMessage = new AppointmentScheduledIntegrationEvent();
 
       var appt = appointmentScheduledEvent.AppointmentScheduled;
 

@@ -7,8 +7,5 @@
     public string Salutation { get; set; }
     public string PreferredName { get; set; }
     public int? PreferredDoctorId { get; set; }
-
-    //TODO: need to check
-    //public IList<int> Patients { get; set; } = new List<int>();
   }
 }

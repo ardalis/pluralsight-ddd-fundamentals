@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace VetClinicPublic.Web.Services
 {
-  public class ConfirmationEmailHandler : IRequestHandler<AppointmentDTO>
+  public class ConfirmationEmailHandler : IRequestHandler<SendAppointmentConfirmationCommand>
   {
     readonly ILogger<ConfirmationEmailHandler> _logger;
     private readonly ISendConfirmationEmails _emailSender;
@@ -19,7 +19,7 @@ namespace VetClinicPublic.Web.Services
       _emailSender = emailSender;
     }
 
-    public Task<Unit> Handle(AppointmentDTO request, 
+    public Task<Unit> Handle(SendAppointmentConfirmationCommand request, 
       CancellationToken cancellationToken)
     {
       _logger.LogInformation("Message Received - Sending Email!");
@@ -29,5 +29,4 @@ namespace VetClinicPublic.Web.Services
       return Task.FromResult(Unit.Value);
     }
   }
-
 }

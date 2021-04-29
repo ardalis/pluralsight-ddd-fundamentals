@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using FrontDesk.Api.Hubs;
-using FrontDesk.Core.Events.ApplicationEvents;
+using FrontDesk.Core.Events.IntegrationEvents;
 using FrontDesk.Infrastructure.Messaging;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
@@ -112,15 +112,19 @@ namespace FrontDesk.Api
       using var scope = _serviceScopeFactory.CreateScope();
       var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-      if (eventType.GetString() == "AppointmentConfirmedEvent")
+      if (eventType.GetString() == nameof(AppointmentConfirmLinkClickedIntegrationEvent))
       {
         Guid appointmentId = root.GetProperty("AppointmentId").GetGuid();
         DateTimeOffset dateTimeOffset = root.GetProperty("DateTimeEventOccurred").GetDateTimeOffset();
-        var appEvent = new AppointmentConfirmedAppEvent(dateTimeOffset)
+        var appEvent = new AppointmentConfirmLinkClickedIntegrationEvent(dateTimeOffset)
         {
           AppointmentId = appointmentId
         };
         await mediator.Publish(appEvent);
+      }
+      else
+      {
+        throw new Exception($"Unknown message type: {eventType.GetString()}");
       }
     }
 
