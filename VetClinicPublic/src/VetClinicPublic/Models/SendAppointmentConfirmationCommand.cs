@@ -3,7 +3,7 @@ using MediatR;
 
 namespace VetClinicPublic.Web.Models
 {
-    public class AppointmentDTO : IRequest
+    public class SendAppointmentConfirmationCommand : IRequest
     {
         public Guid AppointmentId { get; set; }
         public string ClientName { get; set; }

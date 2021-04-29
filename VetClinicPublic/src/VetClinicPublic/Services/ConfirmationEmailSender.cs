@@ -25,7 +25,7 @@ namespace VetClinicPublic.Web.Services
       _config = Guard.Against.Null(settings.Value, nameof(settings));
     }
 
-    public void SendConfirmationEmail(Models.AppointmentDTO appointment)
+    public void SendConfirmationEmail(Models.SendAppointmentConfirmationCommand appointment)
     {
       _logger.LogInformation($"Sending email to confirm appointment: {appointment}");
       string confirmUrl = $"http://localhost:{_config.Port}/appointment/confirm/{appointment.AppointmentId}";

@@ -103,15 +103,13 @@ namespace VetClinicPublic
       using var doc = JsonDocument.Parse(message);
       var root = doc.RootElement;
       var eventType = root.GetProperty("EventType");
-      //var entity = root.GetProperty("Entity");
 
       using var scope = _serviceScopeFactory.CreateScope();
       var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
       if(eventType.GetString() == "AppointmentScheduledIntegrationEvent")
       {
-        // TODO: deserialize with System.Text.Json
-        var command = new AppointmentDTO()
+        var command = new SendAppointmentConfirmationCommand()
         {
           AppointmentId = root.GetProperty("AppointmentId").GetGuid(),
           AppointmentType = root.GetProperty("AppointmentType").GetString(),

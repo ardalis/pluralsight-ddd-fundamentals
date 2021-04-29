@@ -4,7 +4,7 @@ namespace VetClinicPublic.Web.Models
 {
     public class AppointmentScheduledEvent
     {
-        public AppointmentScheduledEvent(AppointmentDTO appointment) : this()
+        public AppointmentScheduledEvent(SendAppointmentConfirmationCommand appointment) : this()
         {
             AppointmentScheduled = appointment;
         }
@@ -15,7 +15,7 @@ namespace VetClinicPublic.Web.Models
         }
 
         public DateTime DateTimeEventOccurred { get; set; }
-        public AppointmentDTO AppointmentScheduled { get; set; }
+        public SendAppointmentConfirmationCommand AppointmentScheduled { get; set; }
         public string EventType
         {
             get
