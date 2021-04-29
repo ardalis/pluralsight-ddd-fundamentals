@@ -5,7 +5,6 @@ using FrontDesk.Core.Events;
 using FrontDesk.Core.Events.IntegrationEvents;
 using FrontDesk.Core.Exceptions;
 using FrontDesk.Core.Interfaces;
-using FrontDesk.Core.ScheduleAggregate.Specifications;
 using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Core.SyncedAggregates.Specifications;
 using MediatR;
