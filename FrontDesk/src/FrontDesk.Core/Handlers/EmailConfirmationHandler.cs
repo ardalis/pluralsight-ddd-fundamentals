@@ -18,17 +18,14 @@ namespace FrontDesk.Core.Handlers
   public class EmailConfirmationHandler : INotificationHandler<AppointmentConfirmLinkClickedIntegrationEvent>
   {
     private readonly IRepository<Schedule> _scheduleRepository;
-    private readonly IReadRepository<Schedule> _scheduleReadRepository;
     private readonly IApplicationSettings _settings;
     private readonly ILogger<EmailConfirmationHandler> _logger;
 
     public EmailConfirmationHandler(IRepository<Schedule> scheduleRepository,
-      IReadRepository<Schedule> scheduleReadRepository,
       IApplicationSettings settings,
       ILogger<EmailConfirmationHandler> logger)
     {
       _scheduleRepository = scheduleRepository;
-      _scheduleReadRepository = scheduleReadRepository;
       _settings = settings;
       _logger = logger;
     }
@@ -40,7 +37,7 @@ namespace FrontDesk.Core.Handlers
 
       var scheduleSpec = new ScheduleForClinicAndDateWithAppointmentsSpec(_settings.ClinicId, _settings.TestDate);
       // Note: In this demo this only works for appointments scheduled on TestDate
-      var schedule = (await _scheduleReadRepository.GetBySpecAsync(scheduleSpec));
+      var schedule = (await _scheduleRepository.GetBySpecAsync(scheduleSpec));
       Guard.Against.Null(schedule, nameof(Schedule));
 
       var appointmentToConfirm = schedule.Appointments.FirstOrDefault(a => a.Id == appointmentConfirmedEvent.AppointmentId);

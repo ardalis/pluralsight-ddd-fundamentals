@@ -35,9 +35,6 @@ namespace VetClinicPublic
       services.AddSingleton<ISendEmail, SmtpEmailSender>();
       services.AddSingleton<ISendConfirmationEmails, ConfirmationEmailSender>();
 
-      services.AddSingleton<IMessagePublisher, RabbitMessagePublisher>();
-      services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
-      services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
 
       // configure MediatR
       services.AddMediatR(typeof(Startup).Assembly);
@@ -46,6 +43,9 @@ namespace VetClinicPublic
       var messagingConfig = Configuration.GetSection("RabbitMq");
       var messagingSettings = messagingConfig.Get<RabbitMqConfiguration>();
       services.Configure<RabbitMqConfiguration>(messagingConfig);
+      services.AddSingleton<IMessagePublisher, RabbitMessagePublisher>();
+      services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
+      services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
       if (messagingSettings.Enabled)
       {
         services.AddHostedService<FrontDeskRabbitMqService>();
