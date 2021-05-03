@@ -75,6 +75,16 @@ namespace VetClinicPublic
       }
     }
 
+
+
+
+
+
+
+
+
+
+
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
       stoppingToken.ThrowIfCancellationRequested();
@@ -88,14 +98,41 @@ namespace VetClinicPublic
 
       return Task.CompletedTask;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private async void OnMessageReceived(object model, BasicDeliverEventArgs args)
     {
       var body = args.Body.ToArray();
       var message = Encoding.UTF8.GetString(body);
-      //_logger.LogInformation(" [x] Received {0}", message);
 
       await HandleMessage(message);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     private async Task HandleMessage(string message)
     {
