@@ -81,9 +81,9 @@ docker kill $(docker ps -q)
 ```
 Note that any data changes you make will not be persisted if you **docker remove** the SQL Server container. The Docker container for SQL Server will be recreated and seeded on the next **docker run**. In other scenarios, you might be using Docker volumes to persist or share the database across container instances but that's overkill for this demo.
 
-### 1.2 Visual Studio
+### 1.2 Visual Studio and VS Code
 
-Running the sample from Visual Studio requires some additional setup. You will need to run multiple solutions side by side. You will also need to run RabbitMQ, ideally as a docker image, which you can so using this command:
+Running the sample from Visual Studio (or VS Code or Rider, etc) requires some additional setup. You will need to run multiple solutions side by side. You will also need to run RabbitMQ and PaperCut, ideally as a docker images. You can run RabbitMQ from Docker using this command:
 
 ```powershell
 docker run --rm -it --hostname ddd-sample-rabbit -p 15672:15672 -p 5672:5672 rabbitmq:3-management
