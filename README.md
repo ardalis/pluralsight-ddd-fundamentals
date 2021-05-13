@@ -12,7 +12,7 @@ If you like or are using this project to learn, please give it a star. Thanks!
 
 &nbsp;&nbsp;[1.1 Docker](#11-docker)
 
-&nbsp;&nbsp;[1.2 Visual Studio](#12-visual-studio)
+&nbsp;&nbsp;[1.2 Visual Studio and VS Code](#12-visual-studio-and-vs-code)
 
 [2. Student Recommendations](#2-student-recommendations)
 
@@ -168,6 +168,10 @@ Client for communicating with RabbitMQ.
 
 ## 5. Credits
 
-This sample is from [Julie Lerman](https://www.pluralsight.com/authors/julie-lerman) and [Steve Smith](https://www.pluralsight.com/authors/steve-smith)'s Pluralsight course. The original sample was written for .NET Framework by Steve. The current .NET 5 version was initially ported with the help of [Shady Nagy](https://twitter.com/ShadyNagy_). Progress Software provided the [Blazor Scheduler control](https://www.telerik.com/blazor-ui/scheduler) used to display the clinic's schedule. Additional credits include:
+This sample is from [Julie Lerman](https://www.pluralsight.com/authors/julie-lerman) and [Steve Smith](https://www.pluralsight.com/authors/steve-smith)'s Pluralsight course. The original sample was written for .NET Framework by Steve. The current .NET 5 version was initially ported with the help of [Shady Nagy](https://twitter.com/ShadyNagy_). Progress Software provided the [Blazor Scheduler control](https://www.telerik.com/blazor-ui/scheduler) used to display the clinic's schedule*.
+
+\* *Initial version is using a Kendo schedule since certain features weren't availalbe at recording time*
+
+Additional credits include:
 
 - Your name could be here...
