@@ -119,7 +119,52 @@ Don't worry about submitting a pull request for any `TODO` comments you fix. The
 
 ## 3. Architecture Notes
 
+The reference application is built as a small set of related monolithic ASP.NET Core applications. The two Blazor applications are built using a modified version of the [CleanArchitecture solution template](https://github.com/ardalis/CleanArchitecture) and also bears a great deal of similiarity to the [eShopOnWeb application](https://github.com/dotnet-architecture/eShopOnWeb) (also maintained by @ardalis). To learn more about migrating toward a domain-centric architecture from a data-centric one, check out [Steve's two courses on N-Tier architecture on Pluralsight](https://www.pluralsight.com/authors/steve-smith). You'll also find [videos covering Clean Architecture on Steve's YouTube channel](https://www.youtube.com/c/Ardalis/search?query=clean) as well as on the [eShopOnWeb home page](https://www.youtube.com/watch?v=vRZ8ucGac8M&ab_channel=Ardalis).
+
+If you or your team need help with architecting your .NET application following principles of clean architecture, with or without microservices, [Steve and his team and NimblePros](https://nimblepros.com) have a great deal of experience helping clients do just that. Get in touch.
+
 ## 4. Developer Notes
+
+If you're new to this kind of application development, and you have a Pluralsight subscription, I strongly advise you to learn about [SOLID principles](https://www.pluralsight.com/courses/csharp-solid-principles) and various [code smells and refactoring techniques](https://www.pluralsight.com/courses/refactoring-csharp-developers). You'll find the background in these principles informs most of the design decisions used in the individual classes and projects used in the sample code provided here. If you're really serious about learning these topics, watch the original versions of these courses, which were able to go into more depth (more recent courses need to be shorter since Pluralsight found too many students didn't complete longer courses. But not *you* - you have what it takes to finish the whole thing. Right?). They're available from [Steve's author page on Pluralsight](https://www.pluralsight.com/authors/steve-smith).
+
+The sample doesn't include exhaustive test coverage, but does demonstrate some automated tests. If testing is new to you, [Julie has a great course on automated testing](https://www.pluralsight.com/courses/automated-testing-fraidy-cats) that you should check out.
+
+### 4.1 Referenced NuGet Packages
+
+This course uses several NuGet packages that you may find useful.
+
+[Ardalis.ApiEndpoints](https://www.nuget.org/packages/Ardalis.ApiEndpoints/)
+A simple base class that lets you keep your API endpoints small and focused on one endpoint at a time. MVC is replaced with Request-EndPoint-Response (REPR).
+
+[Ardalis.GuardClauses](https://www.nuget.org/packages/Ardalis.GuardClauses/)
+Contains common guard clauses so you can use them consistently. Also can be easily extended to apply your own guards for custom/domain exception cases.
+
+[Ardalis.Specification](https://www.nuget.org/packages/Ardalis.Specification/)
+An implementation of the Specification design pattern that is well-suited to work with ORMs like Entity Framework (Core).
+
+[Ardalis.Specification.EntityFrameworkCore](https://www.nuget.org/packages/Ardalis.Specification.EntityFrameworkCore/)
+Adds EF Core-specific functionality, including a default implementation of a generic EF repository that supports Specifications.
+
+[Ardalis.Result](https://www.nuget.org/packages/Ardalis.Result/)
+Provides a generic result type that can be returned from application services. Can easily be translated into HTTP status codes or ActionResult types.
+
+[Ardalis.HttpClientTestExtensions](https://www.nuget.org/packages/Ardalis.HttpClientTestExtensions/)
+Removes boilerplate code from ASP.NET Core API integration/functional tests.
+
+[Autofac](https://www.nuget.org/packages/Autofac/)
+Powerful open source DI/IOC container for .NET that supports more features than built-in ServiceCollection.
+
+[MediatR](https://www.nuget.org/packages/MediatR/)
+Used to implement mediator pattern for commands and events.
+
+[Blazored.LocalStorage](https://www.nuget.org/packages/Blazored.LocalStorage/)
+Blazor utility for accessing browser local storage in Blazor WebAssembly apps.
+
+[PluralsightDdd.SharedKernel](https://www.nuget.org/packages/PluralsightDdd.SharedKernel/)
+An example SharedKernel package used by this sample built just for this course.
+
+[RabbitMQ.Client](https://www.nuget.org/packages/RabbitMQ.Client/)
+Client for communicating with RabbitMQ.
 
 ## 5. Credits
 
