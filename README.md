@@ -154,20 +154,20 @@ Removes boilerplate code from ASP.NET Core API integration/functional tests.
 [Autofac](https://www.nuget.org/packages/Autofac/)
 Powerful open source DI/IOC container for .NET that supports more features than built-in ServiceCollection.
 
+[Blazored.LocalStorage](https://www.nuget.org/packages/Blazored.LocalStorage/)
+Blazor utility for accessing browser local storage in Blazor WebAssembly apps.
+
 [MediatR](https://www.nuget.org/packages/MediatR/)
 Used to implement mediator pattern for commands and events.
 
-[Blazored.LocalStorage](https://www.nuget.org/packages/Blazored.LocalStorage/)
-Blazor utility for accessing browser local storage in Blazor WebAssembly apps.
+[Pluralsight.DDD.Deps](https://github.com/ardalis/pluralsight-ddd-fundamentals/tree/main/FrontDesk/src/FrontDesk.Blazor/deps)
+Includes required trial binaries from Telerik. Currently this includes both Kendo UI and Blazor controls; Kendo should be replaced with just Blazor later in 2021. To build locally you may need to place this package in a [local nuget repository](https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds). This package and its contents are subject to Telerik's EULA located in the same folder.
 
 [PluralsightDdd.SharedKernel](https://www.nuget.org/packages/PluralsightDdd.SharedKernel/)
 An example SharedKernel package used by this sample built just for this course.
 
 [RabbitMQ.Client](https://www.nuget.org/packages/RabbitMQ.Client/)
 Client for communicating with RabbitMQ.
-
-[Pluralsight.DDD.Deps](https://github.com/ardalis/pluralsight-ddd-fundamentals/tree/main/FrontDesk/src/FrontDesk.Blazor/deps)
-Includes required trial binaries from Telerik. Currently this includes both Kendo UI and Blazor controls; Kendo should be replaced with just Blazor later in 2021. To build locally you may need to place this package in a [local nuget repository](https://docs.microsoft.com/en-us/nuget/hosting-packages/local-feeds). This package and its contents are subject to Telerik's EULA located in the same folder.
 
 ## 5. Credits
 
