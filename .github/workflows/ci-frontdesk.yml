@@ -1,0 +1,38 @@
+name: FrontDesk CI Pipeline
+
+on:
+  push:
+    paths: [ 'FrontDesk/src/**' ]
+  pull_request:
+    paths: [ 'FrontDesk/src/**' ]
+  workflow_dispatch:
+
+jobs:
+  ci:
+    name: Continuous Integration
+    runs-on: windows-latest
+    steps:
+      - name: Setup .NET Core
+        id: setup_dotnet_core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.301
+
+      - name: Checkout repository
+        id: checkout_repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Build solution
+        id: build_solution
+        shell: pwsh
+        run: |
+          dotnet nuget add source ${{ github.workspace }}\FrontDesk\src\FrontDesk.Blazor\deps --name Pluralsight.DDD.Deps
+          dotnet build .\FrontDesk\FrontDesk.sln --configuration Release
+
+      - name: Run unit tests
+        id: run_unit_tests
+        shell: pwsh
+        run: |
+          dotnet test .\FrontDesk\FrontDesk.sln --configuration Release

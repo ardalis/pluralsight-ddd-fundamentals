@@ -1,0 +1,37 @@
+name: ClinicManagement CI Pipeline
+
+on:
+  push:
+    paths: [ 'ClinicManagement/src/**' ]
+  pull_request:
+    paths: [ 'ClinicManagement/src/**' ]
+  workflow_dispatch:
+
+jobs:
+  ci:
+    name: Continuous Integration
+    runs-on: windows-latest
+    steps:
+      - name: Setup .NET Core
+        id: setup_dotnet_core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.301
+
+      - name: Checkout repository
+        id: checkout_repo
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Build solution
+        id: build_solution
+        shell: pwsh
+        run: |
+          dotnet build .\ClinicManagement\ClinicManagement.sln --configuration Release
+
+      - name: Run unit tests
+        id: run_unit_tests
+        shell: pwsh
+        run: |
+          dotnet test .\ClinicManagement\ClinicManagement.sln --configuration Release
