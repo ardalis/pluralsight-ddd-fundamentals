@@ -29,10 +29,17 @@ jobs:
         shell: pwsh
         run: |
           dotnet nuget add source ${{ github.workspace }}\FrontDesk\src\FrontDesk.Blazor\deps --name Pluralsight.DDD.Deps
-          dotnet build .\FrontDesk\FrontDesk.sln --configuration Release
+          dotnet build .\FrontDesk\FrontDesk.sln --configuration Release --output Artifacts
 
       - name: Run unit tests
         id: run_unit_tests
         shell: pwsh
         run: |
-          dotnet test .\FrontDesk\FrontDesk.sln --configuration Release
+          dotnet test .\FrontDesk\FrontDesk.sln --configuration Release --no-build --output Artifacts
+
+      - name: Upload artifacts
+        id: upload_artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: Artifacts
+          path: Artifacts/
