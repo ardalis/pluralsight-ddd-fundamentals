@@ -1,5 +1,5 @@
 services:
-# https://zgadzaj.com/development/docker/docker-compose/containers/rabbitmq
+  # https://zgadzaj.com/development/docker/docker-compose/containers/rabbitmq
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: ddd.rabbitmq
@@ -13,8 +13,8 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
     container_name: ddd.frontdesk-db
     environment:
-        SA_PASSWORD: "P@ssW0rd!"
-        ACCEPT_EULA: "Y"
+      SA_PASSWORD: "P@ssW0rd!"
+      ACCEPT_EULA: "Y"
     ports:
       - 1434:1433 # exposed just for debugging purposes
 
@@ -53,8 +53,8 @@ services:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
     container_name: ddd.clinicmanagement-db
     environment:
-        SA_PASSWORD: "P@ssW0rd!"
-        ACCEPT_EULA: "Y"
+      SA_PASSWORD: "P@ssW0rd!"
+      ACCEPT_EULA: "Y"
 
   clinicmanagement-api:
     build:
@@ -70,7 +70,7 @@ services:
     restart: on-failure
     depends_on:
       - rabbitmq
-      - frontdesk-db
+      - clinicmanagement-db
 
   clinicmanagement-blazor:
     build:
@@ -91,7 +91,7 @@ services:
     image: jijiechen/papercut:latest
     container_name: ddd.papercut
     ports: # exposes port 25 internally
-    - 37409:37408
+      - 37409:37408
 
   vet-clinic-public:
     build:
