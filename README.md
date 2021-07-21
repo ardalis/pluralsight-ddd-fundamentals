@@ -173,7 +173,7 @@ Client for communicating with RabbitMQ.
 
 This sample is from [Julie Lerman](https://www.pluralsight.com/authors/julie-lerman) and [Steve Smith](https://www.pluralsight.com/authors/steve-smith)'s Pluralsight course. The original sample was written for .NET Framework by Steve. The current .NET 5 version was initially ported with the help of [Shady Nagy](https://twitter.com/ShadyNagy_). Progress Software provided the [Blazor Scheduler control](https://www.telerik.com/blazor-ui/scheduler) used to display the clinic's schedule*.
 
-\* *Initial version is using a Kendo schedule since certain features weren't availalbe at recording time*
+\* *Initial version is using a Kendo schedule since certain features weren't available at recording time*
 
 Additional credits include:
 
