@@ -83,6 +83,12 @@ Note that any data changes you make will not be persisted if you **docker remove
 
 ### 1.2 Visual Studio and VS Code
 
+You may need to configure a local NuGet server and put this package in it:
+
+```
+/FrontDesk/src/FrontDesk.Blazor/deps/Pluralsight.DDD.Deps/Pluralsight.DDD.Deps.1.0.0.nupkg
+```
+
 Running the sample from Visual Studio (or VS Code or Rider, etc) requires some additional setup. You will need to run multiple solutions side by side. You will also need to run RabbitMQ and PaperCut, ideally as a docker images. You can run RabbitMQ from Docker using this command:
 
 ```powershell
