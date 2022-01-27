@@ -2,6 +2,8 @@
 
 Sample code for the [Pluralsight DDD Fundamentals course (2nd edition) by Julie Lerman and Steve "ardalis" Smith](https://www.pluralsight.com/courses/fundamentals-domain-driven-design). If you are looking for the .NET Framework sample from [the original 2014 DDD Fundamentals course](https://app.pluralsight.com/library/courses/domain-driven-design-fundamentals), it's available as the [ddd-vet-clinic sample](https://github.com/ardalis/ddd-vet-sample).
 
+[Additional exercises from Steve's DDD workshops](https://ardalis.gumroad.com/l/ZCSml) (separate from Pluralsight course)
+
 ## Give a Star! :star:
 
 If you like or are using this project to learn, please give it a star. Thanks!
