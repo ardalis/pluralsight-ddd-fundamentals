@@ -10,6 +10,7 @@ namespace ClinicManagement.Api.ApplicationEvents
     public NamedEntityCreatedEvent(NamedEntity entity, string eventType)
     {
       Entity = entity;
+      EventType = eventType;
     }
   }
 }
