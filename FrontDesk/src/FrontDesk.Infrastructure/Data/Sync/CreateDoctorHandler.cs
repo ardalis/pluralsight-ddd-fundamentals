@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 
 namespace FrontDesk.Infrastructure.Data.Sync
 {
-
   public class CreateDoctorHandler : IRequestHandler<CreateDoctorCommand>
   {
     private readonly AppDbContext _dbContext;
@@ -19,6 +18,7 @@ namespace FrontDesk.Infrastructure.Data.Sync
       _dbContext = dbContext;
       _logger = logger;
     }
+
     public async Task<Unit> Handle(CreateDoctorCommand request, CancellationToken cancellationToken)
     {
       _logger.LogInformation($"Creating new Doctor in FrontDesk database: {request.Name}");
