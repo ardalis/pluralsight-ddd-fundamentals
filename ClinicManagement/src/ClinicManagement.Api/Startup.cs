@@ -87,7 +87,7 @@ namespace ClinicManagement.Api
         options.AddPolicy(name: CORS_POLICY,
                                 builder =>
                                 {
-                              builder.WithOrigins(baseUrlConfig.WebBase.Replace("host.docker.internal", "localhost").TrimEnd('/'));
+                              builder.WithOrigins(baseUrlConfig.WebBase.Replace("host.docker.internal", "localhost").TrimEnd('/'), "localhost:6100", "localhost:6150");
                               builder.SetIsOriginAllowed(origin => true);
                               builder.AllowAnyMethod();
                               builder.AllowAnyHeader();
