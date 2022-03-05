@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 
 namespace FrontDesk.Infrastructure.Data.Sync
 {
-
   public class UpdateClientHandler : IRequestHandler<UpdateClientCommand>
   {
     private readonly AppDbContext _dbContext;
@@ -20,6 +19,7 @@ namespace FrontDesk.Infrastructure.Data.Sync
       _dbContext = dbContext;
       _logger = logger;
     }
+
     public async Task<Unit> Handle(UpdateClientCommand request,
       CancellationToken cancellationToken)
     {

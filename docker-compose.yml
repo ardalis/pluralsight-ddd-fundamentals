@@ -55,6 +55,8 @@ services:
     environment:
       SA_PASSWORD: "P@ssW0rd!"
       ACCEPT_EULA: "Y"
+    ports:
+      - 1435:1433 # exposed just for debugging purposes
 
   clinicmanagement-api:
     build:

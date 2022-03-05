@@ -7,6 +7,7 @@ using ClinicManagement.Api.ApplicationEvents;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -19,14 +20,17 @@ namespace ClinicManagement.Api.DoctorEndpoints
     private readonly IRepository<Doctor> _repository;
     private readonly IMapper _mapper;
     private readonly IMessagePublisher _messagePublisher;
+    private readonly ILogger<Create> _logger;
 
     public Create(IRepository<Doctor> repository,
       IMapper mapper,
-      IMessagePublisher messagePublisher)
+      IMessagePublisher messagePublisher,
+      ILogger<Create> logger)
     {
       _repository = repository;
       _mapper = mapper;
       _messagePublisher = messagePublisher;
+      _logger = logger;
     }
 
     [HttpPost("api/doctors")]
@@ -50,6 +54,8 @@ namespace ClinicManagement.Api.DoctorEndpoints
       // In the DbContext you could look for entities marked with an interface saying they needed
       // to be synchronized via cross-domain events and publish the appropriate message.
       var appEvent = new NamedEntityCreatedEvent(_mapper.Map<NamedEntity>(toAdd), "Doctor-Created");
+
+      _logger.LogInformation("Sending doctor created event: {0}", appEvent);
       _messagePublisher.Publish(appEvent);
 
       return Ok(response);
