@@ -6,7 +6,7 @@ Sample code for the [Pluralsight DDD Fundamentals course (2nd edition) by Julie 
 
 ## Give a Star! :star:
 
-If you like or are using this project to learn, please give it a star. Thanks!
+If you like or are using this project to learn, please give it a star. Thanks!!!
 
 ## Table of Contents
 
