@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
@@ -19,7 +20,10 @@ namespace FrontDesk.Blazor.Services
     {
       _logger.LogInformation("Read today date/time from configuration.");
 
-      return Convert.ToDateTime(await _httpService.HttpGetAsync($"api/configurations"));
+      var stringDateTimeOffset = await _httpService.HttpGetAsync($"api/configurations");
+      var dateTimeWithOffset = DateTimeOffset.ParseExact(stringDateTimeOffset, "MM/dd/yyyy HH:mm:ss zzz", CultureInfo.InvariantCulture);
+
+      return dateTimeWithOffset.UtcDateTime;
     }
   }
 }
