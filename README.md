@@ -56,17 +56,17 @@ It also adds the following supporting containers:
 
 Once running, you should be able to access the various apps using localhost (HTTP not HTTPS because of [Kestrel configuration restrictions](https://docs.microsoft.com/en-us/aspnet/core/security/docker-compose-https)) and the following ports (you can also find these bindings in the docker-compose.yml file):
 
-| Service (in docker)            | Docker Port    | Visual Studio Port |
-|--------------------------------|---------------:|-------------------:|
-| FrontDesk (main app)           |           5100 |               5150 |
-| ClinicManagement               |           6100 |               6150 |
-| VetClinicPublic                |           7100 |               7150 |
-| FrontDesk API / Swagger        |           5200 |               5250 |
-| ClinicManagement API / Swagger |           6200 |               6250 |
-| RabbitMQ Management            |          15673 |              15672 |
-| RabbitMQ Service               |         (5672) |               5672 |
-| Papercut Management            |          37409 |              37408 |
-| Papercut SMTP                  |           (25) |                 25 |
+| Service (in docker)            | Docker Port | Visual Studio Port |
+| ------------------------------ | ----------: | -----------------: |
+| FrontDesk (main app)           |        5100 |               5150 |
+| ClinicManagement               |        6100 |               6150 |
+| VetClinicPublic                |        7100 |               7150 |
+| FrontDesk API / Swagger        |        5200 |               5250 |
+| ClinicManagement API / Swagger |        6200 |               6250 |
+| RabbitMQ Management            |       15673 |              15672 |
+| RabbitMQ Service               |      (5672) |               5672 |
+| Papercut Management            |       37409 |              37408 |
+| Papercut SMTP                  |        (25) |                 25 |
 
 The ports in () are only open inside of docker, not exposed otherwise.
 
@@ -81,6 +81,7 @@ If you want to quickly clean up all of your docker containers (**All** of them n
 ```powershell
 docker kill $(docker ps -q)
 ```
+
 Note that any data changes you make will not be persisted if you **docker remove** the SQL Server container. The Docker container for SQL Server will be recreated and seeded on the next **docker run**. In other scenarios, you might be using Docker volumes to persist or share the database across container instances but that's overkill for this demo.
 
 ### 1.2 Visual Studio and VS Code
@@ -133,7 +134,7 @@ If you or your team need help with architecting your .NET application following 
 
 ## 4. Developer Notes
 
-If you're new to this kind of application development, and you have a Pluralsight subscription, I strongly advise you to learn about [SOLID principles](https://www.pluralsight.com/courses/csharp-solid-principles) and various [code smells and refactoring techniques](https://www.pluralsight.com/courses/refactoring-csharp-developers). You'll find the background in these principles informs most of the design decisions used in the individual classes and projects used in the sample code provided here. If you're really serious about learning these topics, watch the original versions of these courses, which were able to go into more depth (more recent courses need to be shorter since Pluralsight found too many students didn't complete longer courses. But not *you* - you have what it takes to finish the whole thing. Right?). They're available from [Steve's author page on Pluralsight](https://www.pluralsight.com/authors/steve-smith).
+If you're new to this kind of application development, and you have a Pluralsight subscription, I strongly advise you to learn about [SOLID principles](https://www.pluralsight.com/courses/csharp-solid-principles) and various [code smells and refactoring techniques](https://www.pluralsight.com/courses/refactoring-csharp-developers). You'll find the background in these principles informs most of the design decisions used in the individual classes and projects used in the sample code provided here. If you're really serious about learning these topics, watch the original versions of these courses, which were able to go into more depth (more recent courses need to be shorter since Pluralsight found too many students didn't complete longer courses. But not _you_ - you have what it takes to finish the whole thing. Right?). They're available from [Steve's author page on Pluralsight](https://www.pluralsight.com/authors/steve-smith).
 
 The sample doesn't include exhaustive test coverage, but does demonstrate some automated tests. If testing is new to you, [Julie has a great course on automated testing](https://www.pluralsight.com/courses/automated-testing-fraidy-cats) that you should check out.
 
@@ -179,10 +180,15 @@ Client for communicating with RabbitMQ.
 
 ## 5. Credits
 
-This sample is from [Julie Lerman](https://www.pluralsight.com/authors/julie-lerman) and [Steve Smith](https://www.pluralsight.com/authors/steve-smith)'s Pluralsight course. The original sample was written for .NET Framework by Steve. The current .NET 5 version was initially ported with the help of [Shady Nagy](https://twitter.com/ShadyNagy_). Progress Software provided the [Blazor Scheduler control](https://www.telerik.com/blazor-ui/scheduler) used to display the clinic's schedule*.
+This sample is from [Julie Lerman](https://www.pluralsight.com/authors/julie-lerman) and [Steve Smith](https://www.pluralsight.com/authors/steve-smith)'s Pluralsight course. The original sample was written for .NET Framework by Steve. The current .NET 5 version was initially ported with the help of [Shady Nagy](https://twitter.com/ShadyNagy_). Progress Software provided the [Blazor Scheduler control](https://www.telerik.com/blazor-ui/scheduler) used to display the clinic's schedule\*.
 
-\* *Initial version is using a Kendo schedule since certain features weren't available at recording time*
+\* _Initial version is using a Kendo schedule since certain features weren't available at recording time_
 
 Additional credits include:
+
+Matheus Penido:
+Fixing a bug (https://github.com/ardalis/pluralsight-ddd-fundamentals/issues/36)
+https://github.com/matheuspenido
+https://www.linkedin.com/in/matheus-penido-8419a890/
 
 - Your name could be here...

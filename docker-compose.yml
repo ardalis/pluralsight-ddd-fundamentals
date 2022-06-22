@@ -1,3 +1,4 @@
+version: "2"
 services:
   # https://zgadzaj.com/development/docker/docker-compose/containers/rabbitmq
   rabbitmq:
