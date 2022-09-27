@@ -31,7 +31,7 @@ namespace FrontDesk.Core.ScheduleAggregate
 
     public DateTimeOffsetRange DateRange { get; private set; }
 
-    public Appointment AddNewAppointment(Appointment appointment)
+    public void AddNewAppointment(Appointment appointment)
     {
       Guard.Against.Null(appointment, nameof(appointment));
       Guard.Against.Default(appointment.Id, nameof(appointment.Id));
@@ -43,8 +43,6 @@ namespace FrontDesk.Core.ScheduleAggregate
 
       var appointmentScheduledEvent = new AppointmentScheduledEvent(appointment);
       Events.Add(appointmentScheduledEvent);
-
-      return appointment;
     }
 
     public void DeleteAppointment(Appointment appointment)
