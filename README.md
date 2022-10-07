@@ -28,6 +28,12 @@ If you like or are using this project to learn, please give it a star. Thanks!!!
 
 You can run this sample in Docker or in Visual Studio. Docker is recommended.
 
+Watch how to set up and run the sample app using Docker, Visual Studio, or VS Code here:
+
+[![image](https://user-images.githubusercontent.com/782127/194625565-5cef5019-e6fb-4c1d-a287-783b1924b74f.png)](https://www.youtube.com/watch?v=wl7aF6iJDVM)
+
+[Running the DDD Fundamentals Sample](https://www.youtube.com/watch?v=wl7aF6iJDVM) by [Philippe Vaillancourt](https://blog.nimblepros.com/author/snowfrog)
+
 ### 1.1 Docker
 
 The easiest way to run the sample is using docker. Download the source and run this command from the root folder:
