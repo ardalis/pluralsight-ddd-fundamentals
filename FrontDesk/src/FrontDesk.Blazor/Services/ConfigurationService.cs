@@ -21,7 +21,7 @@ namespace FrontDesk.Blazor.Services
       _logger.LogInformation("Read today date/time from configuration.");
 
       var stringDateTimeOffset = await _httpService.HttpGetAsync($"api/configurations");
-      var dateTimeWithOffset = DateTimeOffset.Parse(stringDateTimeOffset, CultureInfo.InvariantCulture);
+      var dateTimeWithOffset = DateTimeOffset.Parse(stringDateTimeOffset, CultureInfo.CurrentCulture);
 
       return dateTimeWithOffset.UtcDateTime;
     }
