@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +25,7 @@ namespace FrontDesk.Api.ConfigurationEndpoints
     ]
     public override async Task<ActionResult<string>> HandleAsync(CancellationToken cancellationToken)
     {
-      return Ok(new OfficeSettings().TestDate.ToString());
+      return Ok(new OfficeSettings().TestDate.ToString(CultureInfo.InvariantCulture));
     }
   }
 }
