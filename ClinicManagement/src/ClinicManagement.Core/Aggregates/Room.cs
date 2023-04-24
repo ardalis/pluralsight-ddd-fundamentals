@@ -7,6 +7,8 @@ namespace ClinicManagement.Core.Aggregates
   {
     public string Name { get; set; }
 
+    private Room() { }
+    
     public Room(int id, string name)
     {
       Id = id;
