@@ -4,9 +4,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ClinicManagement.Api.ConfigurationEndpoints
 {
-  public class Read : BaseEndpoint
+  public class Read : EndpointBaseSync
     .WithoutRequest
-    .WithResponse<string>
+    .WithActionResult<string>
   {
     public Read()
     {

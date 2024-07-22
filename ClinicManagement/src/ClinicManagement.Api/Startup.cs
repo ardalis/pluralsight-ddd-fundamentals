@@ -95,7 +95,7 @@ namespace ClinicManagement.Api
       });
 
       services.AddControllers();
-      services.AddMediatR(typeof(Startup).Assembly);
+      services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Startup).Assembly));
 
       services.AddResponseCompression(opts =>
       {

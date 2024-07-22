@@ -1,9 +1,9 @@
 ﻿using System;
-using PluralsightDdd.SharedKernel.Interfaces;
+using PluralsightDdd.SharedKernel;
 
 namespace ClinicManagement.Core.Services
 {
-  public class CreateConfirmationEmailMessage : IApplicationEvent
+  public class CreateConfirmationEmailMessage : BaseIntegrationEvent
   {
     public string ClientName { get; set; }
     public string ClientEmailAddress { get; set; }

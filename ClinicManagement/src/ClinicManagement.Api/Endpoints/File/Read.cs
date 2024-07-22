@@ -14,9 +14,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ClinicManagement.Api.FileEndpoints
 {
-  public class Read : BaseAsyncEndpoint
+  public class Read : EndpointBaseAsync
     .WithRequest<string>
-    .WithResponse<FileItem>
+    .WithActionResult<FileItem>
   {
     private readonly ILogger<Read> _logger;
 

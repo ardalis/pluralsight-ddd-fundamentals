@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Interfaces;
 using ClinicManagement.Infrastructure.Data;
 using ClinicManagement.Infrastructure.Messaging;
 using MediatR;
 using MediatR.Pipeline;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.ObjectPool;
 using PluralsightDdd.SharedKernel.Interfaces;
 using RabbitMQ.Client;
@@ -56,11 +58,8 @@ namespace ClinicManagement.Infrastructure
           .As<IMediator>()
           .InstancePerLifetimeScope();
 
-      builder.Register<ServiceFactory>(context =>
-      {
-        var c = context.Resolve<IComponentContext>();
-        return t => c.Resolve(t);
-      });
+      var services = new ServiceCollection();
+      builder.Populate(services);
 
       var mediatrOpenTypes = new[]
       {
