@@ -2,7 +2,7 @@
 
 # From solution root:
 # docker build -t cm --progress=plain --no-cache -f .\ClinicManagement\src\ClinicManagement.Blazor.Host\Dockerfile .
-FROM mcr.microsoft.com/dotnet/sdk:5.0.201-buster-slim AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
 COPY ClinicManagement/src/ClinicManagement.Blazor ./ClinicManagement.Blazor
