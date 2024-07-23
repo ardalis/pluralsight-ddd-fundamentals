@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentAssertions;
+using FluentAssertions.Extensions;
 using Xunit;
 
 namespace PluralsightDdd.SharedKernel.UnitTests.BaseDomainEventTests
@@ -14,7 +15,7 @@ namespace PluralsightDdd.SharedKernel.UnitTests.BaseDomainEventTests
     {
       var newEvent = new TestEvent();
 
-      newEvent.DateOccurred.Should().BeCloseTo(DateTime.UtcNow, 100);
+      newEvent.DateOccurred.Should().BeCloseTo(DateTime.UtcNow, 100.Milliseconds());
     }
   }
 }
