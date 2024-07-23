@@ -34,13 +34,13 @@ namespace FunctionalTests.AppointmentEndpoints
     public async Task CreatesANewAppointment()
     {
       // get schedule
-      var listResult = await _client.GetAndDeserialize<ListScheduleResponse>(ListScheduleRequest.Route, _outputHelper);
+      var listResult = await _client.GetAndDeserializeAsync<ListScheduleResponse>(ListScheduleRequest.Route, _outputHelper);
       var schedule = listResult.Schedules.First();
       string scheduleId = schedule.Id.ToString();
 
       string listRoute = ListAppointmentRequest.Route.Replace("{ScheduleId}", scheduleId);
 
-      var result = await _client.GetAndDeserialize<ListAppointmentResponse>(listRoute, _outputHelper);
+      var result = await _client.GetAndDeserializeAsync<ListAppointmentResponse>(listRoute, _outputHelper);
 
       var jsonContent = GetValidNewAppointmentJson(schedule.Id);
 

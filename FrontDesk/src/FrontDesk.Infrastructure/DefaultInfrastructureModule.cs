@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using FrontDesk.Core.Interfaces;
+using FrontDesk.Core.ScheduleAggregate;
 using FrontDesk.Infrastructure.Data;
 using FrontDesk.Infrastructure.Messaging;
-using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using PluralsightDdd.SharedKernel.Interfaces;
 using Module = Autofac.Module;
-using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Infrastructure
 {
@@ -63,33 +64,30 @@ namespace FrontDesk.Infrastructure
         .As(typeof(IMessagePublisher))
         .InstancePerLifetimeScope();
 
-// MediatR is registered in FrontDesk.Api
-//      builder
-//          .RegisterType<Mediator>()
-//          .As<IMediator>()
-//          .InstancePerLifetimeScope();
+      // MediatR is registered in FrontDesk.Api
+      //      builder
+      //          .RegisterType<Mediator>()
+      //          .As<IMediator>()
+      //          .InstancePerLifetimeScope();
 
-//      var mediatrOpenTypes = new[]
-//{
-//        typeof(IRequestHandler<,>),
-//        typeof(IRequestExceptionHandler<,,>),
-//        typeof(IRequestExceptionAction<,>),
-//        typeof(INotificationHandler<>),
-//      };
+      //      var mediatrOpenTypes = new[]
+      //{
+      //        typeof(IRequestHandler<,>),
+      //        typeof(IRequestExceptionHandler<,,>),
+      //        typeof(IRequestExceptionAction<,>),
+      //        typeof(INotificationHandler<>),
+      //      };
 
-//      foreach (var mediatrOpenType in mediatrOpenTypes)
-//      {
-//        builder
-//        .RegisterAssemblyTypes(_assemblies.ToArray())
-//        .AsClosedTypesOf(mediatrOpenType)
-//        .AsImplementedInterfaces();
-//      }
+      //      foreach (var mediatrOpenType in mediatrOpenTypes)
+      //      {
+      //        builder
+      //        .RegisterAssemblyTypes(_assemblies.ToArray())
+      //        .AsClosedTypesOf(mediatrOpenType)
+      //        .AsImplementedInterfaces();
+      //      }
 
-      builder.Register<ServiceFactory>(context =>
-      {
-        var c = context.Resolve<IComponentContext>();
-        return t => c.Resolve(t);
-      });
+      var services = new ServiceCollection();
+      builder.Populate(services);
 
       builder.RegisterType<EmailSender>().As<IEmailSender>()
           .InstancePerLifetimeScope();

@@ -9,9 +9,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.FileEndpoints
 {
-  public class Upload : BaseAsyncEndpoint
+  public class Upload : EndpointBaseAsync
     .WithRequest<FileItem>
-    .WithResponse<bool>
+    .WithActionResult<bool>
   {
     public Upload()
     {

@@ -10,9 +10,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.RoomEndpoints
 {
-  public class GetById : BaseAsyncEndpoint
+  public class GetById : EndpointBaseAsync
     .WithRequest<GetByIdRoomRequest>
-    .WithResponse<GetByIdRoomResponse>
+    .WithActionResult<GetByIdRoomResponse>
   {
     private readonly IReadRepository<Room> _repository;
     private readonly IMapper _mapper;

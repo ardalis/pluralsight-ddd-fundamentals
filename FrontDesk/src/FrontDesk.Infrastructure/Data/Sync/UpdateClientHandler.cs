@@ -20,7 +20,7 @@ namespace FrontDesk.Infrastructure.Data.Sync
       _logger = logger;
     }
 
-    public async Task<Unit> Handle(UpdateClientCommand request,
+    public async Task Handle(UpdateClientCommand request,
       CancellationToken cancellationToken)
     {
       _logger.LogInformation($"UpdateClientHandler updating Client {request.Name} to sync with Clinic Management.");
@@ -30,7 +30,7 @@ namespace FrontDesk.Infrastructure.Data.Sync
       if (request.Name == currentName)
       {
         // no change
-        return Unit.Value;
+        return;
       }
 
       // use reflection to set name
@@ -41,8 +41,6 @@ namespace FrontDesk.Infrastructure.Data.Sync
       UpdateAppointmentTitles(request, currentName);
 
       _ = await _dbContext.SaveChangesAsync();
-
-      return Unit.Value;
     }
 
     private void UpdateAppointmentTitles(UpdateClientCommand request, string currentName)

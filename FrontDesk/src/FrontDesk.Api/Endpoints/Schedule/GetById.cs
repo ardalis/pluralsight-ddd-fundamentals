@@ -10,9 +10,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.ScheduleEndpoints
 {
-  public class GetById : BaseAsyncEndpoint
+  public class GetById : EndpointBaseAsync
     .WithRequest<GetByIdScheduleRequest>
-    .WithResponse<GetByIdScheduleResponse>
+    .WithActionResult<GetByIdScheduleResponse>
   {
     private readonly IReadRepository<Schedule> _repository;
     private readonly IMapper _mapper;

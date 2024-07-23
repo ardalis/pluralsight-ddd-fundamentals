@@ -11,9 +11,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.DoctorEndpoints
 {
-  public class List : BaseAsyncEndpoint
+  public class List : EndpointBaseAsync
     .WithRequest<ListDoctorRequest>
-    .WithResponse<ListDoctorResponse>
+    .WithActionResult<ListDoctorResponse>
   {
     private readonly IReadRepository<Doctor> _repository;
     private readonly IMapper _mapper;

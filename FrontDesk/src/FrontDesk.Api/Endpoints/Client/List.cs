@@ -13,9 +13,9 @@ using FrontDesk.Core.SyncedAggregates.Specifications;
 
 namespace FrontDesk.Api.ClientEndpoints
 {
-  public class List : BaseAsyncEndpoint
+  public class List : EndpointBaseAsync
     .WithRequest<ListClientRequest>
-    .WithResponse<ListClientResponse>
+    .WithActionResult<ListClientResponse>
   {
     private readonly IReadRepository<Client> _repository;
     private readonly IMapper _mapper;

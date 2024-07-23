@@ -33,11 +33,11 @@ namespace FunctionalTests.AppointmentEndpoints
     public async Task UpdatesAnExistingAppointment()
     {
       var scheduleRoute = ListScheduleRequest.Route;
-      var schedule = (await _client.GetAndDeserialize<ListScheduleResponse>(scheduleRoute)).Schedules.First();
+      var schedule = (await _client.GetAndDeserializeAsync<ListScheduleResponse>(scheduleRoute)).Schedules.First();
 
       string route = ListAppointmentRequest.Route.Replace("{ScheduleId}", schedule.Id.ToString());
 
-      var result = await _client.GetAndDeserialize<ListAppointmentResponse>(route, _outputHelper);
+      var result = await _client.GetAndDeserializeAsync<ListAppointmentResponse>(route, _outputHelper);
 
       var firstAppt = result.Appointments.First();
 

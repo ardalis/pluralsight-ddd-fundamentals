@@ -8,9 +8,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.ConfigurationEndpoints
 {
-  public class Read : BaseAsyncEndpoint
+  public class Read : EndpointBaseAsync
     .WithoutRequest
-    .WithResponse<string>
+    .WithActionResult<string>
   {
     public Read()
     {

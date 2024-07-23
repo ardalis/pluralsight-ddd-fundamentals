@@ -14,9 +14,9 @@ using FrontDesk.Core.SyncedAggregates.Specifications;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
-  public class GetById : BaseAsyncEndpoint
+  public class GetById : EndpointBaseAsync
     .WithRequest<GetByIdAppointmentRequest>
-    .WithResponse<GetByIdAppointmentResponse>
+    .WithActionResult<GetByIdAppointmentResponse>
   {
     private readonly IReadRepository<Schedule> _scheduleRepository;
     private readonly IReadRepository<Client> _clientRepository;

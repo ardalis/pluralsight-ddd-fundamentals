@@ -13,9 +13,9 @@ using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
-  public class Delete : BaseAsyncEndpoint
+  public class Delete : EndpointBaseAsync
     .WithRequest<DeleteAppointmentRequest>
-    .WithResponse<DeleteAppointmentResponse>
+    .WithActionResult<DeleteAppointmentResponse>
   {
     private readonly IReadRepository<Schedule> _scheduleReadRepository;
     private readonly IRepository<Schedule> _scheduleRepository;

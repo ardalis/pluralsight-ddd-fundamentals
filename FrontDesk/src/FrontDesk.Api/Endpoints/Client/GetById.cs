@@ -10,9 +10,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.ClientEndpoints
 {
-  public class GetById : BaseAsyncEndpoint
+  public class GetById : EndpointBaseAsync
     .WithRequest<GetByIdClientRequest>
-    .WithResponse<GetByIdClientResponse>
+    .WithActionResult<GetByIdClientResponse>
   {
     private readonly IReadRepository<Client> _repository;
     private readonly IMapper _mapper;

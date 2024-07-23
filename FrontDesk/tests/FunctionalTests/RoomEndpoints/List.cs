@@ -23,7 +23,7 @@ namespace FunctionalTests.RoomEndpoints
     [Fact]
     public async Task Returns5Rooms()
     {
-      var result = await _client.GetAndDeserialize<ListRoomResponse>(ListRoomRequest.Route, _outputHelper);
+      var result = await _client.GetAndDeserializeAsync<ListRoomResponse>(ListRoomRequest.Route, _outputHelper);
 
       Assert.Equal(5, result.Rooms.Count);
       Assert.Contains(result.Rooms, room => room.Name == "Exam Room 1");

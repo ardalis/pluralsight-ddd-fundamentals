@@ -25,7 +25,7 @@ namespace FunctionalTests.ClientEndpoints
     [Fact]
     public async Task ReturnsManyClients()
     {
-      var result = await _client.GetAndDeserialize<ListClientResponse>(ListClientRequest.Route, _outputHelper);
+      var result = await _client.GetAndDeserializeAsync<ListClientResponse>(ListClientRequest.Route, _outputHelper);
 
       Assert.True(result.Clients.Count > 10);
       Assert.Contains(result.Clients, x => x.FullName == "Steve Smith");
@@ -34,7 +34,7 @@ namespace FunctionalTests.ClientEndpoints
     [Fact]
     public async Task IncludesPatientIds()
     {
-      var result = await _client.GetAndDeserialize<ListClientResponse>(ListClientRequest.Route, _outputHelper);
+      var result = await _client.GetAndDeserializeAsync<ListClientResponse>(ListClientRequest.Route, _outputHelper);
 
       Assert.NotEmpty(result.Clients.First().Patients);
     }
