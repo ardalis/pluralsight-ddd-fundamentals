@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <PackageId>PluralsightDdd.SharedKernel</PackageId>
     <Title>PluralsightDdd.SharedKernel</Title>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
@@ -13,7 +12,7 @@
     <RepositoryUrl>https://github.com/ardalis/pluralsight-ddd-fundamentals</RepositoryUrl>
     <PackageTags>aspnet asp.net aspnetcore asp.net core ddd dddesign value object entity aggregate domain event pluralsight</PackageTags>
     <PackageReleaseNotes>Update DomainEvent to use DateTimeOffset.Now.</PackageReleaseNotes>
-    <Version>2.1.2</Version>
+    <Version>2.1.3</Version>
     <AssemblyName>PluralsightDdd.SharedKernel</AssemblyName>
     <PackageIconUrl>https://user-images.githubusercontent.com/782127/33497760-facf6550-d69c-11e7-94e4-b3856da259a9.png</PackageIconUrl>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -22,17 +21,15 @@
     <LangVersion>9.0</LangVersion>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
   </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Ardalis.Specification" Version="5.1.0" />
-    <PackageReference Include="MediatR" Version="9.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Ardalis.GuardClauses" Version="4.6.0" />
+    <PackageReference Include="Ardalis.Specification" Version="8.0.0" />
+    <PackageReference Include="MediatR" Version="12.3.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
-
 </Project>

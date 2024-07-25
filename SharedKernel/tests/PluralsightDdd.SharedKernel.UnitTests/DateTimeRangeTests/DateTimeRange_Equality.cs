@@ -13,8 +13,8 @@ namespace PluralsightDdd.SharedKernel.UnitTests.DateTimeRangeTests
       var dtr2 = new DateTimeRange(DateTimes.TestDateTime, TimeSpan.FromHours(1));
 
       dtr1.Should().NotBeSameAs(dtr2);
-      dtr1.Should().Equals(dtr2);
-      dtr2.Should().Equals(dtr1);
+      dtr1.Should().Be(dtr2);
+      dtr2.Should().Be(dtr1);
       (dtr1 == dtr2).Should().BeTrue();
     }
   }
