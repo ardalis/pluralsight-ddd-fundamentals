@@ -24,7 +24,7 @@ namespace FunctionalTests.Api
     [Fact]
     public async Task Returns3AppointmentTypes()
     {
-      var result = await _client.GetAndDeserialize<ListAppointmentTypeResponse>("/api/appointment-types", _outputHelper);
+      var result = await _client.GetAndDeserializeAsync<ListAppointmentTypeResponse>("/api/appointment-types", _outputHelper);
 
       Assert.Equal(3, result.AppointmentTypes.Count());
       Assert.Contains(result.AppointmentTypes, x => x.Name == "Wellness Exam");

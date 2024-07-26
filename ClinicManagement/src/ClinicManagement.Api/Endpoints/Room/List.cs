@@ -13,9 +13,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ClinicManagement.Api.RoomEndpoints
 {
-  public class List : BaseAsyncEndpoint
+  public class List : EndpointBaseAsync
     .WithRequest<ListRoomRequest>
-    .WithResponse<ListRoomResponse>
+    .WithActionResult<ListRoomResponse>
   {
     private readonly IRepository<Room> _repository;
     private readonly IMapper _mapper;

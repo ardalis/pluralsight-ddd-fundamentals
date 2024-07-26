@@ -10,9 +10,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ClinicManagement.Api.ClientEndpoints
 {
-  public class Delete : BaseAsyncEndpoint
+  public class Delete : EndpointBaseAsync
     .WithRequest<DeleteClientRequest>
-    .WithResponse<DeleteClientResponse>
+    .WithActionResult<DeleteClientResponse>
   {
     private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;

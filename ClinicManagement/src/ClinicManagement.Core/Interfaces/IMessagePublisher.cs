@@ -1,9 +1,9 @@
-using PluralsightDdd.SharedKernel.Interfaces;
+﻿using PluralsightDdd.SharedKernel;
 
 namespace ClinicManagement.Core.Interfaces
 {
   public interface IMessagePublisher
   {
-    void Publish(IApplicationEvent applicationEvent);
+    void Publish(BaseIntegrationEvent applicationEvent);
   }
 }

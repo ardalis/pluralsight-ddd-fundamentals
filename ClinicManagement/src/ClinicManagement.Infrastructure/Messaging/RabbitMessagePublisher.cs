@@ -2,11 +2,10 @@
 using System.Text;
 using Ardalis.GuardClauses;
 using ClinicManagement.Core.Interfaces;
-using PluralsightDdd.SharedKernel.Interfaces;
+using PluralsightDdd.SharedKernel;
 using Microsoft.Extensions.ObjectPool;
 using RabbitMQ.Client;
 using System.Text.Json;
-using PluralsightDdd.SharedKernel;
 
 namespace ClinicManagement.Infrastructure.Messaging
 {
@@ -19,7 +18,7 @@ namespace ClinicManagement.Infrastructure.Messaging
       _objectPool = new DefaultObjectPool<IModel>(objectPolicy, Environment.ProcessorCount * 2);
     }
 
-    public void Publish(IApplicationEvent applicationEvent)
+    public void Publish(BaseIntegrationEvent applicationEvent)
     {
       Guard.Against.Null(applicationEvent, nameof(applicationEvent));
 

@@ -16,9 +16,9 @@ using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
-  public class Create : BaseAsyncEndpoint
+  public class Create : EndpointBaseAsync
     .WithRequest<CreateAppointmentRequest>
-    .WithResponse<CreateAppointmentResponse>
+    .WithActionResult<CreateAppointmentResponse>
   {
     private readonly IRepository<Schedule> _scheduleRepository;
     private readonly IReadRepository<AppointmentType> _appointmentTypeReadRepository;

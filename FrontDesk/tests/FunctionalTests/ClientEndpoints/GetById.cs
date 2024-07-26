@@ -26,7 +26,7 @@ namespace FunctionalTests.ClientEndpoints
     public async Task ReturnsClientGivenValidId ()
     {
       string route = GetByIdClientRequest.Route.Replace("{ClientId}", "1");
-      var result = await _client.GetAndDeserialize<GetByIdClientResponse>(route, _outputHelper);
+      var result = await _client.GetAndDeserializeAsync<GetByIdClientResponse>(route, _outputHelper);
 
       Assert.Equal("Steve Smith", result.Client.FullName);
     }
@@ -35,7 +35,7 @@ namespace FunctionalTests.ClientEndpoints
     public async Task ReturnsNotFoundGivenInvalidId()
     {
       string route = GetByIdClientRequest.Route.Replace("{ClientId}", "0");
-      _ = await _client.GetAndEnsureNotFound(route, _outputHelper);
+      _ = await _client.GetAndEnsureNotFoundAsync(route, _outputHelper);
     }
   }
 }

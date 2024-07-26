@@ -1,8 +1,8 @@
-﻿using PluralsightDdd.SharedKernel.Interfaces;
+﻿using PluralsightDdd.SharedKernel;
 
 namespace ClinicManagement.Api.ApplicationEvents
 {
-  public class NamedEntityUpdatedEvent : IApplicationEvent
+  public class NamedEntityUpdatedEvent : BaseIntegrationEvent
   {
     public string EventType { get; set; }
     public NamedEntity Entity { get; set; }

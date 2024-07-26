@@ -13,9 +13,9 @@ namespace FrontDesk.Api.ScheduleEndpoints
   /// <summary>
   /// Not used.
   /// </summary>
-  public class Create : BaseAsyncEndpoint
+  public class Create : EndpointBaseAsync
     .WithRequest<CreateScheduleRequest>
-    .WithResponse<CreateScheduleResponse>
+    .WithActionResult<CreateScheduleResponse>
   {
     private readonly IRepository<Schedule> _repository;
     private readonly IMapper _mapper;

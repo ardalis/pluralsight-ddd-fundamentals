@@ -24,7 +24,7 @@ namespace FunctionalTests.AppointmentTypeEndpoints
     [Fact]
     public async Task Returns3AppointmentTypes()
     {
-      var result = await _client.GetAndDeserialize<ListAppointmentTypeResponse>(ListAppointmentTypeRequest.Route, _outputHelper);
+      var result = await _client.GetAndDeserializeAsync<ListAppointmentTypeResponse>(ListAppointmentTypeRequest.Route, _outputHelper);
 
       Assert.Equal(3, result.AppointmentTypes.Count);
       Assert.Contains(result.AppointmentTypes, x => x.Name == "Wellness Exam");

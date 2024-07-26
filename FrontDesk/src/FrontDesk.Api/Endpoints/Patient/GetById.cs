@@ -12,9 +12,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace FrontDesk.Api.PatientEndpoints
 {
-  public class GetById : BaseAsyncEndpoint
+  public class GetById : EndpointBaseAsync
     .WithRequest<GetByIdPatientRequest>
-    .WithResponse<GetByIdPatientResponse>
+    .WithActionResult<GetByIdPatientResponse>
   {
     private readonly IReadRepository<Client> _repository;
     private readonly IMapper _mapper;

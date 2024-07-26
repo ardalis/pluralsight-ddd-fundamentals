@@ -13,9 +13,9 @@ using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
-  public class Update : BaseAsyncEndpoint
+  public class Update : EndpointBaseAsync
     .WithRequest<UpdateAppointmentRequest>
-    .WithResponse<UpdateAppointmentResponse>
+    .WithActionResult<UpdateAppointmentResponse>
   {
     private readonly IRepository<Schedule> _scheduleRepository;
     private readonly IReadRepository<Schedule> _scheduleReadRepository;

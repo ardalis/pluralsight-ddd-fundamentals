@@ -5,10 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.ObjectPool;
 using RabbitMQ.Client;
-using RabbitMQ.Client.Core.DependencyInjection;
 using VetClinicPublic.Web.Interfaces;
 using VetClinicPublic.Web.Services;
-using MediatR;
 
 namespace VetClinicPublic
 {
@@ -37,7 +35,7 @@ namespace VetClinicPublic
 
 
       // configure MediatR
-      services.AddMediatR(typeof(Startup).Assembly);
+      services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Startup).Assembly));
 
       // configure messaging
       var messagingConfig = Configuration.GetSection("RabbitMq");

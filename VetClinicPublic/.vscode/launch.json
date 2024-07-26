@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/src/VetClinicPublic/bin/Debug/net5.0/VetClinicPublic.dll",
+            "program": "${workspaceFolder}/src/VetClinicPublic/bin/Debug/net8.0/VetClinicPublic.dll",
             "args": [],
             "cwd": "${workspaceFolder}/src/VetClinicPublic",
             "stopAtEntry": false,

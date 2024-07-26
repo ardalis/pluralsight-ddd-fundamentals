@@ -19,14 +19,14 @@ namespace VetClinicPublic.Web.Services
       _emailSender = emailSender;
     }
 
-    public Task<Unit> Handle(SendAppointmentConfirmationCommand request, 
+    public Task Handle(SendAppointmentConfirmationCommand request, 
       CancellationToken cancellationToken)
     {
       _logger.LogInformation("Message Received - Sending Email!");
 
       _emailSender.SendConfirmationEmail(request);
 
-      return Task.FromResult(Unit.Value);
+      return Task.CompletedTask;
     }
   }
 }

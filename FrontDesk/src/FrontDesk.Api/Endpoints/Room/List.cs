@@ -12,9 +12,9 @@ using FrontDesk.Core.SyncedAggregates.Specifications;
 
 namespace FrontDesk.Api.RoomEndpoints
 {
-  public class List : BaseAsyncEndpoint
+  public class List : EndpointBaseAsync
     .WithRequest<ListRoomRequest>
-    .WithResponse<ListRoomResponse>
+    .WithActionResult<ListRoomResponse>
   {
     private readonly IReadRepository<Room> _repository;
     private readonly IMapper _mapper;

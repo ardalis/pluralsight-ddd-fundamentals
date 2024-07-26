@@ -105,7 +105,7 @@ namespace FrontDesk.Api
         typeof(AppDbContext).Assembly,
         typeof(Appointment).Assembly
       };
-      services.AddMediatR(assemblies);
+      services.AddMediatR(config => config.RegisterServicesFromAssemblies(assemblies));
 
       services.AddResponseCompression(opts =>
       {

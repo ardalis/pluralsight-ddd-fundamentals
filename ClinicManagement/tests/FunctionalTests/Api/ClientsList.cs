@@ -25,16 +25,16 @@ namespace FunctionalTests.Api
     [Fact]
     public async Task Returns2Clients()
     {
-      var result = await _client.GetAndDeserialize<ListClientResponse>("/api/clients", _outputHelper);
+      var result = await _client.GetAndDeserializeAsync<ListClientResponse>("/api/clients", _outputHelper);
 
-      Assert.Equal(2, result.Clients.Count());
+      Assert.Equal(13, result.Clients.Count());
       Assert.Contains(result.Clients, x => x.FullName == "Steve Smith");
     }
 
     [Fact]
     public async Task IncludesPatientIds()
     {
-      var result = await _client.GetAndDeserialize<ListClientResponse>("/api/clients", _outputHelper);
+      var result = await _client.GetAndDeserializeAsync<ListClientResponse>("/api/clients", _outputHelper);
 
       Assert.NotEmpty(result.Clients.First().Patients);
     }

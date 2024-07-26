@@ -33,9 +33,29 @@ namespace FrontDesk.Infrastructure.Data
       return _sourceRepository.AddAsync(entity);
     }
 
+    public Task<bool> AnyAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
+    {
+      return _sourceRepository.AnyAsync(specification, cancellationToken);
+    }
+
+    public Task<bool> AnyAsync(CancellationToken cancellationToken = default)
+    {
+      return _sourceRepository.AnyAsync(cancellationToken);
+    }
+
+    public IAsyncEnumerable<T> AsAsyncEnumerable(ISpecification<T> specification)
+    {
+      return _sourceRepository.AsAsyncEnumerable(specification);
+    }
+
     public Task<int> CountAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
     {
       return _sourceRepository.CountAsync(specification, cancellationToken);
+    }
+
+    public Task<int> CountAsync(CancellationToken cancellationToken = default)
+    {
+      return _sourceRepository.CountAsync(cancellationToken);
     }
 
     public Task DeleteAsync(T entity)
@@ -46,6 +66,16 @@ namespace FrontDesk.Infrastructure.Data
     public Task DeleteRangeAsync(IEnumerable<T> entities)
     {
       return _sourceRepository.DeleteRangeAsync(entities);
+    }
+
+    public Task<T> FirstOrDefaultAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
+    {
+      return _sourceRepository.FirstOrDefaultAsync(specification, cancellationToken);
+    }
+
+    public Task<TResult?> FirstOrDefaultAsync<TResult>(ISpecification<T, TResult> specification, CancellationToken cancellationToken = default)
+    {
+      return _sourceRepository.FirstOrDefaultAsync(specification, cancellationToken);
     }
 
     public Task<T> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken = default)
@@ -91,6 +121,11 @@ namespace FrontDesk.Infrastructure.Data
           return _sourceRepository.GetBySpecAsync(specification, cancellationToken);
         });
       }
+      return _sourceRepository.GetBySpecAsync(specification, cancellationToken);
+    }
+
+    public Task<T> GetBySpecAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
+    {
       return _sourceRepository.GetBySpecAsync(specification, cancellationToken);
     }
 
@@ -143,6 +178,16 @@ namespace FrontDesk.Infrastructure.Data
     public Task SaveChangesAsync()
     {
       return _sourceRepository.SaveChangesAsync();
+    }
+
+    public Task<T> SingleOrDefaultAsync(ISingleResultSpecification<T> specification, CancellationToken cancellationToken = default)
+    {
+      return _sourceRepository.SingleOrDefaultAsync(specification, cancellationToken);
+    }
+
+    public Task<TResult?> SingleOrDefaultAsync<TResult>(ISingleResultSpecification<T, TResult> specification, CancellationToken cancellationToken = default)
+    {
+      return _sourceRepository.SingleOrDefaultAsync<TResult>(specification, cancellationToken);
     }
 
     public Task UpdateAsync(T entity)

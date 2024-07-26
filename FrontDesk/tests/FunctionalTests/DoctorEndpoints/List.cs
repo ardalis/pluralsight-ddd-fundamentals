@@ -23,7 +23,7 @@ namespace FunctionalTests.DoctorEndpoints
     [Fact]
     public async Task Returns3Doctors()
     {
-      var result = await _client.GetAndDeserialize<ListDoctorResponse>(ListDoctorRequest.Route, _outputHelper);
+      var result = await _client.GetAndDeserializeAsync<ListDoctorResponse>(ListDoctorRequest.Route, _outputHelper);
 
       Assert.Equal(3, result.Doctors.Count);
       Assert.Contains(result.Doctors, x => x.Name == "Dr. Smith");

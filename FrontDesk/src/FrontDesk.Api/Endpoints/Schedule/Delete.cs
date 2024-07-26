@@ -13,9 +13,9 @@ namespace FrontDesk.Api.ScheduleEndpoints
   /// <summary>
   /// Not Used.
   /// </summary>
-  public class Delete : BaseAsyncEndpoint
+  public class Delete : EndpointBaseAsync
     .WithRequest<DeleteScheduleRequest>
-    .WithResponse<DeleteScheduleResponse>
+    .WithActionResult<DeleteScheduleResponse>
   {
     private readonly IRepository<Schedule> _repository;
     private readonly IMapper _mapper;
