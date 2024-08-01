@@ -1,21 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Client;
+using FastEndpoints;
 using FrontDesk.Core.SyncedAggregates;
-using FrontDesk.Core.ScheduleAggregate.Specifications;
-using Microsoft.AspNetCore.Mvc;
-using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
 using FrontDesk.Core.SyncedAggregates.Specifications;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using PluralsightDdd.SharedKernel.Interfaces;
+using IMapper = AutoMapper.IMapper;
 
 namespace FrontDesk.Api.ClientEndpoints
 {
-  public class List : EndpointBaseAsync
-    .WithRequest<ListClientRequest>
-    .WithActionResult<ListClientResponse>
+  public class List : Endpoint<ListClientRequest, Results<Ok<ListClientResponse>, NotFound>>
   {
     private readonly IReadRepository<Client> _repository;
     private readonly IMapper _mapper;
@@ -27,26 +25,30 @@ namespace FrontDesk.Api.ClientEndpoints
       _mapper = mapper;
     }
 
-    [HttpGet("api/clients")]
-    [SwaggerOperation(
-        Summary = "List Clients",
-        Description = "List Clients",
-        OperationId = "clients.List",
-        Tags = new[] { "ClientEndpoints" })
-    ]
-    public override async Task<ActionResult<ListClientResponse>> HandleAsync([FromQuery] ListClientRequest request,
+    public override void Configure()
+    {
+      Get("api/clients");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("List Clients")
+           .WithDescription("List Clients")
+           .WithName("clients.List")
+           .WithTags("ClientEndpoints"));
+    }
+
+    public override async Task<Results<Ok<ListClientResponse>, NotFound>> ExecuteAsync(ListClientRequest request,
       CancellationToken cancellationToken)
     {
       var response = new ListClientResponse(request.CorrelationId());
 
       var spec = new ClientsIncludePatientsSpecification();
       var clients = await _repository.ListAsync(spec);
-      if (clients is null) return NotFound();
+      if (clients is null) return TypedResults.NotFound();
 
       response.Clients = _mapper.Map<List<ClientDto>>(clients);
       response.Count = response.Clients.Count;
 
-      return Ok(response);
+      return TypedResults.Ok(response);
     }
   }
 }
