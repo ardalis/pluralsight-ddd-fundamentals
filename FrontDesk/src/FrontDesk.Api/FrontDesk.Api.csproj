@@ -90,7 +90,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Ardalis.ApiEndpoints" Version="4.1.0" />
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="FastEndpoints" Version="5.28.0" />
     <PackageReference Include="FastEndpoints.Swagger" Version="5.28.0" />
