@@ -2,21 +2,20 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
 using BlazorShared.Models;
-using BlazorShared.Models.Doctor;
-using Microsoft.AspNetCore.Mvc;
+using BlazorShared.Models.File;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Logging;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Processing;
-using Swashbuckle.AspNetCore.Annotations;
 
 namespace ClinicManagement.Api.FileEndpoints
 {
-  public class Read : EndpointBaseAsync
-    .WithRequest<string>
-    .WithActionResult<FileItem>
+  public class Read : Endpoint<ReadFileRequest, Results<Ok<FileItem>, BadRequest, NotFound>>
   {
     private readonly ILogger<Read> _logger;
 
@@ -25,23 +24,28 @@ namespace ClinicManagement.Api.FileEndpoints
       _logger = logger;
     }
 
-    [HttpGet("api/files/{fileName}")]
-    [SwaggerOperation(
-        Summary = "Reads a file",
-        Description = "Reads a file",
-        OperationId = "files.read",
-        Tags = new[] { "FileEndpoints" })
-    ]
-    public override async Task<ActionResult<FileItem>> HandleAsync([FromRoute] string fileName,
+    public override void Configure()
+    {
+      Get("api/files/{fileName}");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Reads a file")
+           .WithDescription("Reads a file")
+           .WithName("files.read")
+           .WithTags("FileEndpoints"));
+    }
+
+    public override async Task<Results<Ok<FileItem>, BadRequest, NotFound>> ExecuteAsync(ReadFileRequest request,
       CancellationToken cancellationToken)
     {
-      if (string.IsNullOrEmpty(fileName)) return BadRequest();
+      var fileName = request.FileName;
+      if (string.IsNullOrEmpty(fileName)) return TypedResults.BadRequest();
 
       var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "images", "patients", fileName.ToLower());
       if (!System.IO.File.Exists(fullPath))
       {
         _logger.LogError($"File not found: {fullPath}");
-        return NotFound();
+        return TypedResults.NotFound();
       }
 
       int maxWidth = 200;
@@ -66,7 +70,7 @@ namespace ClinicManagement.Api.FileEndpoints
         FileName = fileName
       };
 
-      return Ok(response);
+      return TypedResults.Ok(response);
     }
   }
 }

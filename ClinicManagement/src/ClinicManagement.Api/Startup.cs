@@ -1,14 +1,13 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using Autofac;
 using BlazorShared;
-using ClinicManagement.Api.Hubs;
 using ClinicManagement.Core.Interfaces;
 using ClinicManagement.Infrastructure;
 using ClinicManagement.Infrastructure.Data;
 using ClinicManagement.Infrastructure.Messaging;
-using MediatR;
+using FastEndpoints;
+using FastEndpoints.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -94,6 +93,7 @@ namespace ClinicManagement.Api
                             });
       });
 
+      services.AddFastEndpoints().SwaggerDocument();
       services.AddControllers();
       services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Startup).Assembly));
 
@@ -150,6 +150,7 @@ namespace ClinicManagement.Api
 
       app.UseEndpoints(endpoints =>
       {
+        endpoints.MapFastEndpoints();
         endpoints.MapControllers();
         //endpoints.MapHub<ClinicManagementHub>($"/{SignalRConstants.HUB_NAME}");
       });

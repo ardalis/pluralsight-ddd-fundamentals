@@ -1,18 +1,16 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Client;
 using ClinicManagement.Core.Aggregates;
-using Microsoft.AspNetCore.Mvc;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace ClinicManagement.Api.ClientEndpoints
 {
-  public class Delete : EndpointBaseAsync
-    .WithRequest<DeleteClientRequest>
-    .WithActionResult<DeleteClientResponse>
+  public class Delete : Endpoint<DeleteClientRequest, DeleteClientResponse>
   {
     private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
@@ -23,21 +21,25 @@ namespace ClinicManagement.Api.ClientEndpoints
       _mapper = mapper;
     }
 
-    [HttpDelete("api/clients/{id}")]
-    [SwaggerOperation(
-        Summary = "Deletes a Client",
-        Description = "Deletes a Client",
-        OperationId = "clients.delete",
-        Tags = new[] { "ClientEndpoints" })
-    ]
-    public override async Task<ActionResult<DeleteClientResponse>> HandleAsync([FromRoute] DeleteClientRequest request, CancellationToken cancellationToken)
+    public override void Configure()
+    {
+      Delete("api/clients/{id}");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Deletes a Client")
+           .WithDescription("Deletes a Client")
+           .WithName("clients.delete")
+           .WithTags("ClientEndpoints"));
+    }
+
+    public override async Task<DeleteClientResponse> ExecuteAsync(DeleteClientRequest request, CancellationToken cancellationToken)
     {
       var response = new DeleteClientResponse(request.CorrelationId);
 
       var toDelete = _mapper.Map<Client>(request);
       await _repository.DeleteAsync(toDelete);
 
-      return Ok(response);
+      return response;
     }
   }
 }

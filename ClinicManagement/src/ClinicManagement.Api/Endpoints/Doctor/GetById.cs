@@ -1,18 +1,17 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Doctor;
 using ClinicManagement.Core.Aggregates;
-using Microsoft.AspNetCore.Mvc;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace ClinicManagement.Api.DoctorEndpoints
 {
-  public class GetById : EndpointBaseAsync
-    .WithRequest<GetByIdDoctorRequest>
-    .WithActionResult<GetByIdDoctorResponse>
+  public class GetById : Endpoint<GetByIdDoctorRequest, Results<Ok<GetByIdDoctorResponse>, NotFound>>
   {
     private readonly IRepository<Doctor> _repository;
     private readonly IMapper _mapper;
@@ -23,25 +22,27 @@ namespace ClinicManagement.Api.DoctorEndpoints
       _mapper = mapper;
     }
 
-    [HttpGet("api/doctors/{DoctorId}")]
-    [SwaggerOperation(
-        Summary = "Get a Doctor by Id",
-        Description = "Gets a Doctor by Id",
-        OperationId = "doctors.GetById",
-        Tags = new[] { "DoctorEndpoints" })
-    ]
-    public override async Task<ActionResult<GetByIdDoctorResponse>> HandleAsync([FromRoute] GetByIdDoctorRequest request, CancellationToken cancellationToken)
+    public override void Configure()
+    {
+      Get("api/doctors/{DoctorId}");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Get a Doctor by Id")
+           .WithDescription("Gets a Doctor by Id")
+           .WithName("doctors.GetById")
+           .WithTags("DoctorEndpoints"));
+    }
+
+    public override async Task<Results<Ok<GetByIdDoctorResponse>, NotFound>> ExecuteAsync(GetByIdDoctorRequest request, CancellationToken cancellationToken)
     {
       var response = new GetByIdDoctorResponse(request.CorrelationId);
 
       var doctor = await _repository.GetByIdAsync(request.DoctorId);
-      if (doctor is null) return NotFound();
+      if (doctor is null) return TypedResults.NotFound();
 
       response.Doctor = _mapper.Map<DoctorDto>(doctor);
 
-      return Ok(response);
+      return TypedResults.Ok(response);
     }
   }
-
-
 }

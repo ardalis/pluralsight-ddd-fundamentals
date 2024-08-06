@@ -1,21 +1,19 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Doctor;
 using ClinicManagement.Api.ApplicationEvents;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace ClinicManagement.Api.DoctorEndpoints
 {
-  public class Create : EndpointBaseAsync
-    .WithRequest<CreateDoctorRequest>
-    .WithActionResult<CreateDoctorResponse>
+  public class Create : Endpoint<CreateDoctorRequest, CreateDoctorResponse>
   {
     private readonly IRepository<Doctor> _repository;
     private readonly IMapper _mapper;
@@ -33,14 +31,18 @@ namespace ClinicManagement.Api.DoctorEndpoints
       _logger = logger;
     }
 
-    [HttpPost("api/doctors")]
-    [SwaggerOperation(
-        Summary = "Creates a new Doctor",
-        Description = "Creates a new Doctor",
-        OperationId = "doctors.create",
-        Tags = new[] { "DoctorEndpoints" })
-    ]
-    public override async Task<ActionResult<CreateDoctorResponse>> HandleAsync(CreateDoctorRequest request, CancellationToken cancellationToken)
+    public override void Configure()
+    {
+      Post("api/doctors");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Creates a new Doctor")
+           .WithDescription("Creates a new Doctor")
+           .WithName("doctors.create")
+           .WithTags("DoctorEndpoints"));
+    }
+
+    public override async Task<CreateDoctorResponse> ExecuteAsync(CreateDoctorRequest request, CancellationToken cancellationToken)
     {
       var response = new CreateDoctorResponse(request.CorrelationId);
 
@@ -58,7 +60,7 @@ namespace ClinicManagement.Api.DoctorEndpoints
       _logger.LogInformation("Sending doctor created event: {0}", appEvent);
       _messagePublisher.Publish(appEvent);
 
-      return Ok(response);
+      return response;
     }
   }
 }

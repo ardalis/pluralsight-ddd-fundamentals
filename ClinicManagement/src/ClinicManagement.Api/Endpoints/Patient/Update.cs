@@ -1,20 +1,19 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Patient;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Specifications;
-using Microsoft.AspNetCore.Mvc;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace ClinicManagement.Api.PatientEndpoints
 {
-  public class Update : EndpointBaseAsync
-    .WithRequest<UpdatePatientRequest>
-    .WithActionResult<UpdatePatientResponse>
+  public class Update : Endpoint<UpdatePatientRequest, Results<Ok<UpdatePatientResponse>, NotFound>>
   {
     private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
@@ -25,23 +24,27 @@ namespace ClinicManagement.Api.PatientEndpoints
       _mapper = mapper;
     }
 
-    [HttpPut("api/patients")]
-    [SwaggerOperation(
-        Summary = "Updates a Patient",
-        Description = "Updates a Patient",
-        OperationId = "patients.update",
-        Tags = new[] { "PatientEndpoints" })
-    ]
-    public override async Task<ActionResult<UpdatePatientResponse>> HandleAsync(UpdatePatientRequest request, CancellationToken cancellationToken)
+    public override void Configure()
+    {
+      Put("api/patients");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Updates a Patient")
+           .WithDescription("Updates a Patient")
+           .WithName("patients.update")
+           .WithTags("PatientEndpoints"));
+    }
+
+    public override async Task<Results<Ok<UpdatePatientResponse>, NotFound>> ExecuteAsync(UpdatePatientRequest request, CancellationToken cancellationToken)
     {
       var response = new UpdatePatientResponse(request.CorrelationId);
 
       var spec = new ClientByIdIncludePatientsSpec(request.ClientId);
       var client = await _repository.GetBySpecAsync(spec);
-      if (client == null) return NotFound();
+      if (client == null) return TypedResults.NotFound();
 
       var patientToUpdate = client.Patients.FirstOrDefault(p => p.Id == request.PatientId);
-      if (patientToUpdate == null) return NotFound();
+      if (patientToUpdate == null) return TypedResults.NotFound();
 
       patientToUpdate.Name = request.Name;
 
@@ -50,7 +53,7 @@ namespace ClinicManagement.Api.PatientEndpoints
       var dto = _mapper.Map<PatientDto>(patientToUpdate);
       response.Patient = dto;
 
-      return Ok(response);
+      return TypedResults.Ok(response);
     }
   }
 }
