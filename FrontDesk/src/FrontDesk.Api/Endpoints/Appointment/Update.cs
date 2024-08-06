@@ -1,21 +1,19 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Appointment;
-using FrontDesk.Core.SyncedAggregates;
-using FrontDesk.Core.ScheduleAggregate.Specifications;
-using Microsoft.AspNetCore.Mvc;
-using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using FastEndpoints;
 using FrontDesk.Core.ScheduleAggregate;
+using FrontDesk.Core.ScheduleAggregate.Specifications;
+using FrontDesk.Core.SyncedAggregates;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using PluralsightDdd.SharedKernel.Interfaces;
+using IMapper = AutoMapper.IMapper;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
-  public class Update : EndpointBaseAsync
-    .WithRequest<UpdateAppointmentRequest>
-    .WithActionResult<UpdateAppointmentResponse>
+  public class Update : Endpoint<UpdateAppointmentRequest, UpdateAppointmentResponse>
   {
     private readonly IRepository<Schedule> _scheduleRepository;
     private readonly IReadRepository<Schedule> _scheduleReadRepository;
@@ -33,14 +31,18 @@ namespace FrontDesk.Api.AppointmentEndpoints
       _mapper = mapper;
     }
 
-    [HttpPut(UpdateAppointmentRequest.Route)]
-    [SwaggerOperation(
-        Summary = "Updates an Appointment",
-        Description = "Updates an Appointment",
-        OperationId = "appointments.update",
-        Tags = new[] { "AppointmentEndpoints" })
-    ]
-    public override async Task<ActionResult<UpdateAppointmentResponse>> HandleAsync(UpdateAppointmentRequest request,
+    public override void Configure()
+    {
+      Put(UpdateAppointmentRequest.Route);
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Updates an Appointment")
+           .WithDescription("Updates an Appointment")
+           .WithName("appointments.update")
+           .WithTags("AppointmentEndpoints"));
+    }
+
+    public override async Task<UpdateAppointmentResponse> ExecuteAsync(UpdateAppointmentRequest request,
       CancellationToken cancellationToken)
     {
       var response = new UpdateAppointmentResponse(request.CorrelationId());
@@ -63,7 +65,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       var dto = _mapper.Map<AppointmentDto>(apptToUpdate);
       response.Appointment = dto;
 
-      return Ok(response);
+      return response;
     }
   }
 }

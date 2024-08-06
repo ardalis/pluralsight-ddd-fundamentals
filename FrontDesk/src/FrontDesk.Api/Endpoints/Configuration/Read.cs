@@ -1,31 +1,32 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 
 namespace FrontDesk.Api.ConfigurationEndpoints
 {
-  public class Read : EndpointBaseAsync
-    .WithoutRequest
-    .WithActionResult<string>
+  public class Read : Endpoint<EmptyRequest, string>
   {
     public Read()
     {
     }
 
-    [HttpGet("api/configurations")]
-    [SwaggerOperation(
-        Summary = "Read configuration settings",
-        Description = "Read configuration settingss",
-        OperationId = "Configurations.Read",
-        Tags = new[] { "ConfigurationEndpoints" })
-    ]
-    public override async Task<ActionResult<string>> HandleAsync(CancellationToken cancellationToken)
+    public override void Configure()
     {
-      return Ok(new OfficeSettings().TestDate.ToString(CultureInfo.InvariantCulture));
+      Get("api/configurations");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Read configuration settings")
+           .WithDescription("Read configuration settingss")
+           .WithName("Configurations.Read")
+           .WithTags("ConfigurationEndpoints"));
+    }
+
+    public override Task<string> ExecuteAsync(EmptyRequest req, CancellationToken cancellationToken)
+    {
+      return Task.FromResult(new OfficeSettings().TestDate.ToString(CultureInfo.InvariantCulture));
     }
   }
 }

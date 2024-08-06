@@ -1,24 +1,21 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Appointment;
-using FrontDesk.Core.SyncedAggregates;
+using FastEndpoints;
+using FrontDesk.Core.ScheduleAggregate;
 using FrontDesk.Core.ScheduleAggregate.Specifications;
-using Microsoft.AspNetCore.Mvc;
+using FrontDesk.Core.SyncedAggregates;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
-using FrontDesk.Core.ScheduleAggregate;
+using IMapper = AutoMapper.IMapper;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
-  public class Create : EndpointBaseAsync
-    .WithRequest<CreateAppointmentRequest>
-    .WithActionResult<CreateAppointmentResponse>
+  public class Create : Endpoint<CreateAppointmentRequest, CreateAppointmentResponse>
   {
     private readonly IRepository<Schedule> _scheduleRepository;
     private readonly IReadRepository<AppointmentType> _appointmentTypeReadRepository;
@@ -36,14 +33,18 @@ namespace FrontDesk.Api.AppointmentEndpoints
       _logger = logger;
     }
 
-    [HttpPost(CreateAppointmentRequest.Route)]
-    [SwaggerOperation(
-        Summary = "Creates a new Appointment",
-        Description = "Creates a new Appointment",
-        OperationId = "appointments.create",
-        Tags = new[] { "AppointmentEndpoints" })
-    ]
-    public override async Task<ActionResult<CreateAppointmentResponse>> HandleAsync(CreateAppointmentRequest request,
+    public override void Configure()
+    {
+      Post(CreateAppointmentRequest.Route);
+      AllowAnonymous();
+      Description(d =>
+        d.WithSummary("Creates a new Appointment")
+         .WithDescription("Creates a new Appointment")
+         .WithName("appointments.create")
+         .WithTags("AppointmentEndpoints"));
+    }
+
+    public override async Task<CreateAppointmentResponse> ExecuteAsync(CreateAppointmentRequest request,
       CancellationToken cancellationToken)
     {
       var response = new CreateAppointmentResponse(request.CorrelationId());
@@ -67,7 +68,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       _logger.LogInformation(dto.ToString());
       response.Appointment = dto;
 
-      return Ok(response);
+      return response;
     }
   }
 }

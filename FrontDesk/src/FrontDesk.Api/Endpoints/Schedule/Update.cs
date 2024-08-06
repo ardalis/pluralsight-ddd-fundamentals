@@ -1,23 +1,19 @@
 ﻿using System.Threading;
-
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Schedule;
+using FastEndpoints;
 using FrontDesk.Core.ScheduleAggregate;
-using FrontDesk.Core.SyncedAggregates;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace FrontDesk.Api.ScheduleEndpoints
 {
   /// <summary>
   /// Not used.
   /// </summary>
-  public class Update : EndpointBaseAsync
-    .WithRequest<UpdateScheduleRequest>
-    .WithActionResult<UpdateScheduleResponse>
+  public class Update : Endpoint<UpdateScheduleRequest, UpdateScheduleResponse>
   {
     private readonly IRepository<Schedule> _repository;
     private readonly IMapper _mapper;
@@ -29,14 +25,18 @@ namespace FrontDesk.Api.ScheduleEndpoints
       _mapper = mapper;
     }
 
-    [HttpPut("api/schedules")]
-    [SwaggerOperation(
-        Summary = "Updates a Schedule",
-        Description = "Updates a Schedule",
-        OperationId = "schedules.update",
-        Tags = new[] { "ScheduleEndpoints" })
-    ]
-    public override async Task<ActionResult<UpdateScheduleResponse>> HandleAsync(UpdateScheduleRequest request,
+    public override void Configure()
+    {
+      Put("api/schedules");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Updates a Schedule")
+           .WithDescription("Updates a Schedule")
+           .WithName("schedules.update")
+           .WithTags("ScheduleEndpoints"));
+    }
+
+    public override async Task<UpdateScheduleResponse> ExecuteAsync(UpdateScheduleRequest request,
       CancellationToken cancellationToken)
     {
       var response = new UpdateScheduleResponse(request.CorrelationId());
@@ -47,7 +47,7 @@ namespace FrontDesk.Api.ScheduleEndpoints
       var dto = _mapper.Map<ScheduleDto>(toUpdate);
       response.Schedule = dto;
 
-      return Ok(response);
+      return response;
     }
   }
 }

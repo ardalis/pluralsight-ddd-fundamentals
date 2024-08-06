@@ -1,19 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.AppointmentType;
+using FastEndpoints;
 using FrontDesk.Core.SyncedAggregates;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace FrontDesk.Api.AppointmentTypeEndpoints
 {
-  public class List : EndpointBaseAsync
-    .WithRequest<ListAppointmentTypeRequest>
-    .WithActionResult<ListAppointmentTypeResponse>
+  public class List : Endpoint<ListAppointmentTypeRequest, ListAppointmentTypeResponse>
   {
     private readonly IReadRepository<AppointmentType> _appointmentTypeRepository;
     private readonly IMapper _mapper;
@@ -24,14 +22,18 @@ namespace FrontDesk.Api.AppointmentTypeEndpoints
       _mapper = mapper;
     }
 
-    [HttpGet(ListAppointmentTypeRequest.Route)]
-    [SwaggerOperation(
-        Summary = "List Appointment Types",
-        Description = "List Appointment Types",
-        OperationId = "appointment-types.List",
-        Tags = new[] { "AppointmentTypeEndpoints" })
-    ]
-    public override async Task<ActionResult<ListAppointmentTypeResponse>> HandleAsync([FromQuery] ListAppointmentTypeRequest request, CancellationToken cancellationToken)
+    public override void Configure()
+    {
+      Get(ListAppointmentTypeRequest.Route);
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("List Appointment Types")
+           .WithDescription("List Appointment Types")
+           .WithName("appointment-types.List")
+           .WithTags("AppointmentTypeEndpoints"));
+    }
+
+    public override async Task<ListAppointmentTypeResponse> ExecuteAsync(ListAppointmentTypeRequest request, CancellationToken cancellationToken)
     {
       var response = new ListAppointmentTypeResponse(request.CorrelationId());
 
@@ -39,7 +41,7 @@ namespace FrontDesk.Api.AppointmentTypeEndpoints
       response.AppointmentTypes = _mapper.Map<List<AppointmentTypeDto>>(appointmentTypes);
       response.Count = response.AppointmentTypes.Count;
 
-      return Ok(response);
+      return response;
     }
   }
 }

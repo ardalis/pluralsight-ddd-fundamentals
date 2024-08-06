@@ -3,25 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Appointment;
-using FrontDesk.Core.SyncedAggregates;
+using FastEndpoints;
 using FrontDesk.Core.Exceptions;
 using FrontDesk.Core.Interfaces;
+using FrontDesk.Core.ScheduleAggregate;
 using FrontDesk.Core.ScheduleAggregate.Specifications;
+using FrontDesk.Core.SyncedAggregates;
+using FrontDesk.Core.SyncedAggregates.Specifications;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
-using FrontDesk.Core.ScheduleAggregate;
-using FrontDesk.Core.SyncedAggregates.Specifications;
+using IMapper = AutoMapper.IMapper;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
-  public class List : EndpointBaseAsync
-    .WithRequest<ListAppointmentRequest>
-    .WithActionResult<ListAppointmentResponse>
+  public class List : Endpoint<ListAppointmentRequest, Results<Ok<ListAppointmentResponse>, NotFound>>
   {
     private readonly IReadRepository<Schedule> _scheduleRepository;
     private readonly IReadRepository<Client> _clientRepository;
@@ -42,21 +42,25 @@ namespace FrontDesk.Api.AppointmentEndpoints
       _logger = logger;
     }
 
-    [HttpGet(ListAppointmentRequest.Route)]
-    [SwaggerOperation(
-        Summary = "List Appointments",
-        Description = "List Appointments",
-        OperationId = "appointments.List",
-        Tags = new[] { "AppointmentEndpoints" })
-    ]
-    public override async Task<ActionResult<ListAppointmentResponse>> HandleAsync([FromRoute] ListAppointmentRequest request,
+    public override void Configure()
+    {
+      Get(ListAppointmentRequest.Route);
+      AllowAnonymous();
+      Description(d =>
+        d.WithSummary("List Appointments")
+         .WithDescription("List Appointments")
+         .WithName("appointments.List")
+         .WithTags("AppointmentEndpoints"));
+    }
+
+    public override async Task<Results<Ok<ListAppointmentResponse>, NotFound>> ExecuteAsync([FromRoute] ListAppointmentRequest request,
       CancellationToken cancellationToken)
     {
       var response = new ListAppointmentResponse(request.CorrelationId());
       Schedule schedule = null;
       if (request.ScheduleId == Guid.Empty)
       {
-        return NotFound();
+        return TypedResults.NotFound();
       }
 
       // TODO: Get date from API request and use a specification that only includes appointments on that date.
@@ -86,7 +90,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       response.Appointments = myAppointments.OrderBy(a => a.Start).ToList();
       response.Count = response.Appointments.Count;
 
-      return Ok(response);
+      return TypedResults.Ok(response);
     }
 
     //  public override async Task<ActionResult<ListAppointmentResponse>> HandleAsync([FromQuery] ListAppointmentRequest request,

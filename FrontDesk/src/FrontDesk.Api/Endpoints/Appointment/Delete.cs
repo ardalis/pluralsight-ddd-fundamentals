@@ -1,21 +1,21 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Appointment;
 using BlazorShared.Models.Schedule;
+using FastEndpoints;
+using FrontDesk.Core.ScheduleAggregate;
 using FrontDesk.Core.ScheduleAggregate.Specifications;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
-using FrontDesk.Core.ScheduleAggregate;
+using IMapper = AutoMapper.IMapper;
 
 namespace FrontDesk.Api.AppointmentEndpoints
 {
-  public class Delete : EndpointBaseAsync
-    .WithRequest<DeleteAppointmentRequest>
-    .WithActionResult<DeleteAppointmentResponse>
+  public class Delete : Endpoint<DeleteAppointmentRequest, Results<Ok<DeleteAppointmentResponse>, NotFound>>
   {
     private readonly IReadRepository<Schedule> _scheduleReadRepository;
     private readonly IRepository<Schedule> _scheduleRepository;
@@ -28,14 +28,18 @@ namespace FrontDesk.Api.AppointmentEndpoints
       _mapper = mapper;
     }
 
-    [HttpDelete(DeleteAppointmentRequest.Route)]
-    [SwaggerOperation(
-        Summary = "Deletes an Appointment",
-        Description = "Deletes an Appointment",
-        OperationId = "appointments.delete",
-        Tags = new[] { "AppointmentEndpoints" })
-    ]
-    public override async Task<ActionResult<DeleteAppointmentResponse>> HandleAsync([FromRoute] DeleteAppointmentRequest request, CancellationToken cancellationToken)
+    public override void Configure()
+    {
+      Delete(DeleteAppointmentRequest.Route);
+      AllowAnonymous();
+      Description(d =>
+        d.WithSummary("Deletes an Appointment")
+         .WithDescription("Deletes an Appointment")
+         .WithName("appointments.delete")
+         .WithTags("AppointmentEndpoints"));
+    }
+
+    public override async Task<Results<Ok<DeleteAppointmentResponse>, NotFound>> ExecuteAsync(DeleteAppointmentRequest request, CancellationToken cancellationToken)
     {
       var response = new DeleteAppointmentResponse(request.CorrelationId());
 
@@ -43,7 +47,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       var schedule = await _scheduleReadRepository.GetBySpecAsync(spec);
 
       var apptToDelete = schedule.Appointments.FirstOrDefault(a => a.Id == request.AppointmentId);
-      if (apptToDelete == null) return NotFound();
+      if (apptToDelete == null) return TypedResults.NotFound();
 
       schedule.DeleteAppointment(apptToDelete);
 
@@ -52,7 +56,7 @@ namespace FrontDesk.Api.AppointmentEndpoints
       // verify we can still get the schedule
       response.Schedule = _mapper.Map<ScheduleDto>(await _scheduleReadRepository.GetBySpecAsync(spec));
  
-      return Ok(response);
+      return TypedResults.Ok(response);
     }
   }
 }
