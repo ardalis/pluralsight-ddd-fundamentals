@@ -1,17 +1,11 @@
-﻿using System;
-using FrontDesk.Core.ScheduleAggregate;
-using PluralsightDdd.SharedKernel;
+﻿using FrontDesk.Core.ScheduleAggregate;
 
 namespace FrontDesk.Core.Events
 {
-  public class AppointmentScheduledEvent : BaseDomainEvent
+  public class AppointmentScheduledEvent : AppointmentEvent
   {
-    public AppointmentScheduledEvent(Appointment appointment)
+    public AppointmentScheduledEvent(Appointment appointment) : base(appointment)
     {
-      AppointmentScheduled = appointment;
     }
-
-    public Guid Id { get; private set; } = Guid.NewGuid();
-    public Appointment AppointmentScheduled { get; private set; }
   }
 }

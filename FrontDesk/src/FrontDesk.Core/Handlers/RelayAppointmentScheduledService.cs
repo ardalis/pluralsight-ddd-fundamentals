@@ -45,7 +45,7 @@ namespace FrontDesk.Core.Handlers
       // we are translating from a domain event to an integration event here
       var newMessage = new AppointmentScheduledIntegrationEvent();
 
-      var appt = appointmentScheduledEvent.AppointmentScheduled;
+      var appt = appointmentScheduledEvent.Appointment;
 
       // if this is slow these can be parallelized or cached. MEASURE before optimizing.
       var doctor = await _doctorRepository.GetByIdAsync(appt.DoctorId);
@@ -62,7 +62,7 @@ namespace FrontDesk.Core.Handlers
       if (apptType == null) throw new AppointmentTypeNotFoundException(appt.AppointmentTypeId);
 
       newMessage.AppointmentId = appt.Id;
-      newMessage.AppointmentStartDateTime = appointmentScheduledEvent.AppointmentScheduled.TimeRange.Start;
+      newMessage.AppointmentStartDateTime = appointmentScheduledEvent.Appointment.TimeRange.Start;
       newMessage.ClientName = client.FullName;
       newMessage.ClientEmailAddress = client.EmailAddress;
       newMessage.DoctorName = doctor.Name;

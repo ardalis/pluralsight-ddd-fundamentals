@@ -1,23 +1,14 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using FrontDesk.Core.Events;
-using MediatR;
+﻿using FrontDesk.Core.Events;
 using Microsoft.AspNetCore.SignalR;
 
 namespace FrontDesk.Api.Hubs
 {
-  public class AppointmentUpdateHandler : INotificationHandler<AppointmentUpdatedEvent>
+  public class AppointmentUpdateHandler : AppointmentEventHandler<AppointmentUpdatedEvent>
   {
-    private readonly IHubContext<ScheduleHub> _hubContext;
-
-    public AppointmentUpdateHandler(IHubContext<ScheduleHub> hubContext)
+    public AppointmentUpdateHandler(IHubContext<ScheduleHub> hubContext) : base(hubContext)
     {
-      _hubContext = hubContext;
     }
 
-    public Task Handle(AppointmentUpdatedEvent notification, CancellationToken cancellationToken)
-    {
-      return _hubContext.Clients.All.SendAsync("ReceiveMessage", notification.AppointmentUpdated.Title + " was updated", cancellationToken);
-    }
+    protected override string Message => "was updated";
   }
 }
