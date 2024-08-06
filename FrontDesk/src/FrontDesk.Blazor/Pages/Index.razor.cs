@@ -280,9 +280,9 @@ namespace FrontDesk.Blazor.Pages
     private void OpenEdit(AppointmentDto appointment)
     {
       // convert to EDT time (UTC-4)
-      int offset = -4;
-      appointment.Start = new DateTimeOffset(appointment.Start.DateTime.AddHours(offset), new TimeSpan(offset, 0, 0));
-      appointment.End = new DateTimeOffset(appointment.End.DateTime.AddHours(offset), new TimeSpan(offset, 0, 0));
+      //int offset = -4;
+      //appointment.Start = new DateTimeOffset(appointment.Start.DateTime.AddHours(offset), new TimeSpan(offset, 0, 0));
+      //appointment.End = new DateTimeOffset(appointment.End.DateTime.AddHours(offset), new TimeSpan(offset, 0, 0));
       Logger.LogInformation($"OpenEdit called for {appointment}");
 
       CurrentAppointment = appointment;
