@@ -41,6 +41,36 @@ namespace UnitTests.Builders
       return this;
     }
 
+    public AppointmentBuilder WithAppointmentTypeId(int appointmentTypeId)
+    {
+      _appointmentTypeId = appointmentTypeId;
+      return this;
+    }
+
+    public AppointmentBuilder WithClientId(int clientId)
+    {
+      _clientId = clientId;
+      return this;
+    }
+
+    public AppointmentBuilder WithDoctorId(int doctorId)
+    {
+      _doctorId = doctorId;
+      return this;
+    }
+
+    public AppointmentBuilder WithPatientId(int patientId)
+    {
+      _patientId = patientId;
+      return this;
+    }
+
+    public AppointmentBuilder WithRoomId(int roomId)
+    {
+      _roomId = roomId;
+      return this;
+    }
+
     public AppointmentBuilder WithDefaultValues()
     {
       _id = Guid.NewGuid();
