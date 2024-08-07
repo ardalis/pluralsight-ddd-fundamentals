@@ -54,24 +54,37 @@ namespace UnitTests.Core.AggregatesEntities.ScheduleTests
     }
 
     [Fact]
-    public void MarksConflictingAppointmentsForSameAnimalInTwoRoomsAtSameTime()
+    public void MarksConflictingAppointmentsDueToSameRoomId()
     {
+      // Arrange
       var schedule = CreateSchedule();
-      var appointmentType = 1;
-      var doctorId = 2;
-      var patientId = 3;
-      var roomId = 4;
+      var appointment1 = CreateAppointment(APPOINTMENT_TYPE_ID,     CLIENT_ID,     DOCTOR_ID,     PATIENT_ID,     ROOM_ID);
+      var appointment2 = CreateAppointment(APPOINTMENT_TYPE_ID + 1, CLIENT_ID + 1, DOCTOR_ID + 1, PATIENT_ID + 1, ROOM_ID);
 
-      var lisaTitle = "Lisa Appointment";
-      var lisaAppointment = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, CLIENT_ID, doctorId, patientId, roomId, _dateRange, lisaTitle);
-      schedule.AddNewAppointment(lisaAppointment);
+      // Act
+      schedule.AddNewAppointment(appointment1);
+      schedule.AddNewAppointment(appointment2);
 
-      var lisaTitle2 = "Lisa Appointment 2";
-      var lisaAppointment2 = new Appointment(Guid.NewGuid(), appointmentType, _scheduleId, CLIENT_ID, doctorId, patientId, roomId+1, _dateRange, lisaTitle2);
-      schedule.AddNewAppointment(lisaAppointment2);
+      // Assert
+      Assert.True(appointment1.IsPotentiallyConflicting);
+      Assert.True(appointment2.IsPotentiallyConflicting);
+    }
 
-      Assert.True(lisaAppointment.IsPotentiallyConflicting, "lisa1 not conflicting");
-      Assert.True(lisaAppointment2.IsPotentiallyConflicting, "lisa2 not conflicting");
+    [Fact]
+    public void MarksConflictingAppointmentsDueToSameDoctorId()
+    {
+      // Arrange
+      var schedule = CreateSchedule();
+      var appointment1 = CreateAppointment(APPOINTMENT_TYPE_ID,     CLIENT_ID,     DOCTOR_ID, PATIENT_ID,     ROOM_ID);
+      var appointment2 = CreateAppointment(APPOINTMENT_TYPE_ID + 1, CLIENT_ID + 1, DOCTOR_ID, PATIENT_ID + 1, ROOM_ID + 1);
+
+      // Act
+      schedule.AddNewAppointment(appointment1);
+      schedule.AddNewAppointment(appointment2);
+
+      // Assert
+      Assert.True(appointment1.IsPotentiallyConflicting);
+      Assert.True(appointment2.IsPotentiallyConflicting);
     }
 
     private Appointment CreateAppointment(int appointmentTypeId, int clientId, int doctorId, int patientId, int roomId)
