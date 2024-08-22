@@ -36,7 +36,7 @@ namespace ClinicManagement.Api.DoctorEndpoints
     {
       var response = new DeleteDoctorResponse(request.CorrelationId);
 
-      var toDelete = _mapper.Map<Doctor>(request);
+      var toDelete = new Doctor(request.Id, "to delete");
       await _repository.DeleteAsync(toDelete);
 
       return response;
