@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Ardalis.GuardClauses;
 using FrontDesk.Core.Events.IntegrationEvents;
 using FrontDesk.Core.Interfaces;
@@ -23,7 +24,7 @@ namespace FrontDesk.Infrastructure.Messaging
       _logger = logger;
     }
 
-    public void Publish(AppointmentScheduledIntegrationEvent eventToPublish)
+    public Task Publish(object eventToPublish)
     {
       Guard.Against.Null(eventToPublish, nameof(eventToPublish));
 
@@ -52,6 +53,8 @@ namespace FrontDesk.Infrastructure.Messaging
       {
         _objectPool.Return(channel);
       }
+
+      return Task.CompletedTask;
     }
   }
 }

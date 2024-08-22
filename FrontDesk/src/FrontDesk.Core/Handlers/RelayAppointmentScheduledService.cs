@@ -69,7 +69,7 @@ namespace FrontDesk.Core.Handlers
       newMessage.PatientName = patient.Name;
       newMessage.AppointmentType = apptType.Name;
 
-      _messagePublisher.Publish(newMessage);
+      await _messagePublisher.Publish(newMessage);
       _logger.LogInformation($"Message published. {newMessage.PatientName}");
     }
   }
