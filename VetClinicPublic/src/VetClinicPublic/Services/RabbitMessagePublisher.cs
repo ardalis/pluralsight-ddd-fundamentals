@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Ardalis.GuardClauses;
 using Microsoft.Extensions.ObjectPool;
 using PluralsightDdd.SharedKernel;
 using RabbitMQ.Client;
+using VetClinicPublic.Contracts;
 using VetClinicPublic.Web.Interfaces;
 using VetClinicPublic.Web.Models;
 
@@ -19,7 +21,7 @@ namespace VetClinicPublic.Web.Services
       _objectPool = new DefaultObjectPool<IModel>(objectPolicy, Environment.ProcessorCount * 2);
     }
 
-    public void Publish(AppointmentConfirmLinkClickedIntegrationEvent eventToPublish)
+    public Task Publish(object eventToPublish)
     {
       Guard.Against.Null(eventToPublish, nameof(eventToPublish));
 
@@ -46,6 +48,8 @@ namespace VetClinicPublic.Web.Services
       {
         _objectPool.Return(channel);
       }
+
+      return Task.CompletedTask;
     }
   }
 }

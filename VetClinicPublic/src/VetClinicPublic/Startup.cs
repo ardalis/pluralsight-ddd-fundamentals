@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Reflection;
+using MassTransit;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,6 +46,26 @@ namespace VetClinicPublic
       services.AddSingleton<IMessagePublisher, RabbitMessagePublisher>();
       services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
       services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
+      
+      services.AddScoped<IMessagePublisher, MassTransitMessagePublisher>();
+
+      services.AddMassTransit(x =>
+      {
+        var rabbitMqConfiguration = messagingConfig.Get<RabbitMqConfiguration>();
+        x.SetKebabCaseEndpointNameFormatter();
+        
+        x.UsingRabbitMq((context, cfg) =>
+        {
+          var port = (ushort)rabbitMqConfiguration.Port;
+          cfg.Host(rabbitMqConfiguration.Hostname, port, rabbitMqConfiguration.VirtualHost, h =>
+          {
+            h.Username(rabbitMqConfiguration.UserName);
+            h.Password(rabbitMqConfiguration.Password);
+          });
+          
+          cfg.ConfigureEndpoints(context);
+        });
+      });
       if (messagingSettings.Enabled)
       {
         services.AddHostedService<FrontDeskRabbitMqService>();

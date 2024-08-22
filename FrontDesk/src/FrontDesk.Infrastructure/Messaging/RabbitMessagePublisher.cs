@@ -3,7 +3,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
-using FrontDesk.Core.Events.IntegrationEvents;
 using FrontDesk.Core.Interfaces;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.ObjectPool;
