@@ -6,6 +6,7 @@ using PluralsightDdd.SharedKernel;
 using Microsoft.Extensions.ObjectPool;
 using RabbitMQ.Client;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace ClinicManagement.Infrastructure.Messaging
 {
@@ -18,7 +19,7 @@ namespace ClinicManagement.Infrastructure.Messaging
       _objectPool = new DefaultObjectPool<IModel>(objectPolicy, Environment.ProcessorCount * 2);
     }
 
-    public void Publish(BaseIntegrationEvent applicationEvent)
+    public Task Publish(object applicationEvent)
     {
       Guard.Against.Null(applicationEvent, nameof(applicationEvent));
 
@@ -49,6 +50,8 @@ namespace ClinicManagement.Infrastructure.Messaging
       {
         _objectPool.Return(channel);
       }
+
+      return Task.CompletedTask;
     }
   }
 }

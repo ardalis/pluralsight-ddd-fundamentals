@@ -18,7 +18,6 @@ namespace ClinicManagement.Api.MappingProfiles
       CreateMap<UpdateDoctorRequest, Doctor>()
           .ConstructUsing(dto => new Doctor(dto.DoctorId, dto.Name));
       CreateMap<DeleteDoctorRequest, Doctor>();
-      CreateMap<Doctor, NamedEntity>();
     }
   }
 }

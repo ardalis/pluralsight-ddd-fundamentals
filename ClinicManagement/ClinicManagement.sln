@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docker", "Docker", "{D24D54
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicManagement.Contracts", "src\ClinicManagement.Contracts\ClinicManagement.Contracts.csproj", "{EC6443DD-0765-40A6-A4B2-0D113F05F52C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{8F84DB29-025D-484F-9C9C-1282C2880A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F84DB29-025D-484F-9C9C-1282C2880A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F84DB29-025D-484F-9C9C-1282C2880A82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC6443DD-0765-40A6-A4B2-0D113F05F52C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC6443DD-0765-40A6-A4B2-0D113F05F52C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC6443DD-0765-40A6-A4B2-0D113F05F52C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC6443DD-0765-40A6-A4B2-0D113F05F52C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +93,7 @@ Global
 		{D050DA5C-BC2B-4CC4-879C-43374A83B178} = {214E4075-BCE7-453B-8AFA-AA5BCAFD2E82}
 		{EC17AD24-26AA-4C60-86E5-9A8E6E38C3F8} = {214E4075-BCE7-453B-8AFA-AA5BCAFD2E82}
 		{8F84DB29-025D-484F-9C9C-1282C2880A82} = {214E4075-BCE7-453B-8AFA-AA5BCAFD2E82}
+		{EC6443DD-0765-40A6-A4B2-0D113F05F52C} = {214E4075-BCE7-453B-8AFA-AA5BCAFD2E82}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0C7E985-7329-48F5-BB22-EE0AC55B0F35}

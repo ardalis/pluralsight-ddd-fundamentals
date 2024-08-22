@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using BlazorShared.Models.Doctor;
 using ClinicManagement.Api.ApplicationEvents;
+using ClinicManagement.Contracts;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Interfaces;
 using FastEndpoints;
@@ -55,10 +56,10 @@ namespace ClinicManagement.Api.DoctorEndpoints
       // Note: These messages could be triggered from the Repository or DbContext events
       // In the DbContext you could look for entities marked with an interface saying they needed
       // to be synchronized via cross-domain events and publish the appropriate message.
-      var appEvent = new NamedEntityCreatedEvent(_mapper.Map<NamedEntity>(toAdd), "Doctor-Created");
+      var appEvent = new DoctorCreatedEvent(toAdd.Id, toAdd.Name);
 
       _logger.LogInformation("Sending doctor created event: {0}", appEvent);
-      _messagePublisher.Publish(appEvent);
+      await _messagePublisher.Publish(appEvent);
 
       return response;
     }

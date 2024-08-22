@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClinicManagement.BlazorShared\ClinicManagement.BlazorShared.csproj" />
+    <ProjectReference Include="..\ClinicManagement.Contracts\ClinicManagement.Contracts.csproj" />
     <ProjectReference Include="..\ClinicManagement.Infrastructure\ClinicManagement.Infrastructure.csproj" />
   </ItemGroup>
   <ItemGroup>

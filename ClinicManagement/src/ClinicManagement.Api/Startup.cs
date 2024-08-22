@@ -8,6 +8,8 @@ using ClinicManagement.Infrastructure.Data;
 using ClinicManagement.Infrastructure.Messaging;
 using FastEndpoints;
 using FastEndpoints.Swagger;
+using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -110,6 +112,25 @@ namespace ClinicManagement.Api
       services.Configure<RabbitMqConfiguration>(messagingConfig);
       services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
       services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
+      services.AddScoped<IMessagePublisher, MassTransitMessagePublisher>();
+
+      services.AddMassTransit(x =>
+      {
+        var rabbitMqConfiguration = messagingConfig.Get<RabbitMqConfiguration>();
+        x.SetKebabCaseEndpointNameFormatter();
+        
+        x.UsingRabbitMq((context, cfg) =>
+        {
+          var port = (ushort)rabbitMqConfiguration.Port;
+          cfg.Host(rabbitMqConfiguration.Hostname, port, rabbitMqConfiguration.VirtualHost, h =>
+          {
+            h.Username(rabbitMqConfiguration.UserName);
+            h.Password(rabbitMqConfiguration.Password);
+          });
+          
+          cfg.ConfigureEndpoints(context);
+        });
+      });
     }
 
     public void ConfigureContainer(ContainerBuilder builder)

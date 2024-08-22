@@ -83,9 +83,6 @@ namespace ClinicManagement.Infrastructure
       builder.RegisterType<AppDbContextSeed>().InstancePerLifetimeScope();
 
       // register RabbitMQ types
-      builder.RegisterType<RabbitMessagePublisher>()
-        .As<IMessagePublisher>()
-        .SingleInstance();
       builder.RegisterType<DefaultObjectPoolProvider>()
         .As<ObjectPoolProvider>()
         .SingleInstance();
