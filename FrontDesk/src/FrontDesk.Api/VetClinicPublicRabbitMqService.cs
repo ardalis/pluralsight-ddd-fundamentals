@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using PluralsightDdd.SharedKernel;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using VetClinicPublic.Contracts;
 
 namespace FrontDesk.Api
 {
@@ -116,7 +117,7 @@ namespace FrontDesk.Api
       {
         Guid appointmentId = root.GetProperty("AppointmentId").GetGuid();
         DateTimeOffset dateTimeOffset = root.GetProperty("DateTimeEventOccurred").GetDateTimeOffset();
-        var appEvent = new AppointmentConfirmLinkClickedIntegrationEvent(dateTimeOffset)
+        var appEvent = new AppointmentConfirmLinkClickedEvent(dateTimeOffset)
         {
           AppointmentId = appointmentId
         };

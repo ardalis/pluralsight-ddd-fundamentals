@@ -1,8 +1,8 @@
 namespace VetClinicPublic.Contracts;
 
-public class AppointmentConfirmLinkClickedEvent
+public class AppointmentConfirmLinkClickedIntegrationEvent
 {
-  public AppointmentConfirmLinkClickedEvent(Guid appointmentId)
+  public AppointmentConfirmLinkClickedIntegrationEvent(Guid appointmentId)
   {
     this.Id = Guid.NewGuid();
     DateTimeEventOccurred = DateTime.Now;
@@ -16,7 +16,7 @@ public class AppointmentConfirmLinkClickedEvent
   {
     get
     {
-      return nameof(AppointmentConfirmLinkClickedEvent);
+      return nameof(AppointmentConfirmLinkClickedIntegrationEvent);
     }
   }
 }

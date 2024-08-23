@@ -12,7 +12,7 @@ namespace FrontDesk.Api.MessageHandlers;
 /// <summary>
 /// TODO: Implement other kinds of updates
 /// </summary>
-public class ClinicManagementDoctorConsumer : IConsumer<DoctorCreatedEvent>
+public class ClinicManagementDoctorConsumer : IConsumer<DoctorCreatedIntegrationEvent>
 {
   private readonly ILogger<ClinicManagementDoctorConsumer> _logger;
   private readonly IMediator _mediator;
@@ -26,7 +26,7 @@ public class ClinicManagementDoctorConsumer : IConsumer<DoctorCreatedEvent>
     _scheduleHub = scheduleHub;
   }
 
-  public async Task Consume(ConsumeContext<DoctorCreatedEvent> context)
+  public async Task Consume(ConsumeContext<DoctorCreatedIntegrationEvent> context)
   {
     var message = context.Message;
     _logger.LogInformation(" [x] Received {0}", message);
@@ -34,7 +34,7 @@ public class ClinicManagementDoctorConsumer : IConsumer<DoctorCreatedEvent>
     await HandleAsync(message);
   }
 
-  private async Task HandleAsync(DoctorCreatedEvent message)
+  private async Task HandleAsync(DoctorCreatedIntegrationEvent message)
   {
     var command = new CreateDoctorCommand { Id = message.Id, Name = message.Name };
     await _mediator.Send(command);

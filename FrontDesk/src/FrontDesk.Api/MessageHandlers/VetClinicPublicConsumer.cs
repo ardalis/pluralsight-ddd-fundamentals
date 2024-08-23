@@ -9,7 +9,7 @@ using VetClinicPublic.Contracts;
 
 namespace FrontDesk.Api.MessageHandlers;
 
-public class VetClinicPublicConsumer : IConsumer<AppointmentConfirmLinkClickedEvent>
+public class VetClinicPublicConsumer : IConsumer<AppointmentConfirmLinkClickedIntegrationEvent>
 {
   private readonly ILogger<ClinicManagementDoctorConsumer> _logger;
   private readonly IMediator _mediator;
@@ -23,12 +23,12 @@ public class VetClinicPublicConsumer : IConsumer<AppointmentConfirmLinkClickedEv
     _scheduleHub = scheduleHub;
   }
 
-  public async Task Consume(ConsumeContext<AppointmentConfirmLinkClickedEvent> context)
+  public async Task Consume(ConsumeContext<AppointmentConfirmLinkClickedIntegrationEvent> context)
   {
     var message = context.Message;
-    _logger.LogInformation(" [x] Received {@Message}", message);
+    _logger.LogInformation(" [x] Received {Message}", message);
 
-    var appEvent = new AppointmentConfirmLinkClickedIntegrationEvent(message.DateTimeEventOccurred)
+    var appEvent = new AppointmentConfirmLinkClickedEvent(message.DateTimeEventOccurred)
     {
       AppointmentId = message.AppointmentId
     };

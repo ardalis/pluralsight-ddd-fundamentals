@@ -6,13 +6,13 @@ namespace FrontDesk.Core.Events.IntegrationEvents
   // This is fired by the message queue handler when an appointment should
   // be marked confirmed. It happens before the appointment is confirmed in
   // the model.
-  public class AppointmentConfirmLinkClickedIntegrationEvent : BaseIntegrationEvent
+  public class AppointmentConfirmLinkClickedEvent : BaseIntegrationEvent
   {
-    public AppointmentConfirmLinkClickedIntegrationEvent() : this(DateTimeOffset.Now)
+    public AppointmentConfirmLinkClickedEvent() : this(DateTimeOffset.Now)
     {
     }
 
-    public AppointmentConfirmLinkClickedIntegrationEvent(DateTimeOffset dateOccurred)
+    public AppointmentConfirmLinkClickedEvent(DateTimeOffset dateOccurred)
     {
       DateOccurred = dateOccurred;
     }
@@ -22,7 +22,7 @@ namespace FrontDesk.Core.Events.IntegrationEvents
     {
       get
       {
-        return nameof(AppointmentConfirmLinkClickedIntegrationEvent);
+        return nameof(AppointmentConfirmLinkClickedEvent);
       }
     }
   }

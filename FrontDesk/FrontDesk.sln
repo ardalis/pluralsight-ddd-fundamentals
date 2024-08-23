@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicManagement.Contracts"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetClinicPublic.Contracts", "..\VetClinicPublic\src\VetClinicPublic.Contracts\VetClinicPublic.Contracts.csproj", "{F9EE7158-15F7-4F9F-9A95-A2F9A0AC4D36}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontDesk.Contracts", "src\FrontDesk.Contracts\FrontDesk.Contracts.csproj", "{BB22E2B1-6812-4D8C-9DD2-90A687060B70}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,10 @@ Global
 		{F9EE7158-15F7-4F9F-9A95-A2F9A0AC4D36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9EE7158-15F7-4F9F-9A95-A2F9A0AC4D36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9EE7158-15F7-4F9F-9A95-A2F9A0AC4D36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB22E2B1-6812-4D8C-9DD2-90A687060B70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB22E2B1-6812-4D8C-9DD2-90A687060B70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB22E2B1-6812-4D8C-9DD2-90A687060B70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB22E2B1-6812-4D8C-9DD2-90A687060B70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +101,7 @@ Global
 		{72FA419D-698A-4AC0-A245-EB8FD4B74A9B} = {C799AB27-573B-4100-97A0-BB5D40FA29B5}
 		{6E649118-CA54-4662-85B8-0DD8D8629466} = {214E4075-BCE7-453B-8AFA-AA5BCAFD2E82}
 		{F9EE7158-15F7-4F9F-9A95-A2F9A0AC4D36} = {214E4075-BCE7-453B-8AFA-AA5BCAFD2E82}
+		{BB22E2B1-6812-4D8C-9DD2-90A687060B70} = {214E4075-BCE7-453B-8AFA-AA5BCAFD2E82}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0C7E985-7329-48F5-BB22-EE0AC55B0F35}

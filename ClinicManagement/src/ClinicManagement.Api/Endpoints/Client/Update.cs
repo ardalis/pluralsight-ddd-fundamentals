@@ -51,7 +51,7 @@ namespace ClinicManagement.Api.ClientEndpoints
       // Note: These messages could be triggered from the Repository or DbContext events
       // In the DbContext you could look for entities marked with an interface saying they needed
       // to be synchronized via cross-domain events and publish the appropriate message.
-      var appEvent = new ClientUpdatedEvent(toUpdate.Id, toUpdate.FullName);
+      var appEvent = new ClientUpdatedIntegrationEvent(toUpdate.Id, toUpdate.FullName);
       await _messagePublisher.Publish(appEvent);
 
       return response;

@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BlazorShared\BlazorShared.csproj" />
+    <ProjectReference Include="..\FrontDesk.Contracts\FrontDesk.Contracts.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\" />

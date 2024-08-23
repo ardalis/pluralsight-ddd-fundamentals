@@ -15,7 +15,7 @@ namespace FrontDesk.Core.Handlers
   /// <summary>
   /// This handler responds to incoming messages saying a user has confirmed an appointment
   /// </summary>
-  public class EmailConfirmationHandler : INotificationHandler<AppointmentConfirmLinkClickedIntegrationEvent>
+  public class EmailConfirmationHandler : INotificationHandler<AppointmentConfirmLinkClickedEvent>
   {
     private readonly IRepository<Schedule> _scheduleRepository;
     private readonly IApplicationSettings _settings;
@@ -30,7 +30,7 @@ namespace FrontDesk.Core.Handlers
       _logger = logger;
     }
 
-    public async Task Handle(AppointmentConfirmLinkClickedIntegrationEvent appointmentConfirmedEvent,
+    public async Task Handle(AppointmentConfirmLinkClickedEvent appointmentConfirmedEvent,
       CancellationToken cancellationToken)
     {
       _logger.LogInformation($"Handling appointment confirmation: {appointmentConfirmedEvent.AppointmentId}");

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FrontDesk.Contracts;
 using FrontDesk.Core.Events;
-using FrontDesk.Core.Events.IntegrationEvents;
 using FrontDesk.Core.Exceptions;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.SyncedAggregates;
