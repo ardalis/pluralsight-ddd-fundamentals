@@ -23,7 +23,7 @@ namespace VetClinicPublic.Web.Controllers
     [HttpGet("appointment/confirm/{id}")]
     public async Task<ActionResult> Confirm(Guid id)
     {
-      var appEvent = new AppointmentConfirmLinkClickedEvent(id);
+      var appEvent = new AppointmentConfirmLinkClickedIntegrationEvent(id);
       await _messagePublisher.Publish(appEvent);
       return View();
     }

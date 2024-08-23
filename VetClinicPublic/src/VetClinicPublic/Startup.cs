@@ -54,6 +54,8 @@ namespace VetClinicPublic
         var rabbitMqConfiguration = messagingConfig.Get<RabbitMqConfiguration>();
         x.SetKebabCaseEndpointNameFormatter();
         
+        x.AddConsumers(Assembly.GetExecutingAssembly());
+        
         x.UsingRabbitMq((context, cfg) =>
         {
           var port = (ushort)rabbitMqConfiguration.Port;

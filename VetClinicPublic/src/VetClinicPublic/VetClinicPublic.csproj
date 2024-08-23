@@ -28,6 +28,7 @@
     <Folder Include="Content\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\FrontDesk\src\FrontDesk.Contracts\FrontDesk.Contracts.csproj" />
     <ProjectReference Include="..\VetClinicPublic.Contracts\VetClinicPublic.Contracts.csproj" />
   </ItemGroup>
 </Project>

@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetClinicPublic", "src\VetC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VetClinicPublic.Contracts", "src\VetClinicPublic.Contracts\VetClinicPublic.Contracts.csproj", "{FC51FCAF-90B4-419C-92DE-C43647745ECA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontDesk.Contracts", "..\FrontDesk\src\FrontDesk.Contracts\FrontDesk.Contracts.csproj", "{BC7AFE92-B775-40FA-A3DA-F322B881506F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{FC51FCAF-90B4-419C-92DE-C43647745ECA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC51FCAF-90B4-419C-92DE-C43647745ECA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC51FCAF-90B4-419C-92DE-C43647745ECA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC7AFE92-B775-40FA-A3DA-F322B881506F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC7AFE92-B775-40FA-A3DA-F322B881506F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC7AFE92-B775-40FA-A3DA-F322B881506F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC7AFE92-B775-40FA-A3DA-F322B881506F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,6 +38,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{AAE803E2-C4B7-4A07-861C-21E81B772365} = {855DD11F-7B21-4DDF-AE8F-FC5E3AE65E82}
 		{FC51FCAF-90B4-419C-92DE-C43647745ECA} = {855DD11F-7B21-4DDF-AE8F-FC5E3AE65E82}
+		{BC7AFE92-B775-40FA-A3DA-F322B881506F} = {855DD11F-7B21-4DDF-AE8F-FC5E3AE65E82}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1B162917-0757-44A7-9348-554082BB3DCE}
