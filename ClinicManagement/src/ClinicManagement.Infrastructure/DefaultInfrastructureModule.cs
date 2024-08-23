@@ -81,14 +81,6 @@ namespace ClinicManagement.Infrastructure
           .InstancePerLifetimeScope();
 
       builder.RegisterType<AppDbContextSeed>().InstancePerLifetimeScope();
-
-      // register RabbitMQ types
-      builder.RegisterType<DefaultObjectPoolProvider>()
-        .As<ObjectPoolProvider>()
-        .SingleInstance();
-      builder.RegisterType<RabbitModelPooledObjectPolicy>()
-        .As<IPooledObjectPolicy<IModel>>()
-        .SingleInstance();
     }
 
     private void RegisterDevelopmentOnlyDependencies(ContainerBuilder builder)

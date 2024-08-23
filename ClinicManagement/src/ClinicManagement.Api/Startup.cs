@@ -17,8 +17,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.ObjectPool;
-using RabbitMQ.Client;
 
 namespace ClinicManagement.Api
 {
@@ -110,8 +108,6 @@ namespace ClinicManagement.Api
       // configure messaging
       var messagingConfig = Configuration.GetSection("RabbitMq");
       services.Configure<RabbitMqConfiguration>(messagingConfig);
-      services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
-      services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
       services.AddScoped<IMessagePublisher, MassTransitMessagePublisher>();
 
       services.AddMassTransit(x =>
