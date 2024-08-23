@@ -41,7 +41,6 @@ namespace VetClinicPublic
 
       // configure messaging
       var messagingConfig = Configuration.GetSection("RabbitMq");
-      var messagingSettings = messagingConfig.Get<RabbitMqConfiguration>();
       services.Configure<RabbitMqConfiguration>(messagingConfig);
       services.AddSingleton<IMessagePublisher, RabbitMessagePublisher>();
       services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
@@ -68,10 +67,6 @@ namespace VetClinicPublic
           cfg.ConfigureEndpoints(context);
         });
       });
-      if (messagingSettings.Enabled)
-      {
-        services.AddHostedService<FrontDeskRabbitMqService>();
-      }
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

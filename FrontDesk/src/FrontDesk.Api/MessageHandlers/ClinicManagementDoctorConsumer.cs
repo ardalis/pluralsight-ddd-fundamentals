@@ -29,7 +29,7 @@ public class ClinicManagementDoctorConsumer : IConsumer<DoctorCreatedIntegration
   public async Task Consume(ConsumeContext<DoctorCreatedIntegrationEvent> context)
   {
     var message = context.Message;
-    _logger.LogInformation(" [x] Received {0}", message);
+    _logger.LogInformation(" [x] Received {Message}", message);
 
     await HandleAsync(message);
   }
