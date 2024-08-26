@@ -181,7 +181,7 @@ Includes required trial binaries from Telerik. Currently this includes both Kend
 [PluralsightDdd.SharedKernel](https://www.nuget.org/packages/PluralsightDdd.SharedKernel/)
 An example SharedKernel package used by this sample built just for this course.
 
-[RabbitMQ.Client](https://www.nuget.org/packages/RabbitMQ.Client/)
+[MassTransit.RabbitMQ](https://www.nuget.org/packages/MassTransit.RabbitMQ/)
 Client for communicating with RabbitMQ.
 
 ## 5. Credits
