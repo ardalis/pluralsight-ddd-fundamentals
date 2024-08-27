@@ -1,13 +1,14 @@
 ﻿using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
+using BlazorShared.Models.Configuration;
 using FastEndpoints;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
 namespace FrontDesk.Api.ConfigurationEndpoints
 {
-  public class Read : Endpoint<EmptyRequest, string>
+  public class Read : Endpoint<GetConfigurationRequest, string>
   {
     public Read()
     {
@@ -15,7 +16,7 @@ namespace FrontDesk.Api.ConfigurationEndpoints
 
     public override void Configure()
     {
-      Get("api/configurations");
+      Get(GetConfigurationRequest.Route);
       AllowAnonymous();
       Description(d =>
           d.WithSummary("Read configuration settings")
@@ -24,9 +25,9 @@ namespace FrontDesk.Api.ConfigurationEndpoints
            .WithTags("ConfigurationEndpoints"));
     }
 
-    public override Task<string> ExecuteAsync(EmptyRequest req, CancellationToken cancellationToken)
+    public override Task HandleAsync(GetConfigurationRequest req, CancellationToken cancellationToken)
     {
-      return Task.FromResult(new OfficeSettings().TestDate.ToString(CultureInfo.InvariantCulture));
+      return SendStringAsync(new OfficeSettings().TestDate.ToString(CultureInfo.InvariantCulture));
     }
   }
 }
