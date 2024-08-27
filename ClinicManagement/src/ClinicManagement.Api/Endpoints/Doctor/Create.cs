@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using BlazorShared.Models.Doctor;
-using ClinicManagement.Api.ApplicationEvents;
 using ClinicManagement.Contracts;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Interfaces;

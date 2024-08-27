@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using BlazorShared.Models.Client;
-using ClinicManagement.Api.ApplicationEvents;
 using ClinicManagement.Core.Aggregates;
 
 namespace ClinicManagement.Api.MappingProfiles
