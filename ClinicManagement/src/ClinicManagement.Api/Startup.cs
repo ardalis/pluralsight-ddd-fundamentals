@@ -94,7 +94,6 @@ namespace ClinicManagement.Api
       });
 
       services.AddFastEndpoints().SwaggerDocument();
-      services.AddControllers();
       services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Startup).Assembly));
 
       services.AddResponseCompression(opts =>
@@ -151,7 +150,6 @@ namespace ClinicManagement.Api
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapFastEndpoints();
-        endpoints.MapControllers();
         //endpoints.MapHub<ClinicManagementHub>($"/{SignalRConstants.HUB_NAME}");
       });
     }
