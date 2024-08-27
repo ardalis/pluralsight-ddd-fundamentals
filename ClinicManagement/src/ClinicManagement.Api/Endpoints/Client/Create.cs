@@ -1,18 +1,16 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Client;
 using ClinicManagement.Core.Aggregates;
-using Microsoft.AspNetCore.Mvc;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace ClinicManagement.Api.ClientEndpoints
 {
-  public class Create : EndpointBaseAsync
-    .WithRequest<CreateClientRequest>
-    .WithActionResult<CreateClientResponse>
+  public class Create : Endpoint<CreateClientRequest, CreateClientResponse>
   {
     private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
@@ -23,14 +21,18 @@ namespace ClinicManagement.Api.ClientEndpoints
       _mapper = mapper;
     }
 
-    [HttpPost("api/clients")]
-    [SwaggerOperation(
-        Summary = "Creates a new Client",
-        Description = "Creates a new Client",
-        OperationId = "clients.create",
-        Tags = new[] { "ClientEndpoints" })
-    ]
-    public override async Task<ActionResult<CreateClientResponse>> HandleAsync(CreateClientRequest request, CancellationToken cancellationToken)
+    public override void Configure()
+    {
+      Post("api/clients");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Creates a new Client")
+           .WithDescription("Creates a new Client")
+           .WithName("clients.create")
+           .WithTags("ClientEndpoints"));
+    }
+
+    public override async Task<CreateClientResponse> ExecuteAsync(CreateClientRequest request, CancellationToken cancellationToken)
     {
       var response = new CreateClientResponse(request.CorrelationId);
 
@@ -40,7 +42,7 @@ namespace ClinicManagement.Api.ClientEndpoints
       var dto = _mapper.Map<ClientDto>(toAdd);
       response.Client = dto;
 
-      return Ok(response);
+      return response;
     }
   }
 }

@@ -2,34 +2,37 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
 using BlazorShared.Models;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ClinicManagement.Api.FileEndpoints
 {
-  public class Upload : EndpointBaseAsync
-    .WithRequest<FileItem>
-    .WithActionResult<bool>
+  public class Upload : Endpoint<FileItem, Results<Ok<bool>, BadRequest>>
   {
     public Upload()
     {
     }
 
-    [HttpPost("api/files")]
-    [SwaggerOperation(
-        Summary = "Uploads a file",
-        Description = "Uploads a file",
-        OperationId = "files.upload",
-        Tags = new[] { "FileEndpoints" })
-    ]
-    public override async Task<ActionResult<bool>> HandleAsync(FileItem request, CancellationToken cancellationToken)
+    public override void Configure()
     {
-      if (request == null || string.IsNullOrEmpty(request.DataBase64)) return BadRequest();
+      Post("api/files");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Uploads a file")
+           .WithDescription("Uploads a file")
+           .WithName("files.upload")
+           .WithTags("FileEndpoints"));
+    }
+
+    public override async Task<Results<Ok<bool>, BadRequest>> HandleAsync(FileItem request, CancellationToken cancellationToken)
+    {
+      if (request == null || string.IsNullOrEmpty(request.DataBase64)) return TypedResults.BadRequest();
 
       var fileData = Convert.FromBase64String(request.DataBase64);
-      if (fileData.Length <= 0) return BadRequest();
+      if (fileData.Length <= 0) return TypedResults.BadRequest();
 
       var fullPath = Path.Combine(Directory.GetCurrentDirectory(), @"images/Patients", request.FileName.ToLower());
       if (System.IO.File.Exists(fullPath))
@@ -38,7 +41,7 @@ namespace ClinicManagement.Api.FileEndpoints
       }
       await System.IO.File.WriteAllBytesAsync(fullPath, fileData);
 
-      return Ok(true);
+      return TypedResults.Ok(true);
     }
   }
 }

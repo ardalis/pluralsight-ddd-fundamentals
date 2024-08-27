@@ -1,6 +1,6 @@
 ﻿namespace BlazorShared.Models.AppointmentType
 {
-  public class ListAppointmentTypeRequest : BaseRequest
+  public class ListAppointmentTypeRequest : EmptyBaseRequest
   {
   }
 }

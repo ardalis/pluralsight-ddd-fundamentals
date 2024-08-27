@@ -1,6 +1,6 @@
 ﻿namespace BlazorShared.Models.Client
 {
-  public class ListClientRequest : BaseRequest
+  public class ListClientRequest : EmptyBaseRequest
   {
   }
 }

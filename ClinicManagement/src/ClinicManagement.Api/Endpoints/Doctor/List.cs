@@ -1,19 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Doctor;
 using ClinicManagement.Core.Aggregates;
-using Microsoft.AspNetCore.Mvc;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace ClinicManagement.Api.DoctorEndpoints
 {
-  public class List : EndpointBaseAsync
-    .WithRequest<ListDoctorRequest>
-    .WithActionResult<ListDoctorResponse>
+  public class List : Endpoint<ListDoctorRequest, Results<Ok<ListDoctorResponse>, NotFound>>
   {
     private readonly IRepository<Doctor> _repository;
     private readonly IMapper _mapper;
@@ -24,24 +23,28 @@ namespace ClinicManagement.Api.DoctorEndpoints
       _mapper = mapper;
     }
 
-    [HttpGet("api/doctors")]
-    [SwaggerOperation(
-        Summary = "List Doctors",
-        Description = "List Doctors",
-        OperationId = "doctors.List",
-        Tags = new[] { "DoctorEndpoints" })
-    ]
-    public override async Task<ActionResult<ListDoctorResponse>> HandleAsync([FromQuery] ListDoctorRequest request, CancellationToken cancellationToken)
+    public override void Configure()
+    {
+      Get("api/doctors");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("List Doctors")
+           .WithDescription("List Doctors")
+           .WithName("doctors.List")
+           .WithTags("DoctorEndpoints"));
+    }
+
+    public override async Task<Results<Ok<ListDoctorResponse>, NotFound>> ExecuteAsync(ListDoctorRequest request, CancellationToken cancellationToken)
     {
       var response = new ListDoctorResponse(request.CorrelationId);
 
       var doctors = await _repository.ListAsync();
-      if (doctors is null) return NotFound();
+      if (doctors is null) return TypedResults.NotFound();
 
       response.Doctors = _mapper.Map<List<DoctorDto>>(doctors);
       response.Count = response.Doctors.Count;
 
-      return Ok(response);
+      return TypedResults.Ok(response);
     }
   }
 }

@@ -1,20 +1,19 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Patient;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Specifications;
-using Microsoft.AspNetCore.Mvc;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Linq;
+using IMapper = AutoMapper.IMapper;
 
 namespace ClinicManagement.Api.PatientEndpoints
 {
-  public class Delete : EndpointBaseAsync
-    .WithRequest<DeletePatientRequest>
-    .WithActionResult<DeletePatientResponse>
+  public class Delete : Endpoint<DeletePatientRequest, Results<Ok<DeletePatientResponse>, NotFound>>
   {
     private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
@@ -25,27 +24,31 @@ namespace ClinicManagement.Api.PatientEndpoints
       _mapper = mapper;
     }
 
-    [HttpDelete("api/patients/{id}")]
-    [SwaggerOperation(
-        Summary = "Deletes a Patient",
-        Description = "Deletes a Patient",
-        OperationId = "patients.delete",
-        Tags = new[] { "PatientEndpoints" })
-    ]
-    public override async Task<ActionResult<DeletePatientResponse>> HandleAsync([FromRoute] DeletePatientRequest request, CancellationToken cancellationToken)
+    public override void Configure()
+    {
+      Delete("api/patients/{id}");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Deletes a Patient")
+           .WithDescription("Deletes a Patient")
+           .WithName("patients.delete")
+           .WithTags("PatientEndpoints"));
+    }
+
+    public override async Task<Results<Ok<DeletePatientResponse>, NotFound>> ExecuteAsync(DeletePatientRequest request, CancellationToken cancellationToken)
     {
       var response = new DeletePatientResponse(request.CorrelationId);
 
       var spec = new ClientByIdIncludePatientsSpec(request.ClientId);
       var client = await _repository.GetBySpecAsync(spec);
-      if (client == null) return NotFound();
+      if (client == null) return TypedResults.NotFound();
 
       var patientToDelete = client.Patients.FirstOrDefault(p => p.Id == request.PatientId);
       client.Patients.Remove(patientToDelete);
 
       await _repository.UpdateAsync(client);
 
-      return Ok(response);
+      return TypedResults.Ok(response);
     }
   }
 }

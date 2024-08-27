@@ -1,27 +1,31 @@
-﻿using Ardalis.ApiEndpoints;
-using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.AspNetCore.Annotations;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 
 namespace ClinicManagement.Api.ConfigurationEndpoints
 {
-  public class Read : EndpointBaseSync
-    .WithoutRequest
-    .WithActionResult<string>
+  public class Read : Endpoint<EmptyRequest, string>
   {
     public Read()
     {
     }
 
-    [HttpGet("api/configurations")]
-    [SwaggerOperation(
-        Summary = "Read configuration settings",
-        Description = "Read configuration settingss",
-        OperationId = "Configurations.Read",
-        Tags = new[] { "ConfigurationEndpoints" })
-    ]
-    public override ActionResult<string> Handle()
+    public override void Configure()
     {
-      return Ok(new OfficeSettings().TestDate.ToString());
+      Get("api/configurations");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Read configuration settings")
+           .WithDescription("Read configuration settings")
+           .WithName("Configurations.Read")
+           .WithTags("ConfigurationEndpoints"));
+    }
+
+    public override Task HandleAsync(EmptyRequest req, CancellationToken ct)
+    {
+      return SendStringAsync(new OfficeSettings().TestDate.ToString());
     }
   }
 }

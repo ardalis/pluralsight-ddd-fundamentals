@@ -1,18 +1,16 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Room;
 using ClinicManagement.Core.Aggregates;
-using Microsoft.AspNetCore.Mvc;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace ClinicManagement.Api.RoomEndpoints
 {
-  public class Delete : EndpointBaseAsync
-    .WithRequest<DeleteRoomRequest>
-    .WithActionResult<DeleteRoomResponse>
+  public class Delete : Endpoint<DeleteRoomRequest, DeleteRoomResponse>
   {
     private readonly IRepository<Room> _repository;
     private readonly IMapper _mapper;
@@ -23,21 +21,25 @@ namespace ClinicManagement.Api.RoomEndpoints
       _mapper = mapper;
     }
 
-    [HttpDelete("api/rooms/{id}")]
-    [SwaggerOperation(
-        Summary = "Deletes a Room",
-        Description = "Deletes a Room",
-        OperationId = "rooms.delete",
-        Tags = new[] { "RoomEndpoints" })
-    ]
-    public override async Task<ActionResult<DeleteRoomResponse>> HandleAsync([FromRoute] DeleteRoomRequest request, CancellationToken cancellationToken)
+    public override void Configure()
+    {
+      Delete("api/rooms/{id}");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Deletes a Room")
+           .WithDescription("Deletes a Room")
+           .WithName("rooms.delete")
+           .WithTags("RoomEndpoints"));
+    }
+
+    public override async Task<DeleteRoomResponse> ExecuteAsync(DeleteRoomRequest request, CancellationToken cancellationToken)
     {
       var response = new DeleteRoomResponse(request.CorrelationId);
 
       var toDelete = _mapper.Map<Room>(request);
       await _repository.DeleteAsync(toDelete);
 
-      return Ok(response);
+      return response;
     }
   }
 }

@@ -1,20 +1,19 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Patient;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Specifications;
 using ClinicManagement.Core.ValueObjects;
-using Microsoft.AspNetCore.Mvc;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace ClinicManagement.Api.PatientEndpoints
 {
-  public class Create : EndpointBaseAsync
-    .WithRequest<CreatePatientRequest>
-    .WithActionResult<CreatePatientResponse>
+  public class Create : Endpoint<CreatePatientRequest, Results<Ok<CreatePatientResponse>, NotFound>>
   {
     private readonly IRepository<Client> _repository;
     private readonly IMapper _mapper;
@@ -25,20 +24,24 @@ namespace ClinicManagement.Api.PatientEndpoints
       _mapper = mapper;
     }
 
-    [HttpPost("api/patients")]
-    [SwaggerOperation(
-        Summary = "Creates a new Patient",
-        Description = "Creates a new Patient",
-        OperationId = "patients.create",
-        Tags = new[] { "PatientEndpoints" })
-    ]
-    public override async Task<ActionResult<CreatePatientResponse>> HandleAsync(CreatePatientRequest request, CancellationToken cancellationToken)
+    public override void Configure()
+    {
+      Post("api/patients");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Creates a new Patient")
+           .WithDescription("Creates a new Patient")
+           .WithName("patients.create")
+           .WithTags("PatientEndpoints"));
+    }
+
+    public override async Task<Results<Ok<CreatePatientResponse>, NotFound>> ExecuteAsync(CreatePatientRequest request, CancellationToken cancellationToken)
     {
       var response = new CreatePatientResponse(request.CorrelationId);
 
       var spec = new ClientByIdIncludePatientsSpec(request.ClientId);
       var client = await _repository.GetBySpecAsync(spec);
-      if (client == null) return NotFound();
+      if (client == null) return TypedResults.NotFound();
 
       // right now we only add huskies
       var newPatient = new Patient
@@ -54,7 +57,7 @@ namespace ClinicManagement.Api.PatientEndpoints
       var dto = _mapper.Map<PatientDto>(newPatient);
       response.Patient = dto;
 
-      return Ok(response);
+      return TypedResults.Ok(response);
     }
   }
 }

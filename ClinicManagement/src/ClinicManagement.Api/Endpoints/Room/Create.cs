@@ -1,18 +1,16 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Room;
 using ClinicManagement.Core.Aggregates;
-using Microsoft.AspNetCore.Mvc;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace ClinicManagement.Api.RoomEndpoints
 {
-  public class Create : EndpointBaseAsync
-    .WithRequest<CreateRoomRequest>
-    .WithActionResult<CreateRoomResponse>
+  public class Create : Endpoint<CreateRoomRequest, CreateRoomResponse>
   {
     private readonly IRepository<Room> _repository;
     private readonly IMapper _mapper;
@@ -23,14 +21,18 @@ namespace ClinicManagement.Api.RoomEndpoints
       _mapper = mapper;
     }
 
-    [HttpPost("api/rooms")]
-    [SwaggerOperation(
-        Summary = "Creates a new Room",
-        Description = "Creates a new Room",
-        OperationId = "rooms.create",
-        Tags = new[] { "RoomEndpoints" })
-    ]
-    public override async Task<ActionResult<CreateRoomResponse>> HandleAsync(CreateRoomRequest request, CancellationToken cancellationToken)
+    public override void Configure()
+    {
+      Post("api/rooms");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Creates a new Room")
+           .WithDescription("Creates a new Room")
+           .WithName("rooms.create")
+           .WithTags("RoomEndpoints"));
+    }
+
+    public override async Task<CreateRoomResponse> ExecuteAsync(CreateRoomRequest request, CancellationToken cancellationToken)
     {
       var response = new CreateRoomResponse(request.CorrelationId);
 
@@ -40,7 +42,7 @@ namespace ClinicManagement.Api.RoomEndpoints
       var dto = _mapper.Map<RoomDto>(toAdd);
       response.Room = dto;
 
-      return Ok(response);
+      return response;
     }
   }
 }

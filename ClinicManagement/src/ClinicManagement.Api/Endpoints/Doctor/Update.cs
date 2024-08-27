@@ -1,18 +1,16 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Doctor;
 using ClinicManagement.Core.Aggregates;
-using Microsoft.AspNetCore.Mvc;
+using FastEndpoints;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace ClinicManagement.Api.DoctorEndpoints
 {
-  public class Update : EndpointBaseAsync
-    .WithRequest<UpdateDoctorRequest>
-    .WithActionResult<UpdateDoctorResponse>
+  public class Update : Endpoint<UpdateDoctorRequest, UpdateDoctorResponse>
   {
     private readonly IRepository<Doctor> _repository;
     private readonly IMapper _mapper;
@@ -23,14 +21,18 @@ namespace ClinicManagement.Api.DoctorEndpoints
       _mapper = mapper;
     }
 
-    [HttpPut("api/doctors")]
-    [SwaggerOperation(
-        Summary = "Updates a Doctor",
-        Description = "Updates a Doctor",
-        OperationId = "doctors.update",
-        Tags = new[] { "DoctorEndpoints" })
-    ]
-    public override async Task<ActionResult<UpdateDoctorResponse>> HandleAsync(UpdateDoctorRequest request, CancellationToken cancellationToken)
+    public override void Configure()
+    {
+      Put("api/doctors");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Updates a Doctor")
+           .WithDescription("Updates a Doctor")
+           .WithName("doctors.update")
+           .WithTags("DoctorEndpoints"));
+    }
+
+    public override async Task<UpdateDoctorResponse> ExecuteAsync(UpdateDoctorRequest request, CancellationToken cancellationToken)
     {
       var response = new UpdateDoctorResponse(request.CorrelationId);
 
@@ -40,7 +42,7 @@ namespace ClinicManagement.Api.DoctorEndpoints
       var dto = _mapper.Map<DoctorDto>(toUpdate);
       response.Doctor = dto;
 
-      return Ok(response);
+      return response;
     }
   }
 }
