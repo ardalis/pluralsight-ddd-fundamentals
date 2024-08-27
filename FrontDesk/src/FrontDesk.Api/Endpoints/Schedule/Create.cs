@@ -1,21 +1,19 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Schedule;
+using FastEndpoints;
 using FrontDesk.Core.ScheduleAggregate;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace FrontDesk.Api.ScheduleEndpoints
 {
   /// <summary>
   /// Not used.
   /// </summary>
-  public class Create : EndpointBaseAsync
-    .WithRequest<CreateScheduleRequest>
-    .WithActionResult<CreateScheduleResponse>
+  public class Create : Endpoint<CreateScheduleRequest, CreateScheduleResponse>
   {
     private readonly IRepository<Schedule> _repository;
     private readonly IMapper _mapper;
@@ -27,14 +25,18 @@ namespace FrontDesk.Api.ScheduleEndpoints
       _mapper = mapper;
     }
 
-    [HttpPost("api/schedules")]
-    [SwaggerOperation(
-        Summary = "Creates a new Schedule",
-        Description = "Creates a new Schedule",
-        OperationId = "schedules.create",
-        Tags = new[] { "ScheduleEndpoints" })
-    ]
-    public override async Task<ActionResult<CreateScheduleResponse>> HandleAsync(CreateScheduleRequest request,
+    public override void Configure()
+    {
+      Post("api/schedules");
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Creates a new Schedule")
+           .WithDescription("Creates a new Schedule")
+           .WithName("schedules.create")
+           .WithTags("ScheduleEndpoints"));
+    }
+
+    public override async Task<CreateScheduleResponse> ExecuteAsync(CreateScheduleRequest request,
       CancellationToken cancellationToken)
     {
       var response = new CreateScheduleResponse(request.CorrelationId());
@@ -45,7 +47,7 @@ namespace FrontDesk.Api.ScheduleEndpoints
       var dto = _mapper.Map<ScheduleDto>(toAdd);
       response.Schedule = dto;
 
-      return Ok(response);
+      return response;
     }
   }
 }

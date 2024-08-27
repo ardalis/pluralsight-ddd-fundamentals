@@ -1,6 +1,6 @@
 ﻿namespace BlazorShared.Models.Doctor
 {
-  public class ListDoctorRequest : BaseRequest
+  public class ListDoctorRequest : EmptyBaseRequest
   {
     public const string Route = "api/doctors";
   }

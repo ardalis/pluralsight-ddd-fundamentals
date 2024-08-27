@@ -1,16 +1,15 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using Autofac;
 using BlazorShared;
+using FastEndpoints;
+using FastEndpoints.Swagger;
 using FrontDesk.Api.Hubs;
-using FrontDesk.Core.SyncedAggregates;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.ScheduleAggregate;
 using FrontDesk.Infrastructure;
 using FrontDesk.Infrastructure.Data;
 using FrontDesk.Infrastructure.Messaging;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -97,6 +96,7 @@ namespace FrontDesk.Api
                                 });
       });
 
+      services.AddFastEndpoints().SwaggerDocument();
       services.AddControllers();
 
       var assemblies = new Assembly[]
@@ -166,6 +166,7 @@ namespace FrontDesk.Api
 
       app.UseEndpoints(endpoints =>
       {
+        endpoints.MapFastEndpoints();
         endpoints.MapControllers();
         endpoints.MapHub<ScheduleHub>("/schedulehub");
       });

@@ -1,21 +1,19 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
-using AutoMapper;
 using BlazorShared.Models.Schedule;
+using FastEndpoints;
 using FrontDesk.Core.ScheduleAggregate;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
+using IMapper = AutoMapper.IMapper;
 
 namespace FrontDesk.Api.ScheduleEndpoints
 {
   /// <summary>
   /// Not Used.
   /// </summary>
-  public class Delete : EndpointBaseAsync
-    .WithRequest<DeleteScheduleRequest>
-    .WithActionResult<DeleteScheduleResponse>
+  public class Delete : Endpoint<DeleteScheduleRequest, DeleteScheduleResponse>
   {
     private readonly IRepository<Schedule> _repository;
     private readonly IMapper _mapper;
@@ -27,14 +25,18 @@ namespace FrontDesk.Api.ScheduleEndpoints
       _mapper = mapper;
     }
 
-    [HttpDelete(DeleteScheduleRequest.Route)]
-    [SwaggerOperation(
-        Summary = "Deletes a Schedule",
-        Description = "Deletes a Schedule",
-        OperationId = "schedules.delete",
-        Tags = new[] { "ScheduleEndpoints" })
-    ]
-    public override async Task<ActionResult<DeleteScheduleResponse>> HandleAsync([FromRoute] DeleteScheduleRequest request,
+    public override void Configure()
+    {
+      Delete(DeleteScheduleRequest.Route);
+      AllowAnonymous();
+      Description(d =>
+          d.WithSummary("Deletes a Schedule")
+           .WithDescription("Deletes a Schedule")
+           .WithName("schedules.delete")
+           .WithTags("ScheduleEndpoints"));
+    }
+
+    public override async Task<DeleteScheduleResponse> ExecuteAsync(DeleteScheduleRequest request,
       CancellationToken cancellationToken)
     {
       var response = new DeleteScheduleResponse(request.CorrelationId());
@@ -42,7 +44,7 @@ namespace FrontDesk.Api.ScheduleEndpoints
       var toDelete = _mapper.Map<Schedule>(request);
       await _repository.DeleteAsync(toDelete);
 
-      return Ok(response);
+      return response;
     }
   }
 }
