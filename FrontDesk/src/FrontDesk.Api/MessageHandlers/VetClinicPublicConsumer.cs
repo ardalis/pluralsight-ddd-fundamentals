@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using FrontDesk.Api.Hubs;
-using FrontDesk.Core.Events.IntegrationEvents;
+using FrontDesk.Core.Handlers;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
@@ -28,10 +28,10 @@ public class VetClinicPublicConsumer : IConsumer<AppointmentConfirmLinkClickedIn
     var message = context.Message;
     _logger.LogInformation(" [x] Received {Message}", message);
 
-    var appEvent = new AppointmentConfirmLinkClickedEvent(message.DateTimeEventOccurred)
+    var appEvent = new ConfirmAppointmentCommand(message.DateTimeEventOccurred)
     {
       AppointmentId = message.AppointmentId
     };
-    await _mediator.Publish(appEvent);
+    await _mediator.Send(appEvent);
   }
 }
