@@ -23,9 +23,9 @@ namespace ClinicManagement.Api.ConfigurationEndpoints
            .WithTags("ConfigurationEndpoints"));
     }
 
-    public override Task<string> ExecuteAsync(EmptyRequest req, CancellationToken ct)
+    public override Task HandleAsync(EmptyRequest req, CancellationToken ct)
     {
-      return Task.FromResult(new OfficeSettings().TestDate.ToString());
+      return SendStringAsync(new OfficeSettings().TestDate.ToString());
     }
   }
 }
