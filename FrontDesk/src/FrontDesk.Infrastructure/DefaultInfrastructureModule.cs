@@ -1,102 +1,47 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using FrontDesk.Core.Interfaces;
-using FrontDesk.Core.ScheduleAggregate;
+﻿using FrontDesk.Core.Interfaces;
 using FrontDesk.Infrastructure.Data;
 using FrontDesk.Infrastructure.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using PluralsightDdd.SharedKernel.Interfaces;
-using Module = Autofac.Module;
 
 namespace FrontDesk.Infrastructure
 {
-  public class DefaultInfrastructureModule : Module
+  public static class DefaultInfrastructureModule
   {
-    private readonly bool _isDevelopment = false;
-    private readonly List<Assembly> _assemblies = new List<Assembly>();
-
-    public DefaultInfrastructureModule(bool isDevelopment, Assembly callingAssembly = null)
+    public static void AddInfrastructureDependencies(this IServiceCollection services, bool isDevelopment)
     {
-      _isDevelopment = isDevelopment;
-
-      var coreAssembly = Assembly.GetAssembly(typeof(Schedule));
-      _assemblies.Add(coreAssembly);
-
-      var infrastructureAssembly = Assembly.GetAssembly(typeof(AppDbContext));
-      _assemblies.Add(infrastructureAssembly);
-
-      if (callingAssembly != null)
+      if (isDevelopment)
       {
-        _assemblies.Add(callingAssembly);
-      }
-    }
-
-    protected override void Load(ContainerBuilder builder)
-    {
-      if (_isDevelopment)
-      {
-        RegisterDevelopmentOnlyDependencies(builder);
+        RegisterDevelopmentOnlyDependencies(services);
       }
       else
       {
-        RegisterProductionOnlyDependencies(builder);
+        RegisterProductionOnlyDependencies(services);
       }
-      RegisterCommonDependencies(builder);
+
+      RegisterCommonDependencies(services);
     }
 
-    private void RegisterCommonDependencies(ContainerBuilder builder)
+    private static void RegisterCommonDependencies(IServiceCollection services)
     {
-      builder.RegisterGeneric(typeof(EfRepository<>))
-          .As(typeof(IRepository<>))
-          .InstancePerLifetimeScope();
+      services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
-      builder.RegisterGeneric(typeof(EfRepository<>))
-          .InstancePerLifetimeScope();
+      services.AddScoped(typeof(EfRepository<>));
 
       // add a cache
-      builder.RegisterGeneric(typeof(CachedRepository<>))
-        .As(typeof(IReadRepository<>))
-          .InstancePerLifetimeScope();
+      services.AddScoped(typeof(IReadRepository<>), typeof(CachedRepository<>));
 
-      // MediatR is registered in FrontDesk.Api
-      //      builder
-      //          .RegisterType<Mediator>()
-      //          .As<IMediator>()
-      //          .InstancePerLifetimeScope();
+      services.AddScoped<IEmailSender, EmailSender>();
 
-      //      var mediatrOpenTypes = new[]
-      //{
-      //        typeof(IRequestHandler<,>),
-      //        typeof(IRequestExceptionHandler<,,>),
-      //        typeof(IRequestExceptionAction<,>),
-      //        typeof(INotificationHandler<>),
-      //      };
-
-      //      foreach (var mediatrOpenType in mediatrOpenTypes)
-      //      {
-      //        builder
-      //        .RegisterAssemblyTypes(_assemblies.ToArray())
-      //        .AsClosedTypesOf(mediatrOpenType)
-      //        .AsImplementedInterfaces();
-      //      }
-
-      var services = new ServiceCollection();
-      builder.Populate(services);
-
-      builder.RegisterType<EmailSender>().As<IEmailSender>()
-          .InstancePerLifetimeScope();
-
-      builder.RegisterType<AppDbContextSeed>().InstancePerLifetimeScope();
+      services.AddScoped<AppDbContextSeed>();
     }
 
-    private void RegisterDevelopmentOnlyDependencies(ContainerBuilder builder)
+    private static void RegisterDevelopmentOnlyDependencies(IServiceCollection services)
     {
       // Add development only services
     }
 
-    private void RegisterProductionOnlyDependencies(ContainerBuilder builder)
+    private static void RegisterProductionOnlyDependencies(IServiceCollection services)
     {
       // Add production only services
     }
