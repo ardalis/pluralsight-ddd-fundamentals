@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using VetClinicPublic.Contracts;
 using VetClinicPublic.Web.Interfaces;
 using VetClinicPublic.Web.Models;
 
@@ -19,10 +21,10 @@ namespace VetClinicPublic.Web.Controllers
     }
 
     [HttpGet("appointment/confirm/{id}")]
-    public ActionResult Confirm(Guid id)
+    public async Task<ActionResult> Confirm(Guid id)
     {
       var appEvent = new AppointmentConfirmLinkClickedIntegrationEvent(id);
-      _messagePublisher.Publish(appEvent);
+      await _messagePublisher.Publish(appEvent);
       return View();
     }
   }

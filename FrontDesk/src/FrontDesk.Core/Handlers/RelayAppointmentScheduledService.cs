@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FrontDesk.Contracts;
 using FrontDesk.Core.Events;
-using FrontDesk.Core.Events.IntegrationEvents;
 using FrontDesk.Core.Exceptions;
 using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.SyncedAggregates;
@@ -69,7 +69,7 @@ namespace FrontDesk.Core.Handlers
       newMessage.PatientName = patient.Name;
       newMessage.AppointmentType = apptType.Name;
 
-      _messagePublisher.Publish(newMessage);
+      await _messagePublisher.Publish(newMessage);
       _logger.LogInformation($"Message published. {newMessage.PatientName}");
     }
   }

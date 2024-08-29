@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using BlazorShared.Models.Client;
-using ClinicManagement.Api.ApplicationEvents;
+using ClinicManagement.Contracts;
 using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Interfaces;
 using FastEndpoints;
@@ -51,9 +51,8 @@ namespace ClinicManagement.Api.ClientEndpoints
       // Note: These messages could be triggered from the Repository or DbContext events
       // In the DbContext you could look for entities marked with an interface saying they needed
       // to be synchronized via cross-domain events and publish the appropriate message.
-      var appEvent = new NamedEntityUpdatedEvent(_mapper.Map<NamedEntity>(toUpdate), "Client-Updated");
-      _messagePublisher.Publish(appEvent);
-
+      var appEvent = new ClientUpdatedIntegrationEvent(toUpdate.Id, toUpdate.FullName);
+      await _messagePublisher.Publish(appEvent);
 
       return response;
     }

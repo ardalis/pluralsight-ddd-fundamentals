@@ -60,10 +60,6 @@ namespace FrontDesk.Infrastructure
         .As(typeof(IReadRepository<>))
           .InstancePerLifetimeScope();
 
-      builder.RegisterType(typeof(RabbitMessagePublisher))
-        .As(typeof(IMessagePublisher))
-        .InstancePerLifetimeScope();
-
       // MediatR is registered in FrontDesk.Api
       //      builder
       //          .RegisterType<Mediator>()

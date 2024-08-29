@@ -18,6 +18,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" Version="4.6.0" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.4" />
     <PackageReference Include="MediatR" Version="12.3.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="PluralsightDdd.SharedKernel" Version="2.1.3" />
@@ -25,5 +26,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\FrontDesk\src\FrontDesk.Contracts\FrontDesk.Contracts.csproj" />
+    <ProjectReference Include="..\VetClinicPublic.Contracts\VetClinicPublic.Contracts.csproj" />
   </ItemGroup>
 </Project>

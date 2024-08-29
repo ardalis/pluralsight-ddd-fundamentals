@@ -8,6 +8,8 @@ using ClinicManagement.Infrastructure.Data;
 using ClinicManagement.Infrastructure.Messaging;
 using FastEndpoints;
 using FastEndpoints.Swagger;
+using MassTransit;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -15,8 +17,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.ObjectPool;
-using RabbitMQ.Client;
 
 namespace ClinicManagement.Api
 {
@@ -108,8 +108,25 @@ namespace ClinicManagement.Api
       // configure messaging
       var messagingConfig = Configuration.GetSection("RabbitMq");
       services.Configure<RabbitMqConfiguration>(messagingConfig);
-      services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
-      services.AddSingleton<IPooledObjectPolicy<IModel>, RabbitModelPooledObjectPolicy>();
+      services.AddScoped<IMessagePublisher, MassTransitMessagePublisher>();
+
+      services.AddMassTransit(x =>
+      {
+        var rabbitMqConfiguration = messagingConfig.Get<RabbitMqConfiguration>();
+        x.SetKebabCaseEndpointNameFormatter();
+        
+        x.UsingRabbitMq((context, cfg) =>
+        {
+          var port = (ushort)rabbitMqConfiguration.Port;
+          cfg.Host(rabbitMqConfiguration.Hostname, port, rabbitMqConfiguration.VirtualHost, h =>
+          {
+            h.Username(rabbitMqConfiguration.UserName);
+            h.Password(rabbitMqConfiguration.Password);
+          });
+          
+          cfg.ConfigureEndpoints(context);
+        });
+      });
     }
 
     public void ConfigureContainer(ContainerBuilder builder)
