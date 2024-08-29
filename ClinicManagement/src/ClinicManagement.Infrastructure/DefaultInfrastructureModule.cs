@@ -1,97 +1,43 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using ClinicManagement.Core.Aggregates;
-using ClinicManagement.Core.Interfaces;
+﻿using ClinicManagement.Core.Interfaces;
 using ClinicManagement.Infrastructure.Data;
-using ClinicManagement.Infrastructure.Messaging;
-using MediatR;
-using MediatR.Pipeline;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.ObjectPool;
 using PluralsightDdd.SharedKernel.Interfaces;
-using RabbitMQ.Client;
-using Module = Autofac.Module;
 
 namespace ClinicManagement.Infrastructure
 {
-  public class DefaultInfrastructureModule : Module
+  public static class DefaultInfrastructureModule
   {
-    private readonly bool _isDevelopment = false;
-    private readonly List<Assembly> _assemblies = new List<Assembly>();
-
-    public DefaultInfrastructureModule(bool isDevelopment, Assembly callingAssembly = null)
+    public static void AddInfrastructureDependencies(this IServiceCollection services, bool isDevelopment)
     {
-      _isDevelopment = isDevelopment;
-      var coreAssembly = Assembly.GetAssembly(typeof(Room));
-      var infrastructureAssembly = Assembly.GetAssembly(typeof(DefaultInfrastructureModule));
-      _assemblies.Add(coreAssembly);
-      _assemblies.Add(infrastructureAssembly);
-      if (callingAssembly != null)
+      if (isDevelopment)
       {
-        _assemblies.Add(callingAssembly);
-      }
-    }
-
-    protected override void Load(ContainerBuilder builder)
-    {
-      if (_isDevelopment)
-      {
-        RegisterDevelopmentOnlyDependencies(builder);
+        RegisterDevelopmentOnlyDependencies(services);
       }
       else
       {
-        RegisterProductionOnlyDependencies(builder);
+        RegisterProductionOnlyDependencies(services);
       }
-      RegisterCommonDependencies(builder);
+
+      RegisterCommonDependencies(services);
     }
 
-    private void RegisterCommonDependencies(ContainerBuilder builder)
+    private static void RegisterCommonDependencies(IServiceCollection services)
     {
-      builder.RegisterGeneric(typeof(EfRepository<>))
-        .As(typeof(IRepository<>))
-        .InstancePerLifetimeScope();
+      services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
-      builder
-          .RegisterType<Mediator>()
-          .As<IMediator>()
-          .InstancePerLifetimeScope();
+      services.AddScoped<IEmailSender, EmailSender>();
 
-      var services = new ServiceCollection();
-      builder.Populate(services);
-
-      var mediatrOpenTypes = new[]
-      {
-                typeof(IRequestHandler<,>),
-                typeof(IRequestExceptionHandler<,,>),
-                typeof(IRequestExceptionAction<,>),
-                typeof(INotificationHandler<>),
-            };
-
-      foreach (var mediatrOpenType in mediatrOpenTypes)
-      {
-        builder
-        .RegisterAssemblyTypes(_assemblies.ToArray())
-        .AsClosedTypesOf(mediatrOpenType)
-        .AsImplementedInterfaces();
-      }
-
-      builder.RegisterType<EmailSender>().As<IEmailSender>()
-          .InstancePerLifetimeScope();
-
-      builder.RegisterType<AppDbContextSeed>().InstancePerLifetimeScope();
+      services.AddScoped<AppDbContextSeed>();
     }
 
-    private void RegisterDevelopmentOnlyDependencies(ContainerBuilder builder)
+    private static void RegisterDevelopmentOnlyDependencies(IServiceCollection services)
     {
       // TODO: Add development only services
     }
 
-    private void RegisterProductionOnlyDependencies(ContainerBuilder builder)
+    private static void RegisterProductionOnlyDependencies(IServiceCollection services)
     {
       // TODO: Add production only services
     }
-
   }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Reflection;
-using Autofac;
 using BlazorShared;
+using ClinicManagement.Core.Aggregates;
 using ClinicManagement.Core.Interfaces;
 using ClinicManagement.Infrastructure;
 using ClinicManagement.Infrastructure.Data;
@@ -9,7 +9,6 @@ using ClinicManagement.Infrastructure.Messaging;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using MassTransit;
-using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -127,12 +126,17 @@ namespace ClinicManagement.Api
           cfg.ConfigureEndpoints(context);
         });
       });
-    }
 
-    public void ConfigureContainer(ContainerBuilder builder)
-    {
-      bool isDevelopment = (_env.EnvironmentName == "Development");
-      builder.RegisterModule(new DefaultInfrastructureModule(isDevelopment, Assembly.GetExecutingAssembly()));
+      var assemblies = new Assembly[]
+      {
+        typeof(Room).Assembly,
+        typeof(DefaultInfrastructureModule).Assembly,
+        typeof(Startup).Assembly,
+      };
+      services.AddMediatR(config => config.RegisterServicesFromAssemblies(assemblies));
+
+      var isDevelopment = _env.IsDevelopment();
+      services.AddInfrastructureDependencies(isDevelopment);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
