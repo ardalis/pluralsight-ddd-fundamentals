@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Reflection;
-using Autofac;
 using BlazorShared;
 using FastEndpoints;
 using FastEndpoints.Swagger;
@@ -140,12 +139,8 @@ namespace FrontDesk.Api
         });
       });
       
-    }
-
-    public void ConfigureContainer(ContainerBuilder builder)
-    {
-      bool isDevelopment = (_env.EnvironmentName == "Development");
-      builder.RegisterModule(new DefaultInfrastructureModule(isDevelopment, Assembly.GetExecutingAssembly()));
+      bool isDevelopment = _env.IsDevelopment();
+      services.AddInfrastructureDependencies(isDevelopment);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
