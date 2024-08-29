@@ -166,9 +166,6 @@ Provides a generic result type that can be returned from application services. C
 [Ardalis.HttpClientTestExtensions](https://www.nuget.org/packages/Ardalis.HttpClientTestExtensions/)
 Removes boilerplate code from ASP.NET Core API integration/functional tests.
 
-[Autofac](https://www.nuget.org/packages/Autofac/)
-Powerful open source DI/IOC container for .NET that supports more features than built-in ServiceCollection.
-
 [Blazored.LocalStorage](https://www.nuget.org/packages/Blazored.LocalStorage/)
 Blazor utility for accessing browser local storage in Blazor WebAssembly apps.
 
