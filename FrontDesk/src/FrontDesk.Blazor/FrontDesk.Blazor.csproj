@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <UserSecretsId>140e9a6d-c3aa-4b72-b2fd-368cfdee40a5</UserSecretsId>
@@ -18,13 +18,13 @@
     <None Include="wwwroot\_content\Telerik.UI.for.Blazor.Trial\js\telerik-blazor.js" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+    <PackageReference Include="Blazored.LocalStorage" />
     <!--<PackageReference Include="Telerik.UI.for.Blazor.Trial.DDD" Version="2.21.0" />-->
-    <PackageReference Include="Pluralsight.DDD.Deps" Version="1.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.7" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.7" />
-    <PackageReference Include="System.Net.Http.Json" Version="8.0.0" />
+    <PackageReference Include="Pluralsight.DDD.Deps" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" />
+    <PackageReference Include="System.Net.Http.Json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BlazorShared\BlazorShared.csproj" />

@@ -1,19 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.0.46" />
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" Version="8.0.0" />
-    <PackageReference Include="Ardalis.EFCore.Extensions" Version="6.0.0" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.4" />
-    <PackageReference Include="PluralsightDdd.SharedKernel" Version="2.1.3" />
-    <PackageReference Include="SQLite" Version="3.13.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.7" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.7" />
-    <PackageReference Include="Microsoft.Extensions.ObjectPool" Version="8.0.7" />
+    <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" />
+    <PackageReference Include="Ardalis.EFCore.Extensions" />
+    <PackageReference Include="MassTransit.RabbitMQ" />
+    <PackageReference Include="PluralsightDdd.SharedKernel" />
+    <PackageReference Include="SQLite" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
+    <PackageReference Include="Microsoft.Extensions.ObjectPool" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ClinicManagement.Core\ClinicManagement.Core.csproj" />

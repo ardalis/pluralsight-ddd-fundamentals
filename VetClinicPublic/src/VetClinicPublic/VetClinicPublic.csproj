@@ -17,12 +17,12 @@
     <None Include="wwwroot\css\site.css" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Ardalis.GuardClauses" Version="4.6.0" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.4" />
-    <PackageReference Include="MediatR" Version="12.3.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="PluralsightDdd.SharedKernel" Version="2.1.3" />
-    <PackageReference Include="RabbitMQ.Client.Core.DependencyInjection" Version="5.0.0" />
+    <PackageReference Include="Ardalis.GuardClauses" />
+    <PackageReference Include="MassTransit.RabbitMQ" />
+    <PackageReference Include="MediatR" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="PluralsightDdd.SharedKernel" />
+    <PackageReference Include="RabbitMQ.Client.Core.DependencyInjection" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
