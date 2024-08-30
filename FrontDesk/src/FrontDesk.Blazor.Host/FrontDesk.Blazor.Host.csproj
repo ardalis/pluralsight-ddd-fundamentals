@@ -6,6 +6,6 @@
     <ProjectReference Include="..\FrontDesk.Blazor\FrontDesk.Blazor.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" />
   </ItemGroup>
 </Project>
