@@ -4,19 +4,18 @@ using System.Threading.Tasks;
 using Ardalis.HttpClientTestExtensions;
 using BlazorShared.Models.Appointment;
 using BlazorShared.Models.Schedule;
-using FrontDesk.Api;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace FunctionalTests.AppointmentEndpoints
 {
   [Collection("Sequential")]
-  public class Delete : IClassFixture<CustomWebApplicationFactory<Startup>>
+  public class Delete : IClassFixture<CustomWebApplicationFactory<Program>>
   {
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _outputHelper;
 
-    public Delete(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
+    public Delete(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
     {
       _client = factory.CreateClient();
       _outputHelper = outputHelper;

@@ -4,19 +4,18 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Ardalis.HttpClientTestExtensions;
 using BlazorShared.Models.Configuration;
-using FrontDesk.Api;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace FunctionalTests.ConfigurationEndpoints
 {
   [Collection("Sequential")]
-  public class Read : IClassFixture<CustomWebApplicationFactory<Startup>>
+  public class Read : IClassFixture<CustomWebApplicationFactory<Program>>
   {
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _outputHelper;
 
-    public Read(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
+    public Read(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
     {
       _client = factory.CreateClient();
       _outputHelper = outputHelper;

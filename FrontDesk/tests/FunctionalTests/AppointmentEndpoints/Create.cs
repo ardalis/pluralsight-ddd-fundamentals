@@ -14,7 +14,7 @@ using Xunit.Abstractions;
 namespace FunctionalTests.AppointmentEndpoints
 {
   [Collection("Sequential")]
-  public class Create : IClassFixture<CustomWebApplicationFactory<Startup>>
+  public class Create : IClassFixture<CustomWebApplicationFactory<Program>>
   {
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _outputHelper;
@@ -24,7 +24,7 @@ namespace FunctionalTests.AppointmentEndpoints
     private int _testRoomId = 1;
     private int _testDoctorId = 1;
 
-    public Create(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
+    public Create(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
     {
       _client = factory.CreateClient();
       _outputHelper = outputHelper;
