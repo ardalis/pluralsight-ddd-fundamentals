@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using BlazorShared;
 using FastEndpoints;
@@ -10,8 +9,6 @@ using FrontDesk.Core.Interfaces;
 using FrontDesk.Core.ScheduleAggregate;
 using FrontDesk.Infrastructure;
 using FrontDesk.Infrastructure.Data;
-using FrontDesk.Infrastructure.Messaging;
-using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
@@ -19,7 +16,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,30 +66,7 @@ builder.Services.AddResponseCompression(opts =>
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-// configure messaging
-var messagingConfig = builder.Configuration.GetSection("RabbitMq");
-builder.Services.Configure<RabbitMqConfiguration>(messagingConfig);
-builder.Services.AddScoped<IMessagePublisher, MassTransitMessagePublisher>();
-
-builder.Services.AddMassTransit(x =>
-{
-  var rabbitMqConfiguration = messagingConfig.Get<RabbitMqConfiguration>();
-  x.SetKebabCaseEndpointNameFormatter();
-
-  x.AddConsumers(Assembly.GetExecutingAssembly());
-
-  x.UsingRabbitMq((context, cfg) =>
-  {
-    var port = (ushort)rabbitMqConfiguration.Port;
-    cfg.Host(rabbitMqConfiguration.Hostname, port, rabbitMqConfiguration.VirtualHost, h =>
-    {
-      h.Username(rabbitMqConfiguration.UserName);
-      h.Password(rabbitMqConfiguration.Password);
-    });
-
-    cfg.ConfigureEndpoints(context);
-  });
-});
+builder.Services.AddMessaging(builder.Configuration);
 
 // use real database
 // Requires LocalDB which can be installed with SQL Server Express 2016
@@ -106,24 +79,7 @@ builder.Services.AddInfrastructureDependencies(isDevelopment);
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-  var services = scope.ServiceProvider;
-  var hostEnvironment = services.GetService<IWebHostEnvironment>();
-  var loggerFactory = services.GetRequiredService<ILoggerFactory>();
-  var logger = loggerFactory.CreateLogger<Program>();
-  logger.LogInformation($"Starting in environment {hostEnvironment.EnvironmentName}");
-  try
-  {
-    var seedService = services.GetRequiredService<AppDbContextSeed>();
-    //var catalogContext = services.GetRequiredService<AppDbContext>();
-    await seedService.SeedAsync(new OfficeSettings().TestDate);
-  }
-  catch (Exception ex)
-  {
-    logger.LogError(ex, "An error occurred seeding the DB.");
-  }
-}
+await app.SeedDatabaseAsync();
 
 app.UseResponseCompression();
 
@@ -143,7 +99,6 @@ app.UseFastEndpoints().UseSwaggerGen();
 app.MapHub<ScheduleHub>("/schedulehub");
 
 app.Run();
-
 
 public partial class Program
 {
