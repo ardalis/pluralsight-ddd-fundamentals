@@ -44,7 +44,15 @@ builder.Services.AddCors(options =>
                           });
 });
 
-builder.Services.AddFastEndpoints().SwaggerDocument();
+builder.Services
+  .AddFastEndpoints()
+  .SwaggerDocument(o =>
+  {
+    o.DocumentSettings = s =>
+    {
+      s.Title = "My API V1";
+    };
+  });
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 builder.Services.AddResponseCompression(opts =>
@@ -54,7 +62,6 @@ builder.Services.AddResponseCompression(opts =>
 });
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
-builder.Services.AddSwaggerGenCustom();
 
 builder.Services.AddMessaging(builder.Configuration);
 
@@ -88,18 +95,7 @@ app.UseRouting();
 
 app.UseCors(CORS_POLICY);
 
-// Enable middleware to serve generated Swagger as a JSON endpoint.
-app.UseSwagger();
-
-// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
-// specifying the Swagger JSON endpoint.
-app.UseSwaggerUI(c =>
-{
-  c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-  c.RoutePrefix = string.Empty; // Set Swagger UI to app root
-});
-
-app.MapFastEndpoints();
+app.UseFastEndpoints().UseSwaggerGen();
 //app.MapHub<ClinicManagementHub>($"/{SignalRConstants.HUB_NAME}");
 
 app.Run();
