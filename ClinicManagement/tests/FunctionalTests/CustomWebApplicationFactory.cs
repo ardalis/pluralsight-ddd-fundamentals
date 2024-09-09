@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FunctionalTests
 {
-  public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Startup>
+  public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<Program>
   {
     private readonly string _connectionString = "Data Source=functionaltests.db";
     private readonly SqliteConnection _connection;

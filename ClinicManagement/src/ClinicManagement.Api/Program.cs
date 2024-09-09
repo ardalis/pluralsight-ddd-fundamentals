@@ -49,7 +49,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddFastEndpoints().SwaggerDocument();
-builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Startup).Assembly));
+builder.Services.AddMediatR(config => config.RegisterServicesFromAssembly(typeof(Program).Assembly));
 
 builder.Services.AddResponseCompression(opts =>
 {
@@ -57,7 +57,7 @@ builder.Services.AddResponseCompression(opts =>
             new[] { "application/octet-stream" });
 });
 
-builder.Services.AddAutoMapper(typeof(Startup).Assembly);
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddSwaggerGenCustom();
 
 // configure messaging
@@ -87,7 +87,7 @@ var assemblies = new Assembly[]
 {
   typeof(Room).Assembly,
   typeof(DefaultInfrastructureModule).Assembly,
-  typeof(Startup).Assembly,
+  typeof(Program).Assembly,
 };
 builder.Services.AddMediatR(config => config.RegisterServicesFromAssemblies(assemblies));
 
