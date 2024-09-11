@@ -1,21 +1,19 @@
-﻿using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Ardalis.HttpClientTestExtensions;
 using BlazorShared.Models.Client;
-using FrontDesk.Api;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace FunctionalTests.ClientEndpoints
 {
   [Collection("Sequential")]
-  public class GetById : IClassFixture<CustomWebApplicationFactory<Startup>>
+  public class GetById : IClassFixture<CustomWebApplicationFactory<Program>>
   {
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _outputHelper;
 
-    public GetById(CustomWebApplicationFactory<Startup> factory,
+    public GetById(CustomWebApplicationFactory<Program> factory,
       ITestOutputHelper outputHelper)
     {
       _client = factory.CreateClient();

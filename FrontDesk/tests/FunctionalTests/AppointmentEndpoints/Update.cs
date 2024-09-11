@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -7,14 +6,13 @@ using System.Threading.Tasks;
 using Ardalis.HttpClientTestExtensions;
 using BlazorShared.Models.Appointment;
 using BlazorShared.Models.Schedule;
-using FrontDesk.Api;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace FunctionalTests.AppointmentEndpoints
 {
   [Collection("Sequential")]
-  public class Update : IClassFixture<CustomWebApplicationFactory<Startup>>
+  public class Update : IClassFixture<CustomWebApplicationFactory<Program>>
   {
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _outputHelper;
@@ -23,7 +21,7 @@ namespace FunctionalTests.AppointmentEndpoints
     private int _testDoctorId = 3;
     private string _testTitle = "updated title";
 
-    public Update(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
+    public Update(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
     {
       _client = factory.CreateClient();
       _outputHelper = outputHelper;
