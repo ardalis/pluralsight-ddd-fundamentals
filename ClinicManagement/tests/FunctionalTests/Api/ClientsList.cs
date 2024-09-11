@@ -3,19 +3,18 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Ardalis.HttpClientTestExtensions;
 using BlazorShared.Models.Client;
-using ClinicManagement.Api;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace FunctionalTests.Api
 {
   [Collection("Sequential")]
-  public class ClientsList : IClassFixture<CustomWebApplicationFactory<Startup>>
+  public class ClientsList : IClassFixture<CustomWebApplicationFactory<Program>>
   {
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _outputHelper;
 
-    public ClientsList(CustomWebApplicationFactory<Startup> factory,
+    public ClientsList(CustomWebApplicationFactory<Program> factory,
       ITestOutputHelper outputHelper)
     {
       _client = factory.CreateClient();

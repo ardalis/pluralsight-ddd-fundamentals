@@ -3,19 +3,18 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Ardalis.HttpClientTestExtensions;
 using BlazorShared.Models.AppointmentType;
-using ClinicManagement.Api;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace FunctionalTests.Api
 {
   [Collection("Sequential")]
-  public class AppointmentTypesList : IClassFixture<CustomWebApplicationFactory<Startup>>
+  public class AppointmentTypesList : IClassFixture<CustomWebApplicationFactory<Program>>
   {
     private readonly HttpClient _client;
     private readonly ITestOutputHelper _outputHelper;
 
-    public AppointmentTypesList(CustomWebApplicationFactory<Startup> factory, ITestOutputHelper outputHelper)
+    public AppointmentTypesList(CustomWebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
     {
       _client = factory.CreateClient();
       _outputHelper = outputHelper;
