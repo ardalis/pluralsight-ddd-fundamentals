@@ -1,10 +1,12 @@
-﻿using System;
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using VetClinicPublic;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 Console.WriteLine("Run RabbitMQ in Docker if it's not already running.");
 Console.WriteLine(">> docker run -p 5672:5672 -p 15672:15672 rabbitmq:management");
@@ -17,6 +19,8 @@ builder.Services.ConfigureEmailSending(configuration);
 builder.Services.AddMessaging(configuration);
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 if (builder.Environment.IsDevelopment())
 {

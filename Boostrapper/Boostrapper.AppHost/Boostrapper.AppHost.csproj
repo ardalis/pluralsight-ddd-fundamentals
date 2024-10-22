@@ -11,7 +11,13 @@
 
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" Version="8.2.1" />
+    <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="8.2.1" />
+    <PackageReference Include="Nall.Aspire.Hosting.DependsOn" Version="1.0.1" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\VetClinicPublic\src\VetClinicPublic\VetClinicPublic.csproj" />
   </ItemGroup>
 
 </Project>

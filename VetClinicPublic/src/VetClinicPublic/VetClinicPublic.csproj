@@ -23,11 +23,13 @@
     <PackageReference Include="Newtonsoft.Json" />
     <PackageReference Include="PluralsightDdd.SharedKernel" />
     <PackageReference Include="RabbitMQ.Client.Core.DependencyInjection" />
+    <PackageReference Include="System.Text.Json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Boostrapper\Boostrapper.ServiceDefaults\Boostrapper.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\..\FrontDesk\src\FrontDesk.Contracts\FrontDesk.Contracts.csproj" />
     <ProjectReference Include="..\VetClinicPublic.Contracts\VetClinicPublic.Contracts.csproj" />
   </ItemGroup>
