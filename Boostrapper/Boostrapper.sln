@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boostrapper.AppHost", "Boostrapper.AppHost\Boostrapper.AppHost.csproj", "{F66C35ED-43A6-4841-BF4F-1ED29C175FFB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boostrapper.ServiceDefaults", "Boostrapper.ServiceDefaults\Boostrapper.ServiceDefaults.csproj", "{EACC3C02-7D6E-413E-B4D0-B40AE88AE602}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F66C35ED-43A6-4841-BF4F-1ED29C175FFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F66C35ED-43A6-4841-BF4F-1ED29C175FFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F66C35ED-43A6-4841-BF4F-1ED29C175FFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F66C35ED-43A6-4841-BF4F-1ED29C175FFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EACC3C02-7D6E-413E-B4D0-B40AE88AE602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EACC3C02-7D6E-413E-B4D0-B40AE88AE602}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EACC3C02-7D6E-413E-B4D0-B40AE88AE602}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EACC3C02-7D6E-413E-B4D0-B40AE88AE602}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {952056B2-661B-40C9-BC60-33B9C3D4E541}
+	EndGlobalSection
+EndGlobal
