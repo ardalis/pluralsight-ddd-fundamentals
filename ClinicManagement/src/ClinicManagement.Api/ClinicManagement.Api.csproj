@@ -47,6 +47,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Boostrapper\Boostrapper.ServiceDefaults\Boostrapper.ServiceDefaults.csproj" />
     <ProjectReference Include="..\ClinicManagement.BlazorShared\ClinicManagement.BlazorShared.csproj" />
     <ProjectReference Include="..\ClinicManagement.Contracts\ClinicManagement.Contracts.csproj" />
     <ProjectReference Include="..\ClinicManagement.Infrastructure\ClinicManagement.Infrastructure.csproj" />

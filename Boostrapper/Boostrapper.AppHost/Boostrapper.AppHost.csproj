@@ -18,6 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\ClinicManagement\src\ClinicManagement.Api\ClinicManagement.Api.csproj" />
+    <ProjectReference Include="..\..\ClinicManagement\src\ClinicManagement.Blazor.Host\ClinicManagement.Blazor.Host.csproj" />
     <ProjectReference Include="..\..\FrontDesk\src\FrontDesk.Api\FrontDesk.Api.csproj" />
     <ProjectReference Include="..\..\FrontDesk\src\FrontDesk.Blazor.Host\FrontDesk.Blazor.Host.csproj" />
     <ProjectReference Include="..\..\VetClinicPublic\src\VetClinicPublic\VetClinicPublic.csproj" />

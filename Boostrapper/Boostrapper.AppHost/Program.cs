@@ -1,7 +1,4 @@
-﻿
-using Aspire.Hosting;
-
-var builder = DistributedApplication.CreateBuilder(args);
+﻿var builder = DistributedApplication.CreateBuilder(args);
 
 var emailServer = builder.AddContainer("mailserver", "jijiechen/papercut")
                          .WithEndpoint(port: 37408, targetPort: 37408, scheme: "http")
@@ -18,7 +15,7 @@ builder.AddProject<Projects.VetClinicPublic>("vet-clinic-public")
        .WaitFor(rabbitmq)
        .WaitFor(emailServer);
 
-var frontDeskDb = builder.AddSqlServer("frontdesk-sqlserver", port: 1433)
+var frontDeskDb = builder.AddSqlServer("frontdesk-sqlserver", port: 1434)
                          .WithImageTag("2019-latest")
                          .AddDatabase("frontdesk-db");
 
@@ -28,7 +25,19 @@ var frontDeskApi = builder.AddProject<Projects.FrontDesk_Api>("frontdesk-api")
                           .WithReference(frontDeskDb, "DefaultConnection");
 
 builder.AddProject<Projects.FrontDesk_Blazor_Host>("frontdesk-blazor-host")
-       .WithReference(frontDeskApi);
+       .WaitFor(frontDeskApi);
 
-                  
+
+var clinicManagementDb = builder.AddSqlServer("clinicmanagement-sqlserver", port: 1435)
+                                .WithImageTag("2019-latest")
+                                .AddDatabase("clinicmanagement-db");
+
+var clinicManagementApi = builder.AddProject<Projects.ClinicManagement_Api>("clinicmanagement-api")
+                                 .WaitFor(rabbitmq)
+                                 .WaitFor(clinicManagementDb)
+                                 .WithReference(clinicManagementDb, "DefaultConnection");
+
+builder.AddProject<Projects.ClinicManagement_Blazor_Host>("clinicmanagement-blazor-host")
+       .WaitFor(clinicManagementApi);
+
 builder.Build().Run();
