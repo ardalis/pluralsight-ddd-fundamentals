@@ -1,4 +1,6 @@
 ﻿
+using Aspire.Hosting;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 var emailServer = builder.AddContainer("mailserver", "jijiechen/papercut")
@@ -12,8 +14,21 @@ var rabbitmq = builder.AddRabbitMQ("rabbitmq", rabbitmqUser, rabbitmqPassword, p
                       .WithDataVolume()
                       .WithManagementPlugin();
 
-var vetClinic = builder.AddProject<Projects.VetClinicPublic>("vet-clinic-public")
-                       .WaitFor(rabbitmq)
-                       .WaitFor(emailServer);
+builder.AddProject<Projects.VetClinicPublic>("vet-clinic-public")
+       .WaitFor(rabbitmq)
+       .WaitFor(emailServer);
 
+var frontDeskDb = builder.AddSqlServer("frontdesk-sqlserver", port: 1433)
+                         .WithImageTag("2019-latest")
+                         .AddDatabase("frontdesk-db");
+
+var frontDeskApi = builder.AddProject<Projects.FrontDesk_Api>("frontdesk-api")
+                          .WaitFor(rabbitmq)
+                          .WaitFor(frontDeskDb)
+                          .WithReference(frontDeskDb, "DefaultConnection");
+
+builder.AddProject<Projects.FrontDesk_Blazor_Host>("frontdesk-blazor-host")
+       .WithReference(frontDeskApi);
+
+                  
 builder.Build().Run();

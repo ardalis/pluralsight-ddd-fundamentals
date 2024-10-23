@@ -2,7 +2,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boostrapper.AppHost", "Boostrapper.AppHost\Boostrapper.AppHost.csproj", "{F66C35ED-43A6-4841-BF4F-1ED29C175FFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boostrapper.AppHost", "Boostrapper.AppHost\Boostrapper.AppHost.csproj", "{F66C35ED-43A6-4841-BF4F-1ED29C175FFB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boostrapper.ServiceDefaults", "Boostrapper.ServiceDefaults\Boostrapper.ServiceDefaults.csproj", "{EACC3C02-7D6E-413E-B4D0-B40AE88AE602}"
 EndProject
@@ -11,6 +11,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetClinicPublic", "..\VetClinicPublic\src\VetClinicPublic\VetClinicPublic.csproj", "{1924E63F-EC1B-4B0A-ACE6-AA52DA8BA7EC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VetClinicPublic.Contracts", "..\VetClinicPublic\src\VetClinicPublic.Contracts\VetClinicPublic.Contracts.csproj", "{07D90B16-558F-4E72-9F93-7C402D80EAC9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontDesk", "FrontDesk", "{6367C1FD-EA04-4EC0-B25E-5A76C8BFB85E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontDesk.Api", "..\FrontDesk\src\FrontDesk.Api\FrontDesk.Api.csproj", "{22682767-0DE6-4BAF-B32F-B5186F6F34B5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontDesk.Blazor.Host", "..\FrontDesk\src\FrontDesk.Blazor.Host\FrontDesk.Blazor.Host.csproj", "{3749151C-E180-4D44-AB41-3F1FB14A7D44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,6 +40,14 @@ Global
 		{07D90B16-558F-4E72-9F93-7C402D80EAC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07D90B16-558F-4E72-9F93-7C402D80EAC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07D90B16-558F-4E72-9F93-7C402D80EAC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22682767-0DE6-4BAF-B32F-B5186F6F34B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22682767-0DE6-4BAF-B32F-B5186F6F34B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22682767-0DE6-4BAF-B32F-B5186F6F34B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22682767-0DE6-4BAF-B32F-B5186F6F34B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3749151C-E180-4D44-AB41-3F1FB14A7D44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3749151C-E180-4D44-AB41-3F1FB14A7D44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3749151C-E180-4D44-AB41-3F1FB14A7D44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3749151C-E180-4D44-AB41-3F1FB14A7D44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +55,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{1924E63F-EC1B-4B0A-ACE6-AA52DA8BA7EC} = {A218EB75-4210-4A23-9699-329ACCD1CB0D}
 		{07D90B16-558F-4E72-9F93-7C402D80EAC9} = {A218EB75-4210-4A23-9699-329ACCD1CB0D}
+		{22682767-0DE6-4BAF-B32F-B5186F6F34B5} = {6367C1FD-EA04-4EC0-B25E-5A76C8BFB85E}
+		{3749151C-E180-4D44-AB41-3F1FB14A7D44} = {6367C1FD-EA04-4EC0-B25E-5A76C8BFB85E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {952056B2-661B-40C9-BC60-33B9C3D4E541}

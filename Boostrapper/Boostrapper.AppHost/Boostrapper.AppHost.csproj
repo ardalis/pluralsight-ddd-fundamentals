@@ -12,11 +12,14 @@
   <ItemGroup>
     <PackageReference Include="Aspire.Hosting.AppHost" Version="8.2.1" />
     <PackageReference Include="Aspire.Hosting.RabbitMQ" Version="8.2.1" />
+    <PackageReference Include="Aspire.Hosting.SqlServer" Version="8.2.1" />
     <PackageReference Include="Nall.Aspire.Hosting.DependsOn" Version="1.0.1" />
     <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\FrontDesk\src\FrontDesk.Api\FrontDesk.Api.csproj" />
+    <ProjectReference Include="..\..\FrontDesk\src\FrontDesk.Blazor.Host\FrontDesk.Blazor.Host.csproj" />
     <ProjectReference Include="..\..\VetClinicPublic\src\VetClinicPublic\VetClinicPublic.csproj" />
   </ItemGroup>
 
