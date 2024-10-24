@@ -20,6 +20,9 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           queries: security-and-quality
+          
+      - name: Install .NET Aspire workload
+        run: dotnet workload install aspire
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
