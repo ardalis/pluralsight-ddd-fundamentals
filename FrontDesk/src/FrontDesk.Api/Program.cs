@@ -19,6 +19,8 @@ using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 builder.Services.AddSignalR();
 builder.Services.AddMemoryCache();
 
@@ -78,6 +80,8 @@ bool isDevelopment = builder.Environment.IsDevelopment();
 builder.Services.AddInfrastructureDependencies(isDevelopment);
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 await app.SeedDatabaseAsync();
 

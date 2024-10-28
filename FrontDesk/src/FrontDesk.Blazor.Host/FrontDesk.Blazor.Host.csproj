@@ -3,6 +3,7 @@
     <TargetFramework>net8.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Boostrapper\Boostrapper.ServiceDefaults\Boostrapper.ServiceDefaults.csproj" />
     <ProjectReference Include="..\FrontDesk.Blazor\FrontDesk.Blazor.csproj" />
   </ItemGroup>
   <ItemGroup>

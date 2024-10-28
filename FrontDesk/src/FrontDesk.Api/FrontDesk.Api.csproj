@@ -107,6 +107,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Boostrapper\Boostrapper.ServiceDefaults\Boostrapper.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\..\ClinicManagement\src\ClinicManagement.Contracts\ClinicManagement.Contracts.csproj" />
     <ProjectReference Include="..\..\..\VetClinicPublic\src\VetClinicPublic.Contracts\VetClinicPublic.Contracts.csproj" />
     <ProjectReference Include="..\BlazorShared\BlazorShared.csproj" />

@@ -6,7 +6,7 @@
   "profiles": {
     "ClinicManagement.Api": {
       "commandName": "Project",
-      "dotnetRunMessages": "true",
+      "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:6251;http://localhost:6250",

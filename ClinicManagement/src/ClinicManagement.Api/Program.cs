@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Reflection;
 using BlazorShared;
 using ClinicManagement.Api;
@@ -17,6 +17,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 // use real database
 // Requires LocalDB which can be installed with SQL Server Express 2016
@@ -77,6 +79,8 @@ var isDevelopment = builder.Environment.IsDevelopment();
 builder.Services.AddInfrastructureDependencies(isDevelopment);
 
 var app = builder.Build();
+
+app.MapDefaultEndpoints();
 
 await app.SeedDatabaseAsync();
 
