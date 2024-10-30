@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FrontDesk.Api.Hubs;
 using FrontDesk.Core.Handlers;
 using MassTransit;
@@ -11,11 +11,11 @@ namespace FrontDesk.Api.MessageHandlers;
 
 public class VetClinicPublicConsumer : IConsumer<AppointmentConfirmLinkClickedIntegrationEvent>
 {
-  private readonly ILogger<ClinicManagementDoctorConsumer> _logger;
+  private readonly ILogger<VetClinicPublicConsumer> _logger;
   private readonly IMediator _mediator;
   private readonly IHubContext<ScheduleHub> _scheduleHub;
 
-  public VetClinicPublicConsumer(ILogger<ClinicManagementDoctorConsumer> logger, IMediator mediator,
+  public VetClinicPublicConsumer(ILogger<VetClinicPublicConsumer> logger, IMediator mediator,
     IHubContext<ScheduleHub> scheduleHub)
   {
     _logger = logger;

@@ -14,11 +14,11 @@ namespace FrontDesk.Api.MessageHandlers;
 /// </summary>
 public class ClinicManagementClientConsumer : IConsumer<ClientUpdatedIntegrationEvent>
 {
-  private readonly ILogger<ClinicManagementDoctorConsumer> _logger;
+  private readonly ILogger<ClinicManagementClientConsumer> _logger;
   private readonly IMediator _mediator;
   private readonly IHubContext<ScheduleHub> _scheduleHub;
 
-  public ClinicManagementClientConsumer(ILogger<ClinicManagementDoctorConsumer> logger, IMediator mediator,
+  public ClinicManagementClientConsumer(ILogger<ClinicManagementClientConsumer> logger, IMediator mediator,
     IHubContext<ScheduleHub> scheduleHub)
   {
     _logger = logger;
