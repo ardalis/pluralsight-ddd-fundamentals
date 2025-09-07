@@ -23,6 +23,7 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.7" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
+    <PackageVersion Include="microsoft.entityframeworkcore.sqlite" Version="8.0.7" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.7" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.7" />
     <PackageVersion Include="Microsoft.Extensions.ObjectPool" Version="8.0.7" />

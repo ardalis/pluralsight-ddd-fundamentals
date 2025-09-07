@@ -24,7 +24,7 @@ builder.AddServiceDefaults();
 // Requires LocalDB which can be installed with SQL Server Express 2016
 // https://www.microsoft.com/en-us/download/details.aspx?id=54284
 builder.Services.AddDbContext<AppDbContext>(c =>
-    c.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    c.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddSignalR();
 builder.Services.AddMemoryCache();
